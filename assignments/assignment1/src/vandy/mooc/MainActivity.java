@@ -47,7 +47,7 @@ public class MainActivity extends LifecycleLoggingActivity {
      * One time initialization code goes here, e.g., UI layout and
      * some class scope variable initialization.
      *
-     * @param Bundle object that contains saved state information.
+     * @param savedInstanceState Bundle object that contains saved state information.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
