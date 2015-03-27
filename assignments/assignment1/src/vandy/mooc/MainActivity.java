@@ -138,6 +138,7 @@ public class MainActivity extends LifecycleLoggingActivity {
         // the image.
     	// TODO -- you fill in here, replacing "false" with the proper
     	// code.
+        return false;
     }
 
     /**
@@ -147,6 +148,7 @@ public class MainActivity extends LifecycleLoggingActivity {
         // Create an intent that will download the image from the web.
     	// TODO -- you fill in here, replacing "false" with the proper
     	// code.
+        return false;
     }
 
     /**
