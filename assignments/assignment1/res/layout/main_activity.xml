@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="14dp"
         android:inputType="text|textMultiLine"
-        android:hint="@string/defaultURL" />
+        android:hint="@string/defaultURL"
         android:text="@string/enter_url" />
 
     <EditText
