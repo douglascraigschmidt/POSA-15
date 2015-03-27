@@ -20,7 +20,7 @@ public class DownloadImageActivity extends Activity {
      * One time initialization code goes here, e.g., UI layout and
      * some class scope variable initialization.
      *
-     * @param Bundle object that contains saved state information.
+     * @param savedInstanceState object that contains saved state information.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {

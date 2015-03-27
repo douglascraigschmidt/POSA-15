@@ -54,7 +54,7 @@ public class DownloadUtils {
      * disk.
      *
      * @param context	the context in which to write the file.
-     * @param uri       the web url.
+     * @param url       the web url.
      * 
      * @return          the absolute path to the downloaded image file on the file system.
      */
