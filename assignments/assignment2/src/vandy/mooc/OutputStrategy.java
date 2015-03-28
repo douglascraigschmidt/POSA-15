@@ -35,17 +35,6 @@ public class OutputStrategy {
         // another Thread that sleeps for 0.5 seconds to let the user
         // see what's going on.
         // @@ TODO - you fill in here.
-            
-        final MainActivity output = mOuterClass.get();
-
-        if (output == null)
-            return;
-        try {
-            output.print(outputString + "\n");
-        } catch (NullPointerException ex) {
-            errorLog("OutputStrategyAndroid",
-                     "print Failed b/c of null Activity");
-        }
     }
 
     /**
