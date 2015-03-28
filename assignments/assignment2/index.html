@@ -1,0 +1,72 @@
+<html>
+
+<title>Concurrent Ping-Pong Application (P1 - Assignment 2)</title>
+
+<body text = "#000000"
+      link="#000fff"
+      vlink="#ff0f0f"
+      bgcolor="#ffffff">
+
+  <hr>
+  <h3>Concurrent Ping-Pong Application (P1 - Assignment 2)</h3>
+
+  <hr width=50% align=left>
+  <h4>Overview of the Concurrent Ping-Pong Application Assignment</h4>
+
+  <p>
+
+    The purpose of this assignment is to give you experience using
+    Android HaMeR framework classes to develop a multi-threaded app
+    that uses message passing to alternate printing "ping" and "pong"
+    to the user display.  In particular, this assignment involves the
+    use of HaMeR classes like HandlerThread, Handler, Looper, and
+    (implicitly) MessageQueue. You'll also need to use a Java
+    CyclicBarrier to ensure that HandlerThreads are fully initialized
+    before the concurrent ping-pong algorithm begins. <EM><b>No</b>
+    other Java synchronization mechanisms are needed for this
+    assignment</em>. <P>
+
+  <p> In addition to the lectures on Android we'll present in class,
+    the following resources may be helpful in completing portions of
+    this assignment: </p>
+
+  <ul>
+    <li> <A HREF="https://www.youtube.com/watch?v=FmE4_Oe_p3A&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=28">Android Looper</A>
+    <li> <A HREF="https://www.youtube.com/watch?v=8InQVs1H-XI&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=29">Overview of Android Handler</A>
+    <li> <A HREF="https://www.youtube.com/watch?v=xyeAvek2ai0&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=31">Sending and Handling Messages with Android Handler </A>
+    <li> <A HREF="https://www.youtube.com/watch?v=V6LTKKTh_FA&index=25&list=PLZ9NgFYEMxp4KSJPUyaQCj7x--NQ6kvcX">Java Barrier Synchronization (around the 40:00 mark starting with slide 86)</A>
+
+  </ul>
+
+  <hr width=50% align=left>
+  <h4>Skeleton Code</h4>
+
+  <p> Skeleton code for this assignment is available <a
+    href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment2">here</a>.
+    Pull the appropriate skeleton code in your repository, read it
+    carefully, and complete the "TODO" markers.  In addition to
+    filling in the "TODO" code snippets, I also recommend looking
+    carefully at the code provided in the MainActivity.java class,
+    which illustrates other interesting uses of the HaMeR
+    framework.</p>
+
+  <p> Note that there are no automated unit tests for this
+  assignment. Instead, you'll know the program is working when you can
+  successfully generate "ping" and "pong" requests in the proper
+  order.  Make sure that your program works properly for both correct
+  and incorrect input entered by the user.
+
+    </p>
+
+  <hr width=50% align=left>
+  <h4>Concluding Remarks</h4>
+  <p>
+
+  This assignment is designed to help you deepen your familiarity with
+  concurrent programming of the Android HaMeR framework.  It's more
+  complicated than assignment1, so make sure you start early and
+  participate in Virtual Office Hours if you have questions or run
+  into problems.  </p>
+
+</body>
+</html>
