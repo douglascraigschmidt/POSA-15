@@ -29,7 +29,7 @@
        android:name=".DownloadImageActivity"
        android:label="@string/download_image_activity">
       <intent-filter>
-        <action android:name="android.intent.action.WEB_SEARCH" />
+        <action android:name="android.intent.action.IMAGE_DOWNLOAD" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:scheme="http" />
         <data android:scheme="https" />
