@@ -1,9 +1,12 @@
 package vandy.mooc;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 /**
  * An Activity that downloads an image, stores it in a local file on
@@ -26,10 +29,11 @@ public class DownloadImageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
-        // @@ TODO -- you fill in here.
+        super.onCreate(savedInstanceState);
 
         // Get the URL associated with the Intent data.
-        // @@ TODO -- you fill in here.
+        Intent eventIntent = getIntent();
+        Uri url = Uri.parse(eventIntent.getData().toString());
 
         // Download the image in the background, create an Intent that
         // contains the path to the image file, and set this as the
@@ -41,5 +45,37 @@ public class DownloadImageActivity extends Activity {
         // methods should be called in the background thread.  See
         // http://stackoverflow.com/questions/20412871/is-it-safe-to-finish-an-android-activity-from-a-background-thread
         // for more discussion about this topic.
+        DownloaderRunnable runnable = new DownloaderRunnable(url);
+        
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
+
+
+	private Handler messageHandler = new Handler() {
+        public void handleMessage(Message msg) {
+        	super.handleMessage(msg);
+        	Intent returnIntent = new Intent();
+            returnIntent.putExtra("URL", msg.obj.toString());
+            setResult(RESULT_OK,returnIntent);
+            finish();
+        }
+    };
+    
+    private class DownloaderRunnable implements Runnable
+    {
+    	private final Uri _url;
+    	public DownloaderRunnable(Uri url){
+    		_url = url;
+    	}
+
+		@Override
+		public void run() {			
+			Message msg = Message.obtain();
+			msg.obj = DownloadUtils.downloadImage(getBaseContext(), _url);
+			msg.setTarget(messageHandler);
+			msg.sendToTarget();
+		}
+    }
+    
 }
