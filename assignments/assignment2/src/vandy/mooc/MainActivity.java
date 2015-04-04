@@ -134,9 +134,6 @@ public class MainActivity extends Activity {
             // Stop the thread that handles calls to print();
             mDelayedOutputThread.interrupt();
 
-            // Stop the PlayPingPong threads.
-            mPlayPingPong.interrupt();
-        	
             // Reset the color output.
             mPingPongColorOutput.setText("");
             mPingPongColorOutput.setBackgroundColor(Color.TRANSPARENT);
