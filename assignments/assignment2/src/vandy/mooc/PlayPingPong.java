@@ -39,7 +39,7 @@ public class PlayPingPong implements Runnable {
      * HandlerThreads.
      */
     // @@ TODO - you fill in here.
-    PingPongThread[] mPingPongHandlers;
+    Handler[] mPingPongHandlers = new Handler[2];
 
     /**
      * Define a CyclicBarrier synchronizer that ensures the
@@ -91,9 +91,13 @@ public class PlayPingPong implements Runnable {
             // Create the Handler that will service this type of
             // Handler, i.e., either PING or PONG.
             // @@ TODO - you fill in here.
-        	Handler targetHandler = mMyType == PingPong.PING ? 
-        			new Handler(mPingPongHandlers[1].getLooper()) : 
-        		    new Handler(mPingPongHandlers[0].getLooper());
+        	//Handler targetHandler = mMyType == PingPong.PING ? mPingPongHandlers[1] : mPingPongHandlers[0];
+        	if(mMyType == PingPong.PING){
+        		mPingPongHandlers[0] = new Handler(this);
+        	}else{
+        		mPingPongHandlers[1] = new Handler(this);
+        	}
+        	
             try {
                 // Wait for both Threads to initialize their Handlers.            	
                 // @@ TODO - you fill in here.
@@ -107,10 +111,12 @@ public class PlayPingPong implements Runnable {
             // Handler is the "obj" to use for the reply and (2)
             // sending the Message to the PING_THREAD's Handler.
             // @@ TODO - you fill in here.
-            Message msgPingPong = Message.obtain();
-            msgPingPong.obj = this;
-            msgPingPong.setTarget(targetHandler);
-            msgPingPong.sendToTarget();
+            if(mMyType == PingPong.PONG){
+	            Message msgPingPong = Message.obtain();
+	            msgPingPong.obj = mPingPongHandlers[1];
+	            msgPingPong.setTarget(mPingPongHandlers[0]);
+	            msgPingPong.sendToTarget();
+            }
         }
 
         /**
@@ -124,8 +130,8 @@ public class PlayPingPong implements Runnable {
             // @@ TODO - you fill in here, replacing "true" with the
             // appropriate code.
             if (mIterationsCompleted <= mMaxIterations) {
-            	String val = ((PingPongThread)reqMsg.obj).mMyType.toString(); 
-            	mOutputStrategy.print(val);
+            	mIterationsCompleted++;
+            	mOutputStrategy.print(mMyType.toString());
             } else {
                 // Shutdown the HandlerThread to the main PingPong
                 // thread can join with it.
@@ -142,7 +148,7 @@ public class PlayPingPong implements Runnable {
             // the reply.
             // @@ TODO - you fill in here.
             Message comebackMessage = Message.obtain() ;
-            comebackMessage.obj = this;
+            comebackMessage.obj = reqMsg.getTarget();
             comebackMessage.setTarget((Handler)reqMsg.obj);
             comebackMessage.sendToTarget();
 
@@ -150,7 +156,9 @@ public class PlayPingPong implements Runnable {
             // HandlerThread, which is the "target" of the msg
             // parameter.
             // @@ TODO - you fill in here.
-
+            synchronized (mCBarrier){
+            	mCBarrier.notifyAll();
+            }
             return true;
         }
     }
@@ -177,26 +185,31 @@ public class PlayPingPong implements Runnable {
        
         // Create the ping and pong threads.
         // @@ TODO - you fill in here.
-        mPingPongHandlers = new PingPongThread[2];
+        PingPongThread ping = new PingPongThread(PingPong.PING);
+        PingPongThread pong = new PingPongThread(PingPong.PONG);
+        /*mPingPongHandlers = new PingPongThread[2];
         mPingPongHandlers[0] = new PingPongThread(PingPong.PING);
         mPingPongHandlers[1] = new PingPongThread(PingPong.PONG);
-
+*/
         // Start ping and pong threads, which cause their Looper to
         // loop.
         // @@ TODO - you fill in here.
     	mCBarrier = new CyclicBarrier(2);
-        mPingPongHandlers[0].start();//ping
-        mPingPongHandlers[1].start();//pong
+        //mPingPongHandlers[0].start();//ping
+        //mPingPongHandlers[1].start();//pong
+    	ping.start();
+    	pong.start();
 
         // Barrier synchronization to wait for all work to be done
         // before exiting play().
         // @@ TODO - you fill in here.
+    	synchronized (mCBarrier){
         try {
 			mCBarrier.wait();
 		} catch (InterruptedException e) {
 			Log.d("run", e.getMessage());
 		}
-
+    	}
         // Let the user know we're done.
         mOutputStrategy.print("Done!");
     }
