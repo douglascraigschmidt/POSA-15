@@ -47,7 +47,7 @@ public class MainActivity extends LifecycleLoggingActivity {
      * One time initialization code goes here, e.g., UI layout and
      * some class scope variable initialization.
      *
-     * @param Bundle object that contains saved state information.
+     * @param savedInstanceState object that contains saved state information.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,23 +130,26 @@ public class MainActivity extends LifecycleLoggingActivity {
     }    
 
     /**
-     * Factory method that returns an Intent for viewing the
+     * Factory method that returns an implicit Intent for viewing the
      * downloaded image in the Gallery app.
      */
     private Intent makeGalleryIntent(String pathToImageFile) {
         // Create an intent that will start the Gallery app to view
         // the image.
-    	// TODO -- you fill in here, replacing "false" with the proper
+    	// TODO -- you fill in here, replacing "null" with the proper
     	// code.
+        return null;
     }
 
     /**
-     * Factory method that returns an Intent for downloading an image.
+     * Factory method that returns an implicit Intent for downloading
+     * an image.
      */
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
-    	// TODO -- you fill in here, replacing "false" with the proper
+    	// TODO -- you fill in here, replacing "null" with the proper
     	// code.
+        return null;
     }
 
     /**

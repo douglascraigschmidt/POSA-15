@@ -21,7 +21,7 @@ public abstract class LifecycleLoggingActivity extends Activity {
      * called from onCreate no other lifecycle callbacks are called
      * except for onDestroy().
      *
-     * @param Bundle object that contains saved state information.
+     * @param savedInstanceState object that contains saved state information.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState){

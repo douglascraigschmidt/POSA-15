@@ -8,21 +8,16 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="14dp"
-        android:inputType="text|textMultiLine"
-        android:hint="@string/defaultURL" />
-        android:text="@string/enter_url" />
+        android:layout_marginStart="14dp"
+        android:text="@string/defaultURL" />
 
     <EditText
         android:id="@+id/url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
         android:layout_marginTop="20dp"
-        android:inputType="text|textMultiLine"
+        android:inputType="text|textMultiLine|textUri"
+        android:hint="@string/enter_url"
         android:ems="10" >
     </EditText>
 
@@ -30,11 +25,8 @@
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/url"
-        android:layout_below="@+id/url"
         android:layout_marginTop="18dp"
         android:onClick="downloadImage"
         android:text="@string/download_image" />
 
 </LinearLayout>
- 
