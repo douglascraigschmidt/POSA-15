@@ -91,7 +91,6 @@ public class PlayPingPong implements Runnable {
             // Create the Handler that will service this type of
             // Handler, i.e., either PING or PONG.
             // @@ TODO - you fill in here.
-        	//Handler targetHandler = mMyType == PingPong.PING ? mPingPongHandlers[1] : mPingPongHandlers[0];
         	if(mMyType == PingPong.PING){
         		mPingPongHandlers[0] = new Handler(this);
         	}else{
@@ -129,15 +128,18 @@ public class PlayPingPong implements Runnable {
             // with all its iterations yet.
             // @@ TODO - you fill in here, replacing "true" with the
             // appropriate code.
-            if (mIterationsCompleted <= mMaxIterations) {
+            if (mIterationsCompleted < mMaxIterations) {
             	mIterationsCompleted++;
-            	mOutputStrategy.print(mMyType.toString());
+            	mOutputStrategy.print(mMyType.toString() +"("+ mIterationsCompleted + ")\n");
             } else {
                 // Shutdown the HandlerThread to the main PingPong
                 // thread can join with it.
                 // @@ TODO - you fill in here.
             	try {
-					this.join();
+	            	synchronized (mCBarrier){
+	                	mCBarrier.notifyAll();
+	                }
+					join();
 				} catch (InterruptedException e) {
 					Log.d("handleMessage", e.getMessage());
 				}
@@ -156,9 +158,7 @@ public class PlayPingPong implements Runnable {
             // HandlerThread, which is the "target" of the msg
             // parameter.
             // @@ TODO - you fill in here.
-            synchronized (mCBarrier){
-            	mCBarrier.notifyAll();
-            }
+            
             return true;
         }
     }
@@ -181,22 +181,17 @@ public class PlayPingPong implements Runnable {
      */
     public void run() {
         // Let the user know we're starting. 
-        mOutputStrategy.print("Ready...Set...Go!");
+        mOutputStrategy.print("Ready...Set...Go!\n");
        
         // Create the ping and pong threads.
         // @@ TODO - you fill in here.
         PingPongThread ping = new PingPongThread(PingPong.PING);
         PingPongThread pong = new PingPongThread(PingPong.PONG);
-        /*mPingPongHandlers = new PingPongThread[2];
-        mPingPongHandlers[0] = new PingPongThread(PingPong.PING);
-        mPingPongHandlers[1] = new PingPongThread(PingPong.PONG);
-*/
+        
         // Start ping and pong threads, which cause their Looper to
         // loop.
         // @@ TODO - you fill in here.
     	mCBarrier = new CyclicBarrier(2);
-        //mPingPongHandlers[0].start();//ping
-        //mPingPongHandlers[1].start();//pong
     	ping.start();
     	pong.start();
 
