@@ -225,6 +225,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void run() {
                         mPingPongTextViewLog.append(output);
+                        mPingPongTextViewLog.append("\n");
                         mPingPongScrollView.fullScroll(ScrollView.FOCUS_DOWN);
 				        
                         // If we encounter a ping, throw it up on the
