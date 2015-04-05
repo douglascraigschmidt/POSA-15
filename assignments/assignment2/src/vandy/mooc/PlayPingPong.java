@@ -94,7 +94,7 @@ public class PlayPingPong implements Runnable {
 			// sending the Message to the PING_THREAD's Handler.
 			if (mMyType == PingPong.PING) {
 				Message message = getHandler(PingPong.PING).obtainMessage(0, getHandler(PingPong.PONG));
-				getHandler(PingPong.PING).sendMessage(message);
+				message.sendToTarget();
 			}
 		}
 
@@ -120,13 +120,12 @@ public class PlayPingPong implements Runnable {
 			// Create a Message that contains the Handler as the
 			// reqMsg "target" and our Handler as the "obj" to use for
 			// the reply.
-			Handler target = (Handler) reqMsg.obj;
-			Message message = target.obtainMessage(0, getHandler(mMyType));
+			Message message = ((Handler) reqMsg.obj).obtainMessage(0, getHandler(mMyType));
 
 			// Return control to the Handler in the other
 			// HandlerThread, which is the "target" of the msg
 			// parameter.
-			target.sendMessage(message);
+			message.sendToTarget();
 
 			return true;
 		}
