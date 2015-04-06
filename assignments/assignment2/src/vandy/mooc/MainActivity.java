@@ -10,6 +10,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
@@ -21,6 +22,11 @@ public class MainActivity extends Activity {
      * A plain TextView that PingPong will be "played" upon. 
      */
     private TextView mPingPongTextViewLog;
+
+    /** 
+     * A ScrollView that contains the PingPong results.
+     */
+    private ScrollView mPingPongScrollView;
 
     /** 
      * A more colorful TextView that prints "Ping" or "Pong" to the
@@ -61,7 +67,12 @@ public class MainActivity extends Activity {
     /**
      * Maximum number of times to play ping-pong.
      */
-    private int mMaxIterations = 5;
+    private int mMaxIterations = 10;
+
+    /**
+     * PlayPingPong object.
+     */
+    private PlayPingPong mPlayPingPong;
 
     /**
      * Hook method called when the Activity is first launched.
@@ -77,6 +88,8 @@ public class MainActivity extends Activity {
         // with the user.
         mPingPongTextViewLog =
             (TextView) findViewById(R.id.pingpong_text_output);
+        mPingPongScrollView =
+            (ScrollView) findViewById(R.id.scrollview_text_output);
         mPingPongColorOutput =
             (TextView) findViewById(R.id.pingpong_color_output);
         mPlayButton =
@@ -103,23 +116,24 @@ public class MainActivity extends Activity {
         switch(mProgramState) {
         case RUN:
             // Create the object that plays ping-pong.
-            Runnable runnable = new PlayPingPong(mMaxIterations,
-                                                 mOutputStrategy);
+            mPlayPingPong = new PlayPingPong(mMaxIterations,
+                                             mOutputStrategy);
 
             // Create and start a background thread that uses the
             // Android HaMeR concurrency framework to run calls to
             // print() on the UI thread after a short 0.5 sec delay.
             mDelayedOutputThread =
-                new DelayedOutputThread(runnable);
+                new DelayedOutputThread(mPlayPingPong);
             mDelayedOutputThread.start();
 
             mPlayButton.setText(R.string.reset_button);
+            mPingPongScrollView.fullScroll(ScrollView.FOCUS_UP);
             mProgramState = ProgramState.RESET;
             break;
         case RESET:
             // Stop the thread that handles calls to print();
             mDelayedOutputThread.interrupt();
-        	
+
             // Reset the color output.
             mPingPongColorOutput.setText("");
             mPingPongColorOutput.setBackgroundColor(Color.TRANSPARENT);
@@ -211,6 +225,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void run() {
                         mPingPongTextViewLog.append(output);
+                        mPingPongScrollView.fullScroll(ScrollView.FOCUS_DOWN);
 				        
                         // If we encounter a ping, throw it up on the
                         // screen in color.

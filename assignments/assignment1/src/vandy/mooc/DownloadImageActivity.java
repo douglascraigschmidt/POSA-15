@@ -38,6 +38,8 @@ public class DownloadImageActivity extends Activity {
         // @@ TODO -- you fill in here using the Android "HaMeR"
         // concurrency framework.  Note that the finish() method
         // should be called in the UI thread, whereas the other
-        // methods should be called in the background thread.
+        // methods should be called in the background thread.  See
+        // http://stackoverflow.com/questions/20412871/is-it-safe-to-finish-an-android-activity-from-a-background-thread
+        // for more discussion about this topic.
     }
 }
