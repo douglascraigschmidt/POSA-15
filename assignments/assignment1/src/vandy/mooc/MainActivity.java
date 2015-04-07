@@ -142,7 +142,7 @@ public class MainActivity extends LifecycleLoggingActivity {
     }
 
     /**
-     * Factory method that returns an implicit Intent for downloading
+     * Factory method that returns an explicit Intent for downloading
      * an image.
      */
     private Intent makeDownloadImageIntent(Uri url) {
