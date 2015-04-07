@@ -65,7 +65,7 @@ public class MainActivity extends LifecycleLoggingActivity {
 
     /**
      * Called by the Android Activity framework when the user clicks
-     * the "Find Address" button.
+     * the "Download Image" button.
      *
      * @param view The view.
      */
@@ -130,7 +130,7 @@ public class MainActivity extends LifecycleLoggingActivity {
     }    
 
     /**
-     * Factory method that returns an Intent for viewing the
+     * Factory method that returns an implicit Intent for viewing the
      * downloaded image in the Gallery app.
      */
     private Intent makeGalleryIntent(String pathToImageFile) {
@@ -142,7 +142,8 @@ public class MainActivity extends LifecycleLoggingActivity {
     }
 
     /**
-     * Factory method that returns an Intent for downloading an image.
+     * Factory method that returns an implicit Intent for downloading
+     * an image.
      */
     private Intent makeDownloadImageIntent(Uri url) {
         // Create an intent that will download the image from the web.
