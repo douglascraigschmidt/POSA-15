@@ -51,12 +51,12 @@ public abstract class LifecycleLoggingActivity extends Activity {
      * re-acquire resources relinquished when activity was stopped
      * (onStop()) or acquire those resources for the first time after
      * onCreate().
-     */	
+     */
     @Override
     protected void onStart(){
         // Always call super class for necessary
         // initialization/implementation.
-        // TODO - you fill in here.
+        super.onStart();
     }
 	
     /**
@@ -73,9 +73,9 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
+        super.onResume();
     }
-	
+
     /**
      * Hook method called when an Activity loses focus but is still
      * visible in background. May be followed by onStop() or
@@ -89,9 +89,9 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
+        super.onPause();
     }
-	
+
     /**
      * Called when Activity is no longer visible.  Release resources
      * that may cause memory leak. Save instance state
@@ -102,9 +102,9 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
+        super.onPause();
     }
-	
+
     /**
      * Hook method called when user restarts a stopped activity.  Is
      * followed by a call to onStart() and onResume().
@@ -114,9 +114,9 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
+        super.onRestart();
     }
-	
+
     /**
      * Hook method that gives a final chance to release resources and
      * stop spawned threads.  onDestroy() may not always be
@@ -127,6 +127,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
+        super.onDestroy();
     }
 }
