@@ -61,6 +61,10 @@ public class Utils {
             Bitmap originalImage = 
                 BitmapFactory.decodeStream(inputStream);
 
+            // Bail out of we get an invalid bitmap.
+            if (originalImage == null)
+                return null;
+
             grayScaleImage =
                 originalImage.copy(originalImage.getConfig(),
                                    true);
@@ -146,12 +150,18 @@ public class Utils {
                 filename = url.toString();
             }
 
-            // Create an output file and save the image into it.
-            return Utils.createDirectoryAndSaveFile
-                (context, 
-                 // Decode the InputStream into a Bitmap image.
-                 BitmapFactory.decodeStream(inputStream),
-                 filename);
+            // Decode the InputStream into a Bitmap image.
+            Bitmap bitmap =
+                BitmapFactory.decodeStream(inputStream);
+
+            // Bail out of we get an invalid bitmap.
+            if (bitmap == null)
+                return null;
+            else
+                // Create an output file and save the image into it.
+                return Utils.createDirectoryAndSaveFile(context, 
+                                                        bitmap,
+                                                        filename);
         } catch (Exception e) {
             Log.e(TAG, "Exception while downloading. Returning null.");
             Log.e(TAG, e.toString());
