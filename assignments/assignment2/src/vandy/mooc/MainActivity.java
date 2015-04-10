@@ -133,7 +133,13 @@ public class MainActivity extends Activity {
         case RESET:
             // Stop the thread that handles calls to print();
             mDelayedOutputThread.interrupt();
-
+            mDelayedOutputThread.runOnDelayedOutputThread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.myLooper().quit();
+                }
+            });
+        	
             // Reset the color output.
             mPingPongColorOutput.setText("");
             mPingPongColorOutput.setBackgroundColor(Color.TRANSPARENT);
