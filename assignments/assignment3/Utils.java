@@ -32,25 +32,6 @@ public class Utils {
     private final static String TAG = "Utils";
     
     /**
-     * If you have access to a stable Internet connection for testing
-     * purposes, feel free to change this variable to false so it
-     * actually downloads the image from a remote server.
-     */
-    static final boolean DOWNLOAD_OFFLINE = false;
-    
-    /**
-     * The resource that we write to the file system in offline
-     * mode. 
-     */
-    static final int OFFLINE_TEST_IMAGE = R.raw.dougs;
-
-    /**
-     * The file name that we should use to store the image in offline
-     * mode.
-     */
-    static final String OFFLINE_FILENAME = "dougs.jpg";
-    
-    /**
      * Apply a grayscale filter to the @a imageEntity and return it.
      */
     public static Uri grayScaleFilter(Context context,
@@ -134,21 +115,11 @@ public class Utils {
             // Filename that we're downloading (or opening).
             String filename;
 
-            // If we're offline, open the image in our resources.
-            if (DOWNLOAD_OFFLINE) {
-                // Get a stream from the image resource.
-                inputStream =
-                    context.getResources().openRawResource(OFFLINE_TEST_IMAGE);
-                filename = OFFLINE_FILENAME;
-                
-            // Otherwise, download the file requested by the user.
-            } else {
-                // Download the contents at the URL, which should
-                // reference an image.
-                inputStream =
-                    (InputStream) new URL(url.toString()).getContent();
-                filename = url.toString();
-            }
+            // Download the contents at the URL, which should
+            // reference an image.
+            inputStream =
+                (InputStream) new URL(url.toString()).getContent();
+            filename = url.toString();
 
             // Decode the InputStream into a Bitmap image.
             Bitmap bitmap =

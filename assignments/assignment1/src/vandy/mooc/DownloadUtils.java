@@ -148,6 +148,7 @@ public class DownloadUtils {
             inputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
 
         // Get the absolute path of the image.
