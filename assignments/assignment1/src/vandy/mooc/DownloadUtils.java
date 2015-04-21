@@ -119,9 +119,6 @@ public class DownloadUtils {
         Bitmap imageToSave =
             BitmapFactory.decodeStream(inputStream);
 
-        if (imageToSave == null)
-            return null;
-
         File directory =
             new File(Environment.getExternalStoragePublicDirectory
                      (Environment.DIRECTORY_DCIM)
