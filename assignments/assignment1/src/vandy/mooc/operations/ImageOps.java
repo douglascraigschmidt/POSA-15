@@ -135,9 +135,6 @@ public class ImageOps {
      * Start all the downloads.
      */
     public void startDownloads() {
-        // Make the progress bar visible.
-        mLoadingProgressBar.setVisibility(View.VISIBLE);
-
         // Hide the keyboard.
         Utils.hideKeyboard(mActivity.get(),
                            mUrlEditText.getWindowToken());
@@ -146,6 +143,9 @@ public class ImageOps {
             Utils.showToast(mActivity.get(),
                             "no images provided");
         else {
+            // Make the progress bar visible.
+            mLoadingProgressBar.setVisibility(View.VISIBLE);
+
             // Iterate over each URL and start the download.
             for (String urlString : mUrlList) 
                 startDownload(Uri.parse(urlString));
@@ -176,13 +176,33 @@ public class ImageOps {
     }
 
     /**
+     * Handle the results returned from the Service.
+     */
+    public void doResult(int requestCode,
+                         int resultCode,
+                         Bundle data) {
+        // Increment the number of images handled regardless of
+        // whether this result succeeded or failed to download and
+        // image.
+        ++mNumImagesHandled;
+
+        if (resultCode == Activity.RESULT_OK) {
+            Log.d(TAG,
+                  "received image at URI "
+                  + DownloadImageService.getImagePathname(data));
+                
+            // Display all the images that were received successfully.
+            downloadSuccess(data);
+        } else /* if (resultCode == Activity.RESULT_CANCELED) */ {
+            downloadFailure(data);
+        }
+    }
+
+    /**
      * Launch an Activity to display all the images that were received
      * successfully.
      */
     public void downloadSuccess(Bundle data) {
-        // Increment the number of images handled.
-        ++mNumImagesHandled;
-
         // If this is last image handled, display images via
         // DisplayImagesActivity.
         if (allDownloadsComplete()) {
@@ -221,27 +241,14 @@ public class ImageOps {
 
         // Remove the URL that failed from the UI.
         removeUrl(url);
-    }
 
-    /**
-     * Handle the results returned from the Service.
-     */
-    public void doResult(int requestCode,
-                         int resultCode,
-                         Bundle data) {
-        if (resultCode == Activity.RESULT_OK) {
-            Log.d(TAG,
-                  "received image at URI "
-                  + DownloadImageService.getImagePathname(data));
-                
-            // Display all the images that were received successfully.
-            downloadSuccess(data);
-        } else /* if (resultCode == Activity.RESULT_OK) */ {
-            downloadFailure(data);
+        if (allDownloadsComplete()) {
+            // Dismiss the progress bar.
+            mLoadingProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 
-    /**
+   /**
      * Add whatever URL has been entered into the text field if that
      * URL is valid when user presses the "Add URL" button in UI.
      */
@@ -275,7 +282,6 @@ public class ImageOps {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
 
         // (Re)display the URLs provided by the user thus far.
-        mLinearLayout.removeAllViews();
         displayUrls();
     }
 
@@ -283,12 +289,19 @@ public class ImageOps {
      * Display the URLs provided by the user thus far.
      */
     private void displayUrls() {
-        // Update linear layout to display all URLs in list.
-        TextView urlTextView = new TextView(mActivity.get());
-        urlTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                                                     LayoutParams.WRAP_CONTENT));
-        urlTextView.setText(mUrlEditText.getText().toString());
-        mLinearLayout.addView(urlTextView);
+        // First remove all URL views in the parent LinearLayout
+        mLinearLayout.removeAllViews();
+
+        // Add a each URL list entry as a text view child of the parent LinearLayout.
+        for (String url: mUrlList) {
+            TextView urlTextView = new TextView(mActivity.get());
+            urlTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT));
+            urlTextView.setText(url);
+            mLinearLayout.addView(urlTextView);
+        }
+
+        // Clear the URL input view.
         mUrlEditText.setText("");
     }
 
@@ -296,8 +309,8 @@ public class ImageOps {
      * Reset the URLs.
      */
     private void resetUrls() {
-        mLinearLayout.removeAllViews();
         mUrlList.clear();
+        displayUrls();
     }
 
     /**
@@ -382,4 +395,3 @@ public class ImageOps {
             && mNumImagesHandled > 0;
     }
 }
-
