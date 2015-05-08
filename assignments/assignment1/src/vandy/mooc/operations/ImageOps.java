@@ -186,23 +186,22 @@ public class ImageOps {
         // image.
         ++mNumImagesHandled;
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_CANCELED) 
+            handleDownloadFailure(data);
+        else /* resultCode == Activity.RESULT_OK) */
             Log.d(TAG,
                   "received image at URI "
                   + DownloadImageService.getImagePathname(data));
                 
-            // Display all the images that were received successfully.
-            downloadSuccess(data);
-        } else /* if (resultCode == Activity.RESULT_CANCELED) */ {
-            downloadFailure(data);
-        }
+        // Try to display all images received successfully.
+        tryToDisplayImages(data);
     }
 
     /**
      * Launch an Activity to display all the images that were received
-     * successfully.
+     * successfully if all downloads are complete.
      */
-    public void downloadSuccess(Bundle data) {
+    public void tryToDisplayImages(Bundle data) {
         // If this is last image handled, display images via
         // DisplayImagesActivity.
         if (allDownloadsComplete()) {
@@ -229,7 +228,7 @@ public class ImageOps {
     /**
      * Handle failure to download an image.
      */
-    public void downloadFailure(Bundle data) {
+    public void handleDownloadFailure(Bundle data) {
         // Extract the URL from the message.
         final String url =
             DownloadImageService.getImageURL(data);
