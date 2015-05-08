@@ -176,10 +176,10 @@ public class ImageOps {
 
             Log.d(TAG,
                   "Not all images have finished downloading");
-
-            // (Re)display the URLs.
-            displayUrls();
         }
+
+        // (Re)display the URLs.
+        displayUrls();
     }
 
     /**
