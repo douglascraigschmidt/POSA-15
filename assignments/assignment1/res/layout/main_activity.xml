@@ -46,7 +46,7 @@
         android:layout_alignLeft="@+id/url"
         android:layout_below="@+id/url"
         android:layout_marginTop="18dp"
-        android:onClick="downloadImage"
+        android:onClick="downloadImages"
         android:text="@string/download_and_display_image" />
 
     <Button
