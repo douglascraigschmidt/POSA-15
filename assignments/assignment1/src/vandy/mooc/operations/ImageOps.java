@@ -6,12 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import vandy.mooc.R;
 import vandy.mooc.activities.DisplayImagesActivity;
 import vandy.mooc.activities.MainActivity;
 import vandy.mooc.services.DownloadImageService;
 import vandy.mooc.utils.ServiceResultHandler;
 import vandy.mooc.utils.Utils;
+import vandy.mooc.R;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
@@ -75,13 +76,13 @@ public class ImageOps {
      * Stores the running total number of images downloaded that must
      * be handled by ServiceResultHandler.
      */
-    public int mNumImagesToHandle = 0;
+    public int mNumImagesToHandle;
     
     /**
      * Stores the running total number of images that have been
      * handled by the ServiceResultHandler.
      */
-    public int mNumImagesHandled = 0;
+    public int mNumImagesHandled;
     
     /**
      * Stores the directory to be used for all downloaded images.
@@ -102,7 +103,6 @@ public class ImageOps {
         mActivity = new WeakReference<>(activity);
 
         // Initialize the downloadHandler.
-        // @@ TODO -- you fill in here.
         mServiceResultHandler = new ServiceResultHandler(mActivity.get());
                 
         // Create a timestamp that will be unique.
@@ -119,13 +119,14 @@ public class ImageOps {
         mUrlList = new ArrayList<String>();
 
         // Finish the initialization steps.
-        initializeViews();
+        initializeViewFields();
+        resetNonViewFields();
     }        
 
     /**
-     * Initialize all the View objects.
+     * Initialize all the View fields.
      */
-    public void initializeViews() {
+    private void initializeViewFields() {
         // Store the ProgressBar in a field for fast access.
         mLoadingProgressBar = (ProgressBar)
             mActivity.get().findViewById(R.id.progressBar_loading);
@@ -138,6 +139,18 @@ public class ImageOps {
         // Store the linear layout displaying URLs entered.
         mLinearLayout = 
             (LinearLayout) mActivity.get().findViewById(R.id.linearLayout);
+    }
+
+    /**
+     * Reset the non-view fields (e.g., URLs and counters) and
+     * redisplay linear layout.
+     */
+    private void resetNonViewFields() {
+        mUrlList.clear();
+        mNumImagesHandled = 0;
+        mNumImagesToHandle = 0;
+        displayUrls();
+    }
 
     /**
      * Called by the ImageOps constructor and after a runtime
@@ -147,8 +160,8 @@ public class ImageOps {
         // Reset the mActivity WeakReference.
         mActivity = new WeakReference<>(activity);
 
-        // (Re)initialize all the View objects.
-        initializeViews();
+        // (Re)initialize all the View fields.
+        initializeViewFields();
 
         // If the content is non-null then we're done, so set the
         // result of the Activity and finish it.
@@ -157,7 +170,7 @@ public class ImageOps {
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
             Log.d(TAG,
                   "All images have finished downloading");
-        } else {
+        } else if (downloadsInProgress()) {
             // Display the progress bar.
             mLoadingProgressBar.setVisibility(View.VISIBLE);
 
@@ -246,8 +259,8 @@ public class ImageOps {
             // Dismiss the progress bar.
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
 
-            // Reset URL list for next time.
-            resetUrls();
+            // Initialize state for the next run.
+            resetNonViewFields();
 	
             // Create an Activity for displaying the images.
             final Intent intent =
@@ -343,14 +356,6 @@ public class ImageOps {
     }
 
     /**
-     * Reset the URLs.
-     */
-    private void resetUrls() {
-        mUrlList.clear();
-        displayUrls();
-    }
-
-    /**
      * Delete all the downloaded images.
      */
     public void deleteDownloadedImages() {
@@ -364,8 +369,8 @@ public class ImageOps {
                         fileCount
                         + " downloaded image(s) were deleted.");
 
-        // Reset the URLs for the next time.
-        resetUrls();
+        // Reset the non-view fields for the next run.
+        resetNonViewFields();
     }
 
     /**
@@ -406,5 +411,12 @@ public class ImageOps {
     public boolean allDownloadsComplete() {
         return mNumImagesHandled == mNumImagesToHandle
             && mNumImagesHandled > 0;
+    }
+
+    /**
+     * Returns true if there are any downloads in progress, else false.
+     */
+    public boolean downloadsInProgress() {
+        return mNumImagesToHandle > 0;
     }
 }
