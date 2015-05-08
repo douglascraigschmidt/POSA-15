@@ -4,7 +4,6 @@ import vandy.mooc.R;
 import vandy.mooc.operations.ImageOps;
 import vandy.mooc.utils.RetainedFragmentManager;
 import vandy.mooc.utils.ServiceResult;
-import vandy.mooc.utils.Utils;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -74,7 +73,7 @@ public class MainActivity extends LifecycleLoggingActivity
             mImageOps = new ImageOps(this);
 
             // Store the ImageOps into the RetainedFragmentManager.
-            mRetainedFragmentManager.put("STATE",
+            mRetainedFragmentManager.put("IMAGE_OPS_STATE",
                                          mImageOps);
             
         } else {
@@ -84,10 +83,10 @@ public class MainActivity extends LifecycleLoggingActivity
             // The RetainedFragmentManager was previously initialized,
             // which means that a runtime configuration change
             // occured, so obtain the ImageOps object and inform it
-            // that reconfiguration has completed.
+            // that the runtime configuration change has completed.
             mImageOps = 
-                mRetainedFragmentManager.get("STATE");
-            mImageOps.reconfigurationComplete(this);
+                mRetainedFragmentManager.get("IMAGE_OPS_STATE");
+            mImageOps.onConfigurationChange(this);
         }
     }
 
@@ -97,7 +96,7 @@ public class MainActivity extends LifecycleLoggingActivity
      *
      * @param view The view.
      */
-    public void downloadImage(View view) {
+    public void downloadImages(View view) {
         mImageOps.startDownloads();
     }
 

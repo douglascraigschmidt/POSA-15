@@ -118,18 +118,56 @@ public class ImageOps {
         // Initialize the list of URLs.
         mUrlList = new ArrayList<String>();
 
+        // Finish the initialization steps.
+        initializeViews();
+    }        
+
+    /**
+     * Initialize all the View objects.
+     */
+    public void initializeViews() {
         // Store the ProgressBar in a field for fast access.
         mLoadingProgressBar = (ProgressBar)
             mActivity.get().findViewById(R.id.progressBar_loading);
             
-        // Cache the EditText that holds the urls entered by the user
+        // Store the EditText that holds the urls entered by the user
         // (if any).
-        mUrlEditText = (EditText) mActivity.get().findViewById(R.id.url);
+        mUrlEditText = 
+            (EditText) mActivity.get().findViewById(R.id.url);
 
         // Store the linear layout displaying URLs entered.
         mLinearLayout = 
             (LinearLayout) mActivity.get().findViewById(R.id.linearLayout);
-    }        
+
+    /**
+     * Called by the ImageOps constructor and after a runtime
+     * configuration change occurs to finish the initialization steps.
+     */
+    public void onConfigurationChange(MainActivity activity) {
+        // Reset the mActivity WeakReference.
+        mActivity = new WeakReference<>(activity);
+
+        // (Re)initialize all the View objects.
+        initializeViews();
+
+        // If the content is non-null then we're done, so set the
+        // result of the Activity and finish it.
+        if (allDownloadsComplete()) {
+            // Hide the progress bar.
+            mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            Log.d(TAG,
+                  "All images have finished downloading");
+        } else {
+            // Display the progress bar.
+            mLoadingProgressBar.setVisibility(View.VISIBLE);
+
+            Log.d(TAG,
+                  "Not all images have finished downloading");
+
+            // (Re)display the URLs.
+            displayUrls();
+        }
+    }
 
     /**
      * Start all the downloads.
@@ -360,30 +398,6 @@ public class ImageOps {
 
         imageDirectory.delete();
         return fileCount;
-    }
-
-    /**
-     * Called after a runtime configuration change occurs.
-     */
-    public void reconfigurationComplete(MainActivity activity) {
-        // Reset the mActivity WeakReference.
-        mActivity = new WeakReference<>(activity);
-
-        // Store the ProgressBar in a field for fast access.
-        mLoadingProgressBar = (ProgressBar)
-            mActivity.get().findViewById(R.id.progressBar_loading);
-            
-        // If the content is non-null then we're done, so set the
-        // result of the Activity and finish it.
-        if (allDownloadsComplete()) {
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
-            Log.d(TAG,
-                  "All images have finished downloading");
-        } else {
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
-            Log.d(TAG,
-                  "Not all images have finished downloading");
-        }
     }
 
     /**
