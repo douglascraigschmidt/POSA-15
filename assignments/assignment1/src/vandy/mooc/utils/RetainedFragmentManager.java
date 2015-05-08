@@ -125,7 +125,7 @@ public class RetainedFragmentManager {
      * "Headless" Fragment that retains state information between
      * configuration changes.
      */
-    public class RetainedFragment extends Fragment {
+    public static class RetainedFragment extends Fragment {
         /**
          * Maps keys to objects.
          */
