@@ -160,6 +160,14 @@ public class ImageOps {
         // Reset the mActivity WeakReference.
         mActivity = new WeakReference<>(activity);
 
+        // If we have a currently active service result handler, allow
+        // the handler to update its outdated weak reference to the
+        // ServiceResult callback implementation instance.
+        if (mServiceResultHandler != null) {
+            ((ServiceResultHandler)mServiceResultHandler)
+                    .onConfigurationChange(mActivity.get());
+        }
+
         // (Re)initialize all the View fields.
         initializeViewFields();
 
@@ -261,18 +269,25 @@ public class ImageOps {
 
             // Initialize state for the next run.
             resetNonViewFields();
-	
-            // Create an Activity for displaying the images.
-            final Intent intent =
-                DisplayImagesActivity.makeIntent
-                (mDirectoryPathname);
 
-            Log.d(TAG,
-                  "starting DisplayImageActivity at "
-                  + mDirectoryPathname);
+            // Only start the DisplayImageActivity if the image folder
+            // exists and also contains at least 1 image to display.
+            // Note that if the directory is empty, File.listFiles()
+            // returns null.
+            File file = new File(mDirectoryPathname);
+            if (file.isDirectory() && file.listFiles() != null) {
+                // Create an Activity for displaying the images.
+                final Intent intent =
+                        DisplayImagesActivity.makeIntent
+                                (mDirectoryPathname);
 
-            // Launch Activity to display the results.
-            mActivity.get().startActivity(intent);
+                Log.d(TAG,
+                        "starting DisplayImageActivity at "
+                                + mDirectoryPathname);
+
+                // Launch Activity to display the results.
+                mActivity.get().startActivity(intent);
+            }
         }
     }  
 
@@ -304,9 +319,9 @@ public class ImageOps {
      */
     public void addUrl() {
         // Get the user input (if any).
-        final String url = mUrlEditText.getText().toString(); 
+        final String url = mUrlEditText.getText().toString();
 
-    	if (URLUtil.isValidUrl(url)) {
+        if (URLUtil.isValidUrl(url)) {
             // Add valid URL to running list for download.
             mUrlList.add
                 (mUrlEditText.getText().toString());
@@ -323,8 +338,16 @@ public class ImageOps {
      * Remove a URL that couldn't be downloaded.
      */
     public void removeUrl(String url) {
-        // Remove the invalid URL from the list.
-        mUrlList.remove(url);
+        // Check if passed URL is in the list of URLs.
+        if (mUrlList.contains(url)) {
+            // Remove the invalid URL from the list.
+            mUrlList.remove(url);
+        } else {
+            // Warn caller that URL was not in the list.
+            Log.w(TAG, "RemoveUrl() - passed URL ("
+                    + (url == null ? "null" : url.toString())
+                    + ") is not in URL list.");
+        }
 
         // If there are no more downloads pending dismiss the progress
         // bar.
@@ -342,11 +365,13 @@ public class ImageOps {
         // First remove all URL views in the parent LinearLayout
         mLinearLayout.removeAllViews();
 
-        // Add a each URL list entry as a text view child of the parent LinearLayout.
+        // Add a each URL list entry as a text view child of the
+        // parent LinearLayout.
         for (String url: mUrlList) {
             TextView urlTextView = new TextView(mActivity.get());
-            urlTextView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
+            urlTextView.setLayoutParams
+                (new LayoutParams(LayoutParams.WRAP_CONTENT,
+                                  LayoutParams.WRAP_CONTENT));
             urlTextView.setText(url);
             mLinearLayout.addView(urlTextView);
         }
@@ -360,14 +385,15 @@ public class ImageOps {
      */
     public void deleteDownloadedImages() {
         // Delete all the downloaded image.
-        Integer fileCount =
-            deleteFiles(mDirectoryPathname, 
-                        Integer.valueOf(0));
+        int fileCount = deleteFiles(mDirectoryPathname, 
+                                    0);
 
         // Indicate how many files were deleted.
         Utils.showToast(mActivity.get(),
                         fileCount
-                        + " downloaded image(s) were deleted.");
+                        + " downloaded image"
+                        + (fileCount == 1 ? " was" : "s were")
+                        + " deleted.");
 
         // Reset the non-view fields for the next run.
         resetNonViewFields();
@@ -378,7 +404,7 @@ public class ImageOps {
      * directory.
      */
     private Integer deleteFiles(String directoryPathname,
-                                Integer fileCount) {
+                                int fileCount) {
         File imageDirectory = new File(directoryPathname);        
         File files[] = imageDirectory.listFiles();
 

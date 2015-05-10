@@ -56,7 +56,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
     protected void onStart(){
         // Always call super class for necessary
         // initialization/implementation.
-        // TODO - you fill in here.
         super.onStart();
         Log.d(TAG,
               "onStart() - the activity is about to become visible");
@@ -76,7 +75,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
         super.onResume();
         Log.d(TAG,
               "onResume() - the activity has become visible (it is now \"resumed\")");
@@ -95,7 +93,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
         super.onPause();
         Log.d(TAG,
               "onPause() - another activity is taking focus (this activity is about to be \"paused\")");
@@ -111,7 +108,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
         super.onStop();
         Log.d(TAG,
               "onStop() - the activity is no longer visible (it is now \"stopped\")");
@@ -126,7 +122,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
         super.onRestart();
         Log.d(TAG,
               "onRestart() - the activity is about to be restarted()");
@@ -142,7 +137,6 @@ public abstract class LifecycleLoggingActivity extends Activity {
         // Always call super class for necessary
         // initialization/implementation and then log which lifecycle
         // hook method is being called.
-        // TODO - you fill in here.
         super.onDestroy();
         Log.d(TAG,
               "onDestroy() - the activity is about to be destroyed");

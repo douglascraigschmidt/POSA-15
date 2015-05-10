@@ -197,12 +197,17 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
             File[] bitmaps = new File(filterPath).listFiles();
             mBitmaps = new ArrayList<Bitmap>();
 
-            for (File bitmap : bitmaps){
-                if (bitmap != null) {
-                    mBitmaps.add
-                        (BitmapFactory.decodeFile(bitmap.getAbsolutePath()));
+            // If there are some image files to display, load, and
+            // store their bitmaps in the bitmap array.
+            if (bitmaps != null) {
+                for (File bitmap : bitmaps) {
+                    if (bitmap != null) {
+                        mBitmaps.add
+                                (BitmapFactory.decodeFile(bitmap.getAbsolutePath()));
+                    }
                 }
             }
+
             notifyDataSetChanged();
         }
     }

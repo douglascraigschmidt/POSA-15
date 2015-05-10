@@ -32,6 +32,16 @@ public class ServiceResultHandler extends Handler {
     }
     
     /**
+     * Called to reset ServiceResult callback instance (MainActivity)
+     * after a configuration change, which will have caused the
+     * garbage collector to destroy the Service object associated with
+     * the mResult WeakReference.
+     */
+    public void onConfigurationChange(ServiceResult serviceResult) {
+        mResult = new WeakReference<>(serviceResult);
+    }
+
+    /**
      * This hook method is dispatched in response to receiving the
      * path to the image file from the DownloadImageService.
      */
@@ -39,14 +49,23 @@ public class ServiceResultHandler extends Handler {
     public void handleMessage(Message message) {
         Log.d(TAG,
               "handleMessage() called back");
-            
-        final int requestCode = DownloadImageService.getRequestCode(message);
+
+        final int requestCode =
+            DownloadImageService.getRequestCode(message);
         final int resultCode = message.arg1;
         final Bundle data = message.getData();
 
-        mResult.get().onServiceResult(requestCode,
-                                      resultCode,
-                                      data);
+        if (mResult.get() == null) {
+            // Warn programmer that mResult callback reference has
+            // been lost without being restored after a configuration
+            // change.
+            Log.w(TAG, "Configuration change handling not implemented correctly;"
+                    + " lost weak reference to ServiceResult callback)");
+        } else {
+            // Forward result to callback implementation.
+            mResult.get().onServiceResult(requestCode,
+                    resultCode,
+                    data);
+        }
     }
 }
-
