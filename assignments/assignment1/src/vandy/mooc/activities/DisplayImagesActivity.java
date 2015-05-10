@@ -204,8 +204,6 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
             if (bitmaps != null) {
                 for (File bitmap : bitmaps) {
                     if (bitmap != null) {
-                        mBitmaps.add
-                                (BitmapFactory.decodeFile(bitmap.getAbsolutePath()));
                         try {
                             mBitmaps.add
                                 (BitmapFactory.decodeFile(bitmap.getAbsolutePath()));
