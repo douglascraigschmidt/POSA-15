@@ -205,8 +205,12 @@ public class ImageOps {
             // Make the progress bar visible.
             mLoadingProgressBar.setVisibility(View.VISIBLE);
 
+            // Keep track of number of images to download that must be
+            // displayed.
+            mNumImagesToHandle = mUrlList.size();
+
             // Iterate over each URL and start the download.
-            for (String urlString : mUrlList) 
+            for (String urlString : mUrlList)
                 startDownload(Uri.parse(urlString));
         }
     }
@@ -222,10 +226,6 @@ public class ImageOps {
                                             url,
                                             mDirectoryPathname,
                                             mServiceResultHandler);
-        // Keep track of number of images downloaded that must
-        // be displayed.
-        ++mNumImagesToHandle;
-
         Log.d(TAG,
               "starting the DownloadImageService for "
               + url.toString());
@@ -246,8 +246,10 @@ public class ImageOps {
         ++mNumImagesHandled;
 
         if (resultCode == Activity.RESULT_CANCELED) 
+            // Handle a successful download.
             handleDownloadFailure(data);
         else /* resultCode == Activity.RESULT_OK) */
+            // Handle a failed download.
             Log.d(TAG,
                   "received image at URI "
                   + DownloadImageService.getImagePathname(data));
