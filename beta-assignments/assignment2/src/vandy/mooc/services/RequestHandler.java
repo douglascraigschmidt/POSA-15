@@ -4,9 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import vandy.mooc.utils.ReplyMessage;
 import vandy.mooc.utils.RequestMessage;
-import vandy.mooc.utils.Utils;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -67,8 +65,7 @@ class RequestHandler extends Handler {
         // TODO -- you fill in here.
 
         Log.d(TAG,
-              "handleMessage() is called for url "
-              + url.toString());
+              "handleMessage() called");
 
         // Get the directory pathname where the image will be stored.
         // TODO -- you fill in here.
@@ -87,8 +84,7 @@ class RequestHandler extends Handler {
                 @Override
                 public void run() {
                     Log.d(TAG,
-                          "run() called for "
-                          + url.toString());
+                          "run() called");
 
                     // Download and store the requested image.
                     // TODO -- you fill in here.
@@ -101,8 +97,7 @@ class RequestHandler extends Handler {
             };
 
         Log.d(TAG,
-              "executing the downloadImageAndReply Runnable on "
-              + url.toString());
+              "executing the downloadImageAndReply Runnable");
 
         // Execute the downloadImageAndReply Runnable to download the
         // image and reply.
@@ -128,7 +123,7 @@ class RequestHandler extends Handler {
 
             // Send the replyMessage back to the Activity.
             // TODO -- you fill in here.
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             Log.e(getClass().getName(),
                   "Exception while sending reply message back to Activity.",
                   e);
