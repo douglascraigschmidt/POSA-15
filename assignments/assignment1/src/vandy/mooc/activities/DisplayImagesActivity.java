@@ -73,6 +73,7 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
         imageGrid.setAdapter(imageAdapter);
         configureGridView(imageGrid);
         
+        // Directory path containing download images.
         mFilePath =
             getIntent().getDataString();
         

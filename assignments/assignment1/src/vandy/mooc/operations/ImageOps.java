@@ -103,7 +103,8 @@ public class ImageOps {
         mActivity = new WeakReference<>(activity);
 
         // Initialize the downloadHandler.
-        mServiceResultHandler = new ServiceResultHandler(mActivity.get());
+        mServiceResultHandler =
+            new ServiceResultHandler(mActivity.get());
                 
         // Create a timestamp that will be unique.
         final String timestamp =
@@ -149,44 +150,6 @@ public class ImageOps {
         mUrlList.clear();
         mNumImagesHandled = 0;
         mNumImagesToHandle = 0;
-        displayUrls();
-    }
-
-    /**
-     * Called by the ImageOps constructor and after a runtime
-     * configuration change occurs to finish the initialization steps.
-     */
-    public void onConfigurationChange(MainActivity activity) {
-        // Reset the mActivity WeakReference.
-        mActivity = new WeakReference<>(activity);
-
-        // If we have a currently active service result handler, allow
-        // the handler to update its outdated weak reference to the
-        // ServiceResult callback implementation instance.
-        if (mServiceResultHandler != null) {
-            ((ServiceResultHandler)mServiceResultHandler)
-                    .onConfigurationChange(mActivity.get());
-        }
-
-        // (Re)initialize all the View fields.
-        initializeViewFields();
-
-        // If the content is non-null then we're done, so set the
-        // result of the Activity and finish it.
-        if (allDownloadsComplete()) {
-            // Hide the progress bar.
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
-            Log.d(TAG,
-                  "All images have finished downloading");
-        } else if (downloadsInProgress()) {
-            // Display the progress bar.
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
-
-            Log.d(TAG,
-                  "Not all images have finished downloading");
-        }
-
-        // (Re)display the URLs.
         displayUrls();
     }
 
@@ -246,10 +209,10 @@ public class ImageOps {
         ++mNumImagesHandled;
 
         if (resultCode == Activity.RESULT_CANCELED) 
-            // Handle a successful download.
+            // Handle a failed download.
             handleDownloadFailure(data);
         else /* resultCode == Activity.RESULT_OK) */
-            // Handle a failed download.
+            // Handle a successful download.
             Log.d(TAG,
                   "received image at URI "
                   + DownloadImageService.getImagePathname(data));
@@ -313,6 +276,21 @@ public class ImageOps {
             // Dismiss the progress bar.
             mLoadingProgressBar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    /**
+     * Returns true if all the downloads have completed, else false.
+     */
+    public boolean allDownloadsComplete() {
+        return mNumImagesHandled == mNumImagesToHandle
+            && mNumImagesHandled > 0;
+    }
+
+    /**
+     * Returns true if there are any downloads in progress, else false.
+     */
+    public boolean downloadsInProgress() {
+        return mNumImagesToHandle > 0;
     }
 
    /**
@@ -434,17 +412,40 @@ public class ImageOps {
     }
 
     /**
-     * Returns true if all the downloads have completed, else false.
+     * Called by the ImageOps constructor and after a runtime
+     * configuration change occurs to finish the initialization steps.
      */
-    public boolean allDownloadsComplete() {
-        return mNumImagesHandled == mNumImagesToHandle
-            && mNumImagesHandled > 0;
-    }
+    public void onConfigurationChange(MainActivity activity) {
+        // Reset the mActivity WeakReference.
+        mActivity = new WeakReference<>(activity);
 
-    /**
-     * Returns true if there are any downloads in progress, else false.
-     */
-    public boolean downloadsInProgress() {
-        return mNumImagesToHandle > 0;
+        // If we have a currently active service result handler, allow
+        // the handler to update its outdated weak reference to the
+        // ServiceResult callback implementation instance.
+        if (mServiceResultHandler != null) {
+            ((ServiceResultHandler)mServiceResultHandler)
+                .onConfigurationChange(mActivity.get());
+        }
+
+        // (Re)initialize all the View fields.
+        initializeViewFields();
+
+        // If the content is non-null then we're done, so set the
+        // result of the Activity and finish it.
+        if (allDownloadsComplete()) {
+            // Hide the progress bar.
+            mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            Log.d(TAG,
+                  "All images have finished downloading");
+        } else if (downloadsInProgress()) {
+            // Display the progress bar.
+            mLoadingProgressBar.setVisibility(View.VISIBLE);
+
+            Log.d(TAG,
+                  "Not all images have finished downloading");
+        }
+
+        // (Re)display the URLs.
+        displayUrls();
     }
 }

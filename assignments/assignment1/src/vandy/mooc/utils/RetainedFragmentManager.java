@@ -140,7 +140,7 @@ public class RetainedFragmentManager {
          *            object that contains saved state information.
          */
         @Override
-            public void onCreate(Bundle savedInstanceState) {
+        public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             
             // Ensure the data survives runtime configuration changes.

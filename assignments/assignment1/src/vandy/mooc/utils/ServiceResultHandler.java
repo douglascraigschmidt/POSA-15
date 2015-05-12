@@ -64,8 +64,8 @@ public class ServiceResultHandler extends Handler {
         } else {
             // Forward result to callback implementation.
             mResult.get().onServiceResult(requestCode,
-                    resultCode,
-                    data);
+                                          resultCode,
+                                          data);
         }
     }
 }
