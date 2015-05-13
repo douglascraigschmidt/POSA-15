@@ -21,7 +21,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 /**
- * An Activity that Displays an image.
+ * An Activity that displays all the image located in a particular
+ * directory on an Android device.
  */
 public class DisplayImagesActivity extends LifecycleLoggingActivity {
     /**

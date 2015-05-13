@@ -1,5 +1,6 @@
 package vandy.mooc.utils;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
@@ -89,23 +90,23 @@ class RequestReplyMessageBase {
     /**
      * Helper method that returns the URL to the image file.
      */
-    public static String getImageURL(Bundle data) {
+    public static Uri getImageURL(Bundle data) {
         // Extract the path to the image file from the Bundle, which
         // should be stored using the IMAGE_URL key.
-        return data.getString(IMAGE_URL);
+        return Uri.parse(data.getString(IMAGE_URL));
     }
 
     /**
      * Helper method that returns the URL to the image file.
      */
-    public String getImageURL() {
+    public Uri getImageURL() {
         // Extract the data from Message, which is in the form of a
         // Bundle that can be passed across processes.
         Bundle data = mMessage.getData();
 
         // Extract the path to the image file from the Bundle, which
         // should be stored using the IMAGE_URL key.
-        return data.getString(IMAGE_URL);
+        return Uri.parse(data.getString(IMAGE_URL));
     }
 
     /**

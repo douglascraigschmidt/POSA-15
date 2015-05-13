@@ -50,9 +50,10 @@
   <p> Skeleton code for this assignment is available <a
     href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment2">here</a>.
     Pull the appropriate skeleton code into your repository, read it
-    carefully, and complete the "TODO" markers, which reside in
-    several Java source files, including DownloadImagesService.java,
-    ImageOps.java, and RequestHandler.java.  </p>
+    carefully, and complete the "TODO" markers, which reside in the
+    following Java source files: DownloadImagesBoundService.java,
+    ImageOpsBoundService.java, RequestHandler.java, ReplyMessage.java,
+    and RequestMessage.java. </p>
 
   <p> Note that there are no automated unit tests for this
   assignment. Instead, you'll know the program is working when you can

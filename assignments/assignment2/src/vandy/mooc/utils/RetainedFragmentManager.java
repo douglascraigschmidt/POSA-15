@@ -11,7 +11,8 @@ import android.util.Log;
 
 /**
  * Retains and manages state information between runtime configuration
- * changes to an Activity.  Implements the Memento pattern.
+ * changes to an Activity.  Plays the role of the "Originator" in the
+ * Memento pattern.
  */
 public class RetainedFragmentManager {
     /**
@@ -123,7 +124,8 @@ public class RetainedFragmentManager {
 
     /**
      * "Headless" Fragment that retains state information between
-     * configuration changes.
+     * configuration changes.  Plays the role of the "Memento" in the
+     * Memento pattern.
      */
     public static class RetainedFragment extends Fragment {
         /**
@@ -140,7 +142,7 @@ public class RetainedFragmentManager {
          *            object that contains saved state information.
          */
         @Override
-            public void onCreate(Bundle savedInstanceState) {
+        public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             
             // Ensure the data survives runtime configuration changes.

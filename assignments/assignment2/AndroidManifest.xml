@@ -38,8 +38,13 @@
     </activity>
     
     <service
-       android:name=".services.DownloadImagesService">
+       android:name=".services.DownloadImagesBoundService"
        android:process=":remote"> 
+    </service>
+
+    <service
+       android:name=".services.DownloadImagesStartedService"
+       android:process=":remote">
     </service>
 
   </application>

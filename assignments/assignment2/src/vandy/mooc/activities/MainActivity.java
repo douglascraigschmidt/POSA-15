@@ -10,22 +10,19 @@ import android.view.View;
 
 /**
  * The main Activity that prompts the user for URLs of images to
- * download concurrently via the DownloadImageService and view via the
- * DisplayImagesActivity.  Also allows the user to delete downloaded
- * images.  Extends LifecycleLoggingActivity so its lifecycle hook
- * methods are logged automatically.  Also implements ServiceResult so
- * that the onServiceResult() hook method is called back when an image
- * has been downloaded.  This implementation uses the
- * RetainedFragmentManager class to handle runtime reconfigurations
- * robustly.
+ * download concurrently via various implementations of
+ * DownloadImages*Service and view via the DisplayImagesActivity.
+ * Also allows the user to delete downloaded images.  Extends
+ * LifecycleLoggingActivity so its lifecycle hook methods are logged
+ * automatically and implements ServiceResult so that the
+ * onServiceResult() hook method is called back when an image has been
+ * downloaded.  This implementation uses the RetainedFragmentManager
+ * class to handle runtime reconfigurations robustly.  As a result,
+ * MainActivity plays the role of the "Caretaker" in the Memento
+ * pattern.
  */
 public class MainActivity extends LifecycleLoggingActivity
                           implements ServiceResult {
-    /**
-     * Debugging tag used by the Android logger.
-     */
-    private final String TAG = getClass().getSimpleName();
-
     /**
      * Used to retain the ImageOps state between runtime configuration
      * changes.
@@ -47,7 +44,7 @@ public class MainActivity extends LifecycleLoggingActivity
      * @param Bundle object that contains saved state information.
      */
     @Override
-        protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         // Always call super class for necessary
         // initialization/implementation.
         super.onCreate(savedInstanceState);
@@ -69,7 +66,9 @@ public class MainActivity extends LifecycleLoggingActivity
         // initialization/implementation.
         super.onStart();
 
-        // Initiate the service binding protocol.
+        // Initiate the service binding protocol (which may be a
+        // no-op, depending on which type of DownloadImages*Service is
+        // used).
         mImageOps.bindService();
     }
 
@@ -79,7 +78,8 @@ public class MainActivity extends LifecycleLoggingActivity
      */
     @Override
     protected void onStop() {
-        // Unbind from the Service.
+        // Unbind from the Service (which may be a no-op, depending on
+        // which type of DownloadImages*Service is used).
         mImageOps.unbindService();
 
         // Always call super class for necessary operations when
@@ -97,23 +97,31 @@ public class MainActivity extends LifecycleLoggingActivity
             Log.d(TAG,
                   "First time onCreate() call");
 
-            // Create the ImageOps object one time.
-            mImageOps = new ImageOps(this);
+            // Create the ImageOps object one time.  The "true"
+            // parameter instructs ImageOps to use the
+            // DownloadImagesBoundService.
+            mImageOps = new ImageOps(this, true);
 
             // Store the ImageOps into the RetainedFragmentManager.
             mRetainedFragmentManager.put("IMAGE_OPS_STATE",
                                          mImageOps);
             
         } else {
+            // The RetainedFragmentManager was previously initialized,
+            // which means that a runtime configuration change
+            // occured.
+
             Log.d(TAG,
                   "Second or subsequent onCreate() call");
 
-            // The RetainedFragmentManager was previously initialized,
-            // which means that a runtime configuration change
-            // occured, so obtain the ImageOps object and inform it
-            // that the runtime configuration change has completed.
+
+            // Obtain the ImageOps object from the
+            // RetainedFragmentManager.
             mImageOps = 
                 mRetainedFragmentManager.get("IMAGE_OPS_STATE");
+
+            // Inform it that the runtime configuration change has
+            // completed.
             mImageOps.onConfigurationChange(this);
         }
     }
@@ -152,8 +160,8 @@ public class MainActivity extends LifecycleLoggingActivity
      */
     @Override
     public void onServiceResult(int requestCode,
-                                    int resultCode,
-                                    Bundle data) {
+                                int resultCode,
+                                Bundle data) {
         // Handle the results.
         mImageOps.doResult(requestCode,
                            resultCode,

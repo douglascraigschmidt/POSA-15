@@ -4,7 +4,9 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import vandy.mooc.utils.ReplyMessage;
 import vandy.mooc.utils.RequestMessage;
+import vandy.mooc.utils.Utils;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -26,7 +28,7 @@ class RequestHandler extends Handler {
      * Store a WeakReference to the Service to enable garbage
      * collection.
      */
-    WeakReference<DownloadImagesService> mService;
+    WeakReference<DownloadImagesBoundService> mService;
     
     /**
      * Reference to the ExecutorService that manages a pool of
@@ -35,9 +37,9 @@ class RequestHandler extends Handler {
     private ExecutorService mExecutorService;
 
     /**
-     * Constructor initializes the WeakReference.
+     * Constructor initializes the WeakReference and ExecutorService.
      */
-    public RequestHandler(DownloadImagesService service) {
+    public RequestHandler(DownloadImagesBoundService service) {
         // Store a WeakReference to the DownloadImageService.
         mService = new WeakReference<>(service);
 
@@ -48,7 +50,7 @@ class RequestHandler extends Handler {
     /**
      * Hook method called back when a request message arrives from an
      * Activity.  The Message it receives contains the Messenger used
-     * to reply to the Activity and the URI of the image to download.
+     * to reply to the Activity and the URL of the image to download.
      * This image is stored in a local file on the local device and
      * image file's URI is sent back to the MainActivity via the
      * Messenger passed with the message.
@@ -63,9 +65,6 @@ class RequestHandler extends Handler {
 
         // Get the URL associated with the Intent data.
         // TODO -- you fill in here.
-
-        Log.d(TAG,
-              "handleMessage() called");
 
         // Get the directory pathname where the image will be stored.
         // TODO -- you fill in here.
@@ -83,9 +82,6 @@ class RequestHandler extends Handler {
                  */
                 @Override
                 public void run() {
-                    Log.d(TAG,
-                          "run() called");
-
                     // Download and store the requested image.
                     // TODO -- you fill in here.
 
@@ -95,9 +91,6 @@ class RequestHandler extends Handler {
                     // TODO -- you fill in here.
                 }
             };
-
-        Log.d(TAG,
-              "executing the downloadImageAndReply Runnable");
 
         // Execute the downloadImageAndReply Runnable to download the
         // image and reply.
@@ -115,6 +108,7 @@ class RequestHandler extends Handler {
         // Call the makeReplyMessage() factory method to create
         // Message.
         // TODO -- you fill in here.
+
         try {
             Log.d(TAG,
                   "sending "
@@ -135,7 +129,7 @@ class RequestHandler extends Handler {
      */
     public void shutdown() {
         // Immediately shutdown the ExecutorService.
-        // TODO -- you fill in here.
+        // TODO -- you fill in here.        
     }
 }
 

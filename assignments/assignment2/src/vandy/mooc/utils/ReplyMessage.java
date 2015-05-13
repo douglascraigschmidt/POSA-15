@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.os.Message;
 
 /**
- * A thin wrapper around an Android Message that defines the schema of
+ * A thin facade around an Android Message that defines the schema of
  * a reply from the Service back to the Activity.
  */
 public class ReplyMessage extends RequestReplyMessageBase {
     /**
-     * Constructor is private to ensure the makeReplyMessage()
-     * factory method is used.
+     * Constructor is private to ensure the makeReplyMessage() factory
+     * method is used.
      */
     private ReplyMessage(Message message) {
         super(message);
@@ -22,7 +22,7 @@ public class ReplyMessage extends RequestReplyMessageBase {
      * Convert a Message into a ReplyMessage.
      */
     public static ReplyMessage makeReplyMessage(Message message) {
-        // Make a copy of the message since it may be recycled.
+        // Make a copy of @a message since it may be recycled.
         return new ReplyMessage(Message.obtain(message));
     }
 

@@ -24,17 +24,17 @@ public class ServiceResultHandler extends Handler {
     private WeakReference<ServiceResult> mResult;
     
     /**
-     * Constructor.
+     * Constructor stores @a serviceResult into a WeakReference.
      */
     public ServiceResultHandler(ServiceResult serviceResult) {
         mResult = new WeakReference<>(serviceResult);
     }
     
     /**
-     * Called to reset ServiceResult callback instance (MainActivity)
-     * after a configuration change, which will have caused the
-     * garbage collector to destroy the Service object associated with
-     * the mResult WeakReference.
+     * Called to reset ServiceResult callback instance (e.g.,
+     * MainActivity) after a configuration change, which will have
+     * caused the garbage collector to destroy the Service object
+     * associated with the mResult WeakReference.
      */
     public void onConfigurationChange(ServiceResult serviceResult) {
         mResult = new WeakReference<>(serviceResult);
@@ -53,6 +53,7 @@ public class ServiceResultHandler extends Handler {
         ReplyMessage replyMessage =
             ReplyMessage.makeReplyMessage(message);
 
+        // Extract the necessary fields from the ReplyMessage.
         final int requestCode =
             replyMessage.getRequestCode();
         final int resultCode = replyMessage.getResultCode();
@@ -65,7 +66,8 @@ public class ServiceResultHandler extends Handler {
             Log.w(TAG, "Configuration change handling not implemented correctly;"
                     + " lost weak reference to ServiceResult callback)");
         } else {
-            // Forward result to callback implementation.
+            // Forward result to ServiceResult callback
+            // implementation.
             mResult.get().onServiceResult(requestCode,
                                           resultCode,
                                           data);

@@ -1,27 +1,19 @@
 package vandy.mooc.services;
 
-import vandy.mooc.utils.ReplyMessage;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.IBinder;
 import android.os.Messenger;
-import android.os.RemoteException;
-import android.util.Log;
 
 /**
- * A bound Service that concurrently downloads an image requested via
- * a Message passed to a Messenger, stores the image in a file on the
- * local device, and returns the URI to the downloaded image file back
- * to the Activity via the Messenger passed with the original Message.
+ * A Bound Service that concurrently downloads an image requested via
+ * a Message passed to a Request Messenger, stores the image in a file
+ * on the local device, and returns the URI to the downloaded image
+ * file back to the Activity via the Reply Messenger passed with the
+ * original Message.
  */
-public class DownloadImagesService extends LifecycleLoggingService {
-    /**
-     * Debugging tag used by the Android logger.
-     */
-    private final String TAG = getClass().getSimpleName();
-
-    /**
+public class DownloadImagesBoundService extends LifecycleLoggingService {
+     /**
      * A RequestHandler that handles request Messages send from the
      * Activity.
      */
@@ -59,11 +51,12 @@ public class DownloadImagesService extends LifecycleLoggingService {
 
     /**
      * Factory method that returns the underlying IBinder associated
-     * with the request Messenger.
+     * with the Request Messenger.
      */
     @Override
     public IBinder onBind(Intent intent) {
         super.onBind(intent);
+        // Return the iBinder associated with the Request Messenger.
         return mRequestMessenger.getBinder();
     }
 
@@ -76,6 +69,6 @@ public class DownloadImagesService extends LifecycleLoggingService {
         super.onDestroy();
 
         // Shutdown the RequestHandler.
-        mRequestHandler.shutdown();
+    	// TODO -- you fill in here.
     }
 }
