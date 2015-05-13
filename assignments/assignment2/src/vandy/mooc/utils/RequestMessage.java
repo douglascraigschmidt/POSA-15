@@ -51,7 +51,7 @@ public class RequestMessage extends RequestReplyMessageBase {
         // TODO -- you fill in here.
 
         // Put the pathname to the image file into the Bundle via the
-        // IMAGE_URL key.
+        // DIRECTORY_PATHNAME key.
         // TODO -- you fill in here.
 
         // Put the request code into the Bundle via the REQUEST_CODE
