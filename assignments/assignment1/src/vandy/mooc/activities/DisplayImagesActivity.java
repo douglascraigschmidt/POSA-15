@@ -73,7 +73,6 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
         imageGrid.setAdapter(imageAdapter);
         configureGridView(imageGrid);
         
-        // Directory path containing download images.
         mFilePath =
             getIntent().getDataString();
         
@@ -110,6 +109,8 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
     	// Configure the GridView with dynamic values.
     	imageGrid.setColumnWidth(mColWidth);
     	imageGrid.setNumColumns(mNumCols);
+    	
+    	((ImageAdapter)imageGrid.getAdapter()).setColWidth(mColWidth);
     }
 
     /**
@@ -192,6 +193,30 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
             return imageView;
         }
 
+        
+        private int mColWidth = 100;
+        
+        public void setColWidth(int w ) {
+        	if (w > 0 )
+        		mColWidth = w;
+        }
+
+        /**
+         * Convert the @a bitmap parameter into a scaled Bitmap to 
+         * avoid out-of-memory exceptions with large images.
+         */
+        private Bitmap getScaledBitmap(File bitmap) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(bitmap.getAbsolutePath(), options);
+        	
+            int sizeRatio = options.outWidth /mColWidth;
+        	
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = sizeRatio;	
+            return BitmapFactory.decodeFile(bitmap.getAbsolutePath(), options);
+        }
+
         /**
          * Resets the bitmaps of the GridView to the ones found at the
          * given filterPath.
@@ -207,7 +232,10 @@ public class DisplayImagesActivity extends LifecycleLoggingActivity {
                     if (bitmap != null) {
                         try {
                             mBitmaps.add
-                                (BitmapFactory.decodeFile(bitmap.getAbsolutePath()));
+                                // Scale the bitmap to avoid
+                                // out-of-memory exceptions with large
+                                // images.
+                                (getScaledBitmap(bitmap));
                         } catch (Exception | Error e) {
                             Log.e(TAG,"Error displaying image:", e);
                             Utils.showToast(DisplayImagesActivity.this,
