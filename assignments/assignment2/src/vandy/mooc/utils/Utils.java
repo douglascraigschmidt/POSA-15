@@ -2,6 +2,7 @@ package vandy.mooc.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -9,6 +10,8 @@ import java.util.Locale;
 
 import vandy.mooc.R;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.MemoryInfo;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,6 +19,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
@@ -55,6 +60,8 @@ public class Utils {
      * mode.
      */
     static final String OFFLINE_FILENAME = "dougs.jpg";
+
+	private static final int BUFLEN = 256;
     
     /**
      * Display a @a bitmapImage on an @a imageView.
@@ -72,14 +79,29 @@ public class Utils {
     /**
      * Display a @a bitmapImage on an @a imageView.
      */
-    public static Bitmap decodeImageFromPath(Uri pathToImageFile) {
-        try (InputStream inputStream =
-             new FileInputStream(pathToImageFile.toString())) {
-                return BitmapFactory.decodeStream(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }  
+    public static Bitmap decodeImageFromPath(Context context, Uri pathToImageFile) {
+    	ActivityManager mgr = (ActivityManager) context
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		MemoryInfo info = new ActivityManager.MemoryInfo();
+		mgr.getMemoryInfo(info);
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		options.inPreferredConfig = Config.ARGB_8888;
+
+		BitmapFactory.decodeFile(pathToImageFile.toString(), options);
+		int ratio = (int) (4 * (long) options.outHeight
+				* (long) options.outWidth * (long) 4 / (info.availMem + 1));
+
+		options.inSampleSize = ratio;
+		options.inJustDecodeBounds = false;
+		try (InputStream inputStream = new FileInputStream(
+				pathToImageFile.toString())) {
+			return BitmapFactory
+					.decodeFile(pathToImageFile.toString(), options);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     /**
@@ -89,7 +111,7 @@ public class Utils {
                                       Uri pathToImageFile,
                                       Uri directoryPathname) {
         Bitmap originalImage =
-            decodeImageFromPath(pathToImageFile);
+            decodeImageFromPath(context, pathToImageFile);
 
         // Bail out if something is wrong with the image.
         if (originalImage == null)
@@ -131,12 +153,25 @@ public class Utils {
             }
         }
 
+        String fname = Long.toString(System.nanoTime());
+		File file = new File(ensureDir(directoryPathname), fname);
+		try {
+			grayScaleImage.compress(CompressFormat.JPEG, 100,
+					new FileOutputStream(file));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		Uri uri = Uri.fromFile(file);
+
         return Utils.createDirectoryAndSaveFile
             (context, 
-             grayScaleImage,
+             uri,
              // Name of the image file that we're filtering.
-             pathToImageFile.toString(),
-             directoryPathname.toString());
+             uri.getLastPathSegment(),
+             directoryPathname.toString()); 
     }
     
     /**
@@ -158,19 +193,28 @@ public class Utils {
                   "external storage is not writable");
             return null;
         }
-
+        
         // If we're offline, open the image in our resources.
         if (DOWNLOAD_OFFLINE) {
             // Get a stream from the image resource.
             try (InputStream inputStream =
                  context.getResources().openRawResource(OFFLINE_TEST_IMAGE)) {
-                    // Create an output file and save the image into it.
-                    return Utils.createDirectoryAndSaveFile
-                        (context,
-                         // Decode the InputStream into a Bitmap image.
-                         BitmapFactory.decodeStream(inputStream),
-                         OFFLINE_FILENAME,
-                         directoryPathname);
+            	byte[] buffer = new byte[BUFLEN];
+				int n;
+				File f = new File(ensureDir(Uri.parse(directoryPathname)),
+						Long.toBinaryString(System.nanoTime()));
+				FileOutputStream fos = new FileOutputStream(f);
+				while ((n = inputStream.read(buffer)) >= 0) {
+					fos.write(buffer, 0, n);
+				}
+				fos.close();
+                // Create an output file and save the image into it.
+                return Utils.createDirectoryAndSaveFile
+                    (context,
+                     // Decode the InputStream into a Bitmap image.
+                     Uri.fromFile(f),
+                     OFFLINE_FILENAME,
+                     directoryPathname);
             } catch (Exception e) {
                 Log.e(TAG,
                       "Exception getting resources."
@@ -182,16 +226,17 @@ public class Utils {
         else {
             // Download the contents at the URL, which should
             // reference an image.
-            try (InputStream inputStream = 
-                 (InputStream) new URL(url.toString()).getContent()) {
-                    // Create an output file and save the image into it.
-                    return Utils.createDirectoryAndSaveFile
-                        (context,
-                         // Decode the InputStream into a Bitmap image.
-                         BitmapFactory.decodeStream(inputStream),
-                         url.toString(),
-                         directoryPathname);
-             } catch (Exception e) {
+        	try /* (InputStream inputStream = 
+            (InputStream) new URL(url.toString()).getContent())*/ {
+               // Create an output file and save the image into it.
+               return Utils.createDirectoryAndSaveFile
+                   (context,
+                    // Decode the InputStream into a Bitmap image.
+                    //BitmapFactory.decodeStream(inputStream),
+                    url,
+                    url.getLastPathSegment(),
+                    directoryPathname);
+        } catch (Exception e) {
                 Log.e(TAG,
                       "Exception while downloading -- returning null."
                       + e.toString());
@@ -211,11 +256,11 @@ public class Utils {
      * @return          the absolute path to the downloaded image file on the file system.
      */
     private static Uri createDirectoryAndSaveFile(Context context,
-                                                  Bitmap imageToSave,
+    										      Uri uri,//Bitmap imageToSave,
                                                   String fileName,
                                                   String directoryPathname) {
         // Bail out of we get an invalid bitmap.
-        if (imageToSave == null)
+        if (uri == null)
             return null;
 
         // Try to open a directory.
@@ -237,9 +282,14 @@ public class Utils {
 
         // Save the image to the output file.
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
-            imageToSave.compress(Bitmap.CompressFormat.JPEG,
-                                 100,
-                                 outputStream);
+        	
+        	URL url = new URL(uri.toString());
+
+			InputStream is = (InputStream) url.getContent();
+            byte[] buffer = new byte[512];
+            int n;
+            while ((n = is.read(buffer))>= 0)
+            		outputStream.write(buffer, 0, n);
             outputStream.flush();
         } catch (Exception e) {
             // Indicate a failure.
@@ -395,4 +445,13 @@ public class Utils {
     private Utils() {
         throw new AssertionError();
     }
+    
+    private static File ensureDir(Uri directoryPathname) {
+		// TODO Auto-generated method stub
+		File d = new File(directoryPathname.toString());
+		if (!d.exists() && !d.mkdir())
+			return null;
+		return d;
+	}
 }
+
