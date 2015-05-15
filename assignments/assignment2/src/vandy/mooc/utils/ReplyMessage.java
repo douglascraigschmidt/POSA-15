@@ -41,23 +41,21 @@ public class ReplyMessage extends RequestReplyMessageBase {
         // Create a new Bundle to handle the result.
         // TODO -- you fill in here.
 
-        // Put the URL to the image file into the Bundle via the
-        // IMAGE_URL key.
+        // Set the Bundle to be the data in the message.
         // TODO -- you fill in here.
 
-        // Put the requestCode into the Bundle via the REQUEST_CODE
-        // key.
+        // Put the URL to the image file into the Bundle
         // TODO -- you fill in here.
 
-        // Set a field in the Message to indicate whether the download
+        // Put the requestCode into the Bundle
+        // TODO -- you fill in here.
+
+        // Set the result code to indicate whether the download
         // succeeded or failed.
         // TODO -- you fill in here.
 
-        // Put the path to the image file into the Bundle via the
-        // IMAGE_PATHNAME key only if the download succeeded.
-        // TODO -- you fill in here.
-
-        // Set the Bundle to be the data in the message.
+        // Put the path to the image file into the Bundle
+        // only if the download succeeded.
         // TODO -- you fill in here.
 
         return replyMessage;
