@@ -56,7 +56,7 @@ class RequestHandler extends Handler {
      * Messenger passed with the message.
      */
     public void handleMessage(Message message) {
-        // Convert the Message into a ReplyMessage.
+        // Convert the Message into a RequestMessage.
         final RequestMessage requestMessage =
             RequestMessage.makeRequestMessage(message);
 
