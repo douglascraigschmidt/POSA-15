@@ -39,8 +39,7 @@ public class RequestMessage extends RequestReplyMessageBase {
         RequestMessage requestMessage =
             new RequestMessage(Message.obtain());
 
-        // Create and put a Messenger as the replyTo field in the
-        // Message.
+        // Put replyMessenger into the Message's replyTo field.
         // TODO -- you fill in here.
 
         // Create a new Bundle to handle the result.
