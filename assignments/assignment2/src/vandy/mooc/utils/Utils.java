@@ -1,3 +1,7 @@
+/**
+ * This software is intended for educational purposes and there is no
+ * warranty, so use at your own risk.
+ */
 package vandy.mooc.utils;
 
 import java.io.File;
@@ -32,8 +36,6 @@ import android.widget.Toast;
  * This helper class encapsulates several static methods that are used
  * to download image files.
  */
-/* This software is intended for educational purposes, and there is no warranty , use at own risk */
-
 public class Utils {
     /**
      * Used for debugging.
@@ -310,15 +312,14 @@ public class Utils {
             if (filePath.exists())
                 filePath.delete();
                 
-            // pre-validate file.    
-            try (InputStream is = (InputStream) url.getContent();
-                   
-            		) {
-            	 BitmapFactory.Options options = new  BitmapFactory.Options();
-            	 options.inJustDecodeBounds = true;
-            	 BitmapFactory.decodeStream(is, null, options);
-            	 if( options.outMimeType == null)
-            		 return null;
+            // Pre-validate file.
+            try (InputStream is = (InputStream) url.getContent()) {
+                 BitmapFactory.Options options = 
+                     new BitmapFactory.Options();
+                 options.inJustDecodeBounds = true;
+                 BitmapFactory.decodeStream(is, null, options);
+                 if (options.outMimeType == null)
+                     return null;
             } catch (Exception e) {
                	return null; // Indicate a failure.
             }
@@ -338,7 +339,8 @@ public class Utils {
             Log.d(TAG,
                   "absolute path to image file is " 
                   + absolutePathToImage);
-            
+
+            // Return the absolute path to the image file.
             return Uri.parse(absolutePathToImage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -347,7 +349,7 @@ public class Utils {
     }
 
     /**
-     * This method checks if we can write image to external storage
+     * This method checks if we can write image to external storage.
      * 
      * @return true if an image can be written, and false otherwise
      */
