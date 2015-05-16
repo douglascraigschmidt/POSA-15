@@ -32,7 +32,7 @@ import android.widget.Toast;
  * This helper class encapsulates several static methods that are used
  * to download image files.
  */
-/* This software is intended for educational purposes, and there is no warranty , use at own risk */
+ /* This software is intended for educational purposes, and there is no warranty , use at own risk */
 
 public class Utils {
     /**
@@ -309,9 +309,8 @@ public class Utils {
             // Delete the file if it already exists.
             if (filePath.exists())
                 filePath.delete();
-
-            // Get the content of the resource at the url and save it
-            // to an output file.
+                
+            //   pre-validate download
             try (InputStream is = (InputStream) url.getContent();
                    
             		) {
@@ -323,7 +322,9 @@ public class Utils {
             } catch (Exception e) {
                	return null; // Indicate a failure.
             }
-            
+
+            // Get the content of the resource at the url and save it
+            // to an output file.
             try (InputStream is = (InputStream) url.getContent();
                  OutputStream os = new FileOutputStream(filePath)) {
                  copyFile(is, os);
