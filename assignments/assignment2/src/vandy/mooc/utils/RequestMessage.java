@@ -39,7 +39,7 @@ public class RequestMessage extends RequestReplyMessageBase {
         RequestMessage requestMessage =
             new RequestMessage(Message.obtain());
 
-        // Put replyMessenger into the Message's replyTo field.
+        // Store replyMessenger into the Message's replyTo field.
         // TODO -- you fill in here.
 
         // Create a new Bundle to handle the result.
