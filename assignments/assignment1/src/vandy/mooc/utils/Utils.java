@@ -249,28 +249,6 @@ public class Utils {
         // Get the absolute path of the image.
         String absolutePathToImage = file.getAbsolutePath();
 
-        // Provide metadata so the downloaded image is viewable in the
-        // Gallery.
-        ContentValues values =
-            new ContentValues();
-        values.put(Images.Media.TITLE,
-                   fileName);
-        values.put(Images.Media.DESCRIPTION,
-                   fileName);
-        values.put(Images.Media.DATE_TAKEN,
-                   System.currentTimeMillis ());
-        values.put(Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                   file.getName().toLowerCase(Locale.US));
-        values.put("_data",
-                   absolutePathToImage);
-        
-        ContentResolver cr = 
-            context.getContentResolver();
-
-        // Store the metadata for the image into the Gallery.
-        cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                  values);
-
         Log.d(TAG,
               "absolute path to image file is " 
               + absolutePathToImage);

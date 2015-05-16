@@ -134,7 +134,8 @@ class RequestReplyMessageBase {
      * @param url - URL to the image file
      */
     public static void setImageURL(Bundle data, Uri url) {
-        data.putString(IMAGE_URL,url.toString());
+        data.putString(IMAGE_URL,
+                       url.toString());
     }
 
     /**
@@ -155,7 +156,8 @@ class RequestReplyMessageBase {
      * @param url
      */
     public void setImageURL(Uri url) {
-        mMessage.getData().putString(IMAGE_URL,url.toString());
+        mMessage.getData().putString(IMAGE_URL,
+                                     url.toString());
     }
 
     /**
@@ -174,7 +176,8 @@ class RequestReplyMessageBase {
      * @param imagePathname - the path to the image file
      */
     public static void setImagePathname(Bundle data, String imagePathname) {
-        data.putString(IMAGE_PATHNAME,imagePathname);
+        data.putString(IMAGE_PATHNAME,
+                       imagePathname);
     }
 
     /**
@@ -196,7 +199,8 @@ class RequestReplyMessageBase {
      * @param imagePathname - the path to the image file
      */
     public void setImagePathname(String imagePathname) {
-        mMessage.getData().putString(IMAGE_PATHNAME,imagePathname);
+        mMessage.getData().putString(IMAGE_PATHNAME,
+                                     imagePathname);
     }
 
     /**
@@ -217,6 +221,7 @@ class RequestReplyMessageBase {
      * @param directoryPathname
      */
     public void setDirectoryPathname(String directoryPathname) {
-        mMessage.getData().putString(DIRECTORY_PATHNAME,directoryPathname);
+        mMessage.getData().putString(DIRECTORY_PATHNAME,
+                                     directoryPathname);
     }
 }
