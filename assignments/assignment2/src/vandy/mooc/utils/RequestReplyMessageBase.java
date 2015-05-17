@@ -14,24 +14,24 @@ class RequestReplyMessageBase {
      * String constant used to extract the pathname to a downloaded
      * image from a Bundle.
      */
-    private static final String IMAGE_PATHNAME = "IMAGE_PATHNAME";
+    public static final String IMAGE_PATHNAME = "IMAGE_PATHNAME";
 
     /**
      * String constant used to extract the request code.
      */
-    private static final String REQUEST_CODE = "REQUEST_CODE";
+    public static final String REQUEST_CODE = "REQUEST_CODE";
 
     /**
      * String constant used to extract the URL to an image from a
      * Bundle.
      */
-    private static final String IMAGE_URL = "IMAGE_URL";
+    public static final String IMAGE_URL = "IMAGE_URL";
 
     /**
      * String constant used to extract the directory pathname to use
      * to store a downloaded image.
      */
-    private static final String DIRECTORY_PATHNAME = "DIRECTORY_PATHNAME";
+    public static final String DIRECTORY_PATHNAME = "DIRECTORY_PATHNAME";
     
     /**
      * Message used to hold the information.
@@ -117,6 +117,15 @@ class RequestReplyMessageBase {
      */
     public void setRequestCode(int requestCode) {
         mMessage.getData().putInt(REQUEST_CODE,requestCode);
+    }
+
+    /**
+     * Helper method that sets the request code of the message to the provided Bundle
+     * @param data
+     * @param requestCode
+     */
+    public static void setRequestCode(Bundle data, int requestCode) {
+        data.putInt(REQUEST_CODE,requestCode);
     }
 
     /**
@@ -223,5 +232,14 @@ class RequestReplyMessageBase {
     public void setDirectoryPathname(String directoryPathname) {
         mMessage.getData().putString(DIRECTORY_PATHNAME,
                                      directoryPathname);
+    }
+
+    /**
+     * Helper method that sets the URI to the directory pathname to provided Bundle
+     * @param data
+     * @param directoryPathname
+     */
+    public static void setDirectoryPathname(Bundle data, String directoryPathname) {
+        data.putString(DIRECTORY_PATHNAME,directoryPathname);
     }
 }
