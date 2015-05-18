@@ -3,6 +3,7 @@ package vandy.mooc;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -136,8 +137,8 @@ public class DownloadActivity extends DownloadBase {
                 // the bitmap image whose pathname is passed as a
                 // parameter to sendPath().  Please use
                 // displayBitmap() defined in DownloadBase.
-                final Runnable displayRunnable = new Runnable () {
-                        public void run () {
+                final Runnable displayRunnable = new Runnable() {
+                        public void run() {
                             displayBitmap(imagePathname);
                         }
                     };
@@ -147,7 +148,7 @@ public class DownloadActivity extends DownloadBase {
         };
      
     /**
-     * This method is called when a user presses a button (see
+     * This method is called when a user presses a button(see
      * res/layout/activity_download.xml)
      */
     public void runService(View view) {
@@ -155,38 +156,42 @@ public class DownloadActivity extends DownloadBase {
 
         hideKeyboard();
 
-    	switch (view.getId()) {
+    	switch(view.getId()) {
         case R.id.bound_sync_button:
             if (mDownloadCall != null) {
                 Log.d(TAG,
-                                      "Calling twoway DownloadServiceSync.downloadImage()");
+                      "Calling twoway DownloadServiceSync.downloadImage()");
+                /** 
+                 * Define an AsyncTask instance to avoid blocking the UI Thread. 
+                 * */
 		AsyncTask<Uri, Void, String> task = new AsyncTask<Uri, Void, String>() {
-			
-				@Override
-				protected String doInBackground(Uri... params) {
-					// TODO Auto-generated method stub
-					try {
-						return mDownloadCall.downloadImage(params[0]);
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return null;
-				}
-				
-				@Override
-				protected void onPostExecute(String result) {
-					if (result != null) {
-						displayBitmap(result);
-					}
-				}
-			};
-		task.execute(uri);
+                    /**
+                     * Runs in a background thread.
+                     */
+                    @Override
+                    protected String doInBackground(Uri... params) {
+                        try {
+                            return mDownloadCall.downloadImage(params[0]);
+                        } catch(RemoteException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    /**
+                     * Runs in the UI Thread.
+                     */
+                    @Override
+                    protected void onPostExecute(String result) {
+                        if (result != null) 
+                            displayBitmap(result);
+                    }
+                }.execute(uri);
             }
             break;
 
         case R.id.bound_async_button:
-            if (mDownloadRequest != null) {
+            if(mDownloadRequest != null) {
                 try {
                     Log.d(TAG,
                           "Calling oneway DownloadServiceAsync.downloadImage()");
@@ -195,7 +200,7 @@ public class DownloadActivity extends DownloadBase {
                     // the appropriate Uri and callback.
                     mDownloadRequest.downloadImage(uri,
                                                    mDownloadCallback);
-                } catch (RemoteException e) {
+                } catch(RemoteException e) {
                     e.printStackTrace();
                 }
             }
@@ -208,16 +213,16 @@ public class DownloadActivity extends DownloadBase {
      * bind the Activity to the Services.
      */
     @Override
-    public void onStart () {
+    public void onStart() {
     	super.onStart();
     	
     	// Bind this activity to the DownloadBoundService* Services if
     	// they aren't already bound Use mBoundSync/mBoundAsync
-    	if (mDownloadCall == null) 
+    	if(mDownloadCall == null) 
             bindService(DownloadBoundServiceSync.makeIntent(this), 
                         mServiceConnectionSync, 
                         BIND_AUTO_CREATE);
-    	if (mDownloadRequest == null)
+    	if(mDownloadRequest == null)
             bindService(DownloadBoundServiceAsync.makeIntent(this), 
                         mServiceConnectionAsync, 
                         BIND_AUTO_CREATE);
@@ -228,39 +233,39 @@ public class DownloadActivity extends DownloadBase {
      * hidden to unbind the Activity from the Services.
      */
     @Override
-    public void onStop () {
+    public void onStop() {
     	super.onStop();
     	
     	// Unbind the Sync/Async Services if they are bound. Use
     	// mBoundSync/mBoundAsync
-    	if (mDownloadCall != null) 
+    	if(mDownloadCall != null) 
             unbindService(mServiceConnectionSync);
-    	if (mDownloadRequest != null) 
+    	if(mDownloadRequest != null) 
             unbindService(mServiceConnectionAsync);
     }
     
     // Public accessor method for testing purposes
-    public DownloadCall getDownloadCall () {
+    public DownloadCall getDownloadCall() {
     	return mDownloadCall;
     }
     
     // Public accessor method for testing purposes
-    public DownloadRequest getDownloadRequest () {
+    public DownloadRequest getDownloadRequest() {
     	return mDownloadRequest;
     }
     
     // Public accessor method for testing purposes
-    public DownloadCallback getDownloadCallback () {
+    public DownloadCallback getDownloadCallback() {
     	return mDownloadCallback;
     }
     
     // Public accessor method for testing purposes
-    public boolean isBoundToSync () {
+    public boolean isBoundToSync() {
     	return mDownloadCall != null;
     }
     
     // Public accessor method for testing purposes
-    public boolean isBoundToAsync () {
+    public boolean isBoundToAsync() {
     	return mDownloadRequest != null;
     }     
 }
