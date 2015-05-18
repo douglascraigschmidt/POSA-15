@@ -32,7 +32,7 @@ public class DownloadBase extends Activity {
     /**
      * Used for debugging.
      */
-    private final String TAG = this.getClass().getSimpleName(); 
+    public final String TAG = this.getClass().getSimpleName(); 
 
     /**
      * This is the reference to the text box that allows the user to
@@ -134,7 +134,7 @@ public class DownloadBase extends Activity {
          * work without complaining.
          * 
          *  Please note that this is for demonstration purposes ONLY,
-         *  and you should NEVER, EVER turn off strict mode in
+         *  and you should NEVER EVER turn off strict mode in
          *  production code. You should also not do networking
          *  operations on the main thread, because it might cause your
          *  application to crash.

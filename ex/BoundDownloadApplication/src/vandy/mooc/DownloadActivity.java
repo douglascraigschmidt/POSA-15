@@ -38,11 +38,6 @@ import android.view.View;
  */
 public class DownloadActivity extends DownloadBase {
     /**
-     * Used for debugging.
-     */
-    private final String TAG = this.getClass().getSimpleName(); 
-    
-    /**
      * The AIDL Interface that's used to make twoway calls to the
      * DownloadServiceSync Service.  This object plays the role of
      * Requestor in the Broker Pattern.  If it's null then there's no
@@ -72,13 +67,11 @@ public class DownloadActivity extends DownloadBase {
             public void onServiceConnected(ComponentName name,
                                            IBinder service) {
             	Log.d(TAG, "ComponentName: " + name);
-                // TODO You fill in here to replace null with a call
-                // to a generated stub method that converts the
+                // Call the generated stub method to convert the
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
-
-                // mDownloadCall = null;
-                mDownloadCall = DownloadCall.Stub.asInterface(service);
+                mDownloadCall =
+                    DownloadCall.Stub.asInterface(service);
             }
 
             /**
@@ -90,7 +83,6 @@ public class DownloadActivity extends DownloadBase {
             public void onServiceDisconnected(ComponentName name) {
                 mDownloadCall = null;
             }
-    	 
         };
      
     /** 
@@ -106,13 +98,11 @@ public class DownloadActivity extends DownloadBase {
             @Override
 		public void onServiceConnected(ComponentName name,
                                                IBinder service) {
-                // TODO You fill in here to replace null with a call
-                // to a generated stub method that converts the
+                // Call the generated stub method to convert the
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
-
-                // mDownloadRequest = null;
-                mDownloadRequest = DownloadRequest.Stub.asInterface(service);
+                mDownloadRequest =
+                    DownloadRequest.Stub.asInterface(service);
             }
 
             /**
@@ -142,15 +132,11 @@ public class DownloadActivity extends DownloadBase {
              */
             @Override
             public void sendPath(final String imagePathname) throws RemoteException {
-                // TODO - You fill in here to replace null with a new
-                // Runnable whose run() method displays the bitmap
-                // image whose pathname is passed as a parameter to
-                // sendPath().  Please use displayBitmap() defined in
-                // DownloadBase.
-
-                // Runnable displayRunnable = null;
-
-                Runnable displayRunnable = new Runnable () {
+                // Create a new Runnable whose run() method displays
+                // the bitmap image whose pathname is passed as a
+                // parameter to sendPath().  Please use
+                // displayBitmap() defined in DownloadBase.
+                final Runnable displayRunnable = new Runnable () {
                         public void run () {
                             displayBitmap(imagePathname);
                         }
@@ -171,29 +157,28 @@ public class DownloadActivity extends DownloadBase {
 
     	switch (view.getId()) {
         case R.id.bound_sync_button:
-            // TODO - You fill in here to use mDownloadCall to
-            // download the image & then display it.
-        	if (mDownloadCall != null) {
-        		try {
-        			Log.d(TAG,
-                                      "Calling twoway DownloadServiceSync.downloadImage()");
+            if (mDownloadCall != null) {
+                try {
+                    Log.d(TAG,
+                          "Calling twoway DownloadServiceSync.downloadImage()");
 
-        			displayBitmap(mDownloadCall.downloadImage(uri));
-        		} catch (RemoteException e1) {
-        			e1.printStackTrace();
-        		}
-        	}
+                    // Use mDownloadCall to download the image and then
+                    // display it.
+                    displayBitmap(mDownloadCall.downloadImage(uri));
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+            }
             break;
 
         case R.id.bound_async_button:
-            // TODO - You fill in here to call downloadImage() on
-            // mDownloadRequest, passing in the appropriate Uri and
-            // callback.
             if (mDownloadRequest != null) {
                 try {
                     Log.d(TAG,
                           "Calling oneway DownloadServiceAsync.downloadImage()");
 
+                    // Call downloadImage() on mDownloadRequest, passing in
+                    // the appropriate Uri and callback.
                     mDownloadRequest.downloadImage(uri,
                                                    mDownloadCallback);
                 } catch (RemoteException e) {
@@ -264,5 +249,4 @@ public class DownloadActivity extends DownloadBase {
     public boolean isBoundToAsync () {
     	return mDownloadRequest != null;
     }     
-    
 }
