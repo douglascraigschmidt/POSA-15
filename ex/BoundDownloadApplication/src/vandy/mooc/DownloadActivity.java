@@ -158,16 +158,30 @@ public class DownloadActivity extends DownloadBase {
     	switch (view.getId()) {
         case R.id.bound_sync_button:
             if (mDownloadCall != null) {
-                try {
-                    Log.d(TAG,
-                          "Calling twoway DownloadServiceSync.downloadImage()");
-
-                    // Use mDownloadCall to download the image and then
-                    // display it.
-                    displayBitmap(mDownloadCall.downloadImage(uri));
-                } catch (RemoteException e1) {
-                    e1.printStackTrace();
-                }
+                Log.d(TAG,
+                                      "Calling twoway DownloadServiceSync.downloadImage()");
+		AsyncTask<Uri, Void, String> task = new AsyncTask<Uri, Void, String>() {
+			
+				@Override
+				protected String doInBackground(Uri... params) {
+					// TODO Auto-generated method stub
+					try {
+						return mDownloadCall.downloadImage(params[0]);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return null;
+				}
+				
+				@Override
+				protected void onPostExecute(String result) {
+					if (result != null) {
+						displayBitmap(result);
+					}
+				}
+			};
+		task.execute(uri);
             }
             break;
 
