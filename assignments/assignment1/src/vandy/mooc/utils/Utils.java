@@ -375,7 +375,8 @@ public class Utils {
     static private String getUniqueFilename(final String filename) {
     	
         return Base64.encodeToString((filename
-                                      + System.currentTimeMillis()).getBytes(),
+                                      + System.currentTimeMillis()
+                                      + Thread.currentThread().getName()).getBytes(),
                                       Base64.NO_WRAP);
         // Use this implementation if you don't want to keep filling
         // up your file system with temp files..
