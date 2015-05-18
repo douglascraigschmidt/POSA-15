@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
+import edu.vuum.mocca.R;
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Base64;
