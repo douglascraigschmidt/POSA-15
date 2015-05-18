@@ -121,26 +121,5 @@ public class DownloadBase extends Activity {
         // reset the image when a button is pressed.
         mCurrentBitmap = ((BitmapDrawable)(mImageView.getDrawable())).getBitmap();
         mDefaultBitmap = mCurrentBitmap;
-        
-        /**
-         * Turn off strict mode. 
-         * 
-         * Normally, if you try to do any networking from the main UI
-         * thread, the Android framework will throw an exception and
-         * stop working. However, part of this application uses a
-         * synchronous AIDL interface to demonstrate how to execute
-         * functions in services synchronously. For this purpose, we
-         * turn off strict mode so that the Android framework will
-         * work without complaining.
-         * 
-         *  Please note that this is for demonstration purposes ONLY,
-         *  and you should NEVER EVER turn off strict mode in
-         *  production code. You should also not do networking
-         *  operations on the main thread, because it might cause your
-         *  application to crash.
-         */
-        StrictMode.ThreadPolicy policy =
-            new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
     }
 }
