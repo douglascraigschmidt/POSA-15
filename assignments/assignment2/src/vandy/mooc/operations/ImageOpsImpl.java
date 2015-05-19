@@ -316,7 +316,9 @@ public abstract class ImageOpsImpl {
             // Note that if the directory is empty, File.listFiles()
             // returns null.
             File file = new File(mDirectoryPathname);
-            if (file.isDirectory() && file.listFiles() != null) {
+            if (file.isDirectory() 
+                && file.listFiles() != null 
+                && file.listFiles().length > 0) {
                 // Create an Activity for displaying the images.
                 final Intent intent =
                         DisplayImagesActivity.makeIntent

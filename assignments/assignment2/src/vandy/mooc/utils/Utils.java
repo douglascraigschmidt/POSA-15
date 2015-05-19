@@ -295,6 +295,11 @@ public class Utils {
             // Bail out of we get an invalid bitmap.
             if (url == null)
                 return null;
+            
+            // Bail if the fileName is null as well.
+            if (fileName == null) {
+            	return null;
+            }
 
             // Create a directory path.
             File directoryPath = new File(directoryPathname);
@@ -368,13 +373,15 @@ public class Utils {
      *          String containing the unique temporary filename.
      */
     static private String getUniqueFilename(final String filename) {
+    	
         return Base64.encodeToString((filename
-                                      + System.currentTimeMillis()).getBytes(),
+                                      + System.currentTimeMillis()
+                                      + Thread.currentThread().getName()).getBytes(),
                                       Base64.NO_WRAP);
         // Use this implementation if you don't want to keep filling
         // up your file system with temp files..
         // 
-        // return Base64.encodeToString(filename, Base64.NO_WRAP);
+        // return Base64.encodeToString(filename.getBytes(), Base64.NO_WRAP);
     }
 
     /**
