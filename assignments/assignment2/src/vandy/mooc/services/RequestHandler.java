@@ -63,7 +63,7 @@ class RequestHandler extends Handler {
         // Get the reply Messenger.
         // TODO -- you fill in here.
 
-        // Get the URL associated with the Intent data.
+        // Get the URL associated with the message data.
         // TODO -- you fill in here.
 
         // Get the directory pathname where the image will be stored.
