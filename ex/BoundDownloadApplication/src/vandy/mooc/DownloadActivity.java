@@ -1,11 +1,17 @@
 package vandy.mooc;
 
 import android.content.ComponentName;
+
 import android.content.ServiceConnection;
+
 import android.net.Uri;
+
 import android.os.IBinder;
+
 import android.os.RemoteException;
+
 import android.util.Log;
+
 import android.view.View;
 
 /**
