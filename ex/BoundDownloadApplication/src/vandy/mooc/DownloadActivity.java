@@ -37,7 +37,7 @@ import android.view.View;
  * applications from tedious and error-prone aspects of inter-process
  * communication.
  */
-public class DownloadActivity extends DownloadBase {
+public class DownloadActivity extends DownloadActivityBase {
     /**
      * The AIDL Interface that's used to make twoway calls to the
      * DownloadServiceSync Service.  This object plays the role of
@@ -118,14 +118,14 @@ public class DownloadActivity extends DownloadBase {
         };
      
     /**
-     * The implementation of the DownloadCallback AIDL
+     * The implementation of the DownloadResults AIDL
      * Interface. Should be passed to the DownloadBoundServiceAsync
      * Service using the DownloadRequest.downloadImage() method.
      * 
-     * This implementation of DownloadCallback.Stub plays the role of
+     * This implementation of DownloadResults.Stub plays the role of
      * Invoker in the Broker Pattern.
      */
-    DownloadCallback.Stub mDownloadCallback = new DownloadCallback.Stub() {
+    DownloadResults.Stub mDownloadResults = new DownloadResults.Stub() {
             /**
              * Called when the DownloadServiceAsync finishes obtaining
              * the results from the GeoNames Web service.  Use the
@@ -164,7 +164,7 @@ public class DownloadActivity extends DownloadBase {
                 /** 
                  * Define an AsyncTask instance to avoid blocking the UI Thread. 
                  * */
-		AsyncTask<Uri, Void, String> task = new AsyncTask<Uri, Void, String>() {
+		new AsyncTask<Uri, Void, String>() {
                     /**
                      * Runs in a background thread.
                      */
@@ -197,9 +197,9 @@ public class DownloadActivity extends DownloadBase {
                           "Calling oneway DownloadServiceAsync.downloadImage()");
 
                     // Call downloadImage() on mDownloadRequest, passing in
-                    // the appropriate Uri and callback.
+                    // the appropriate Uri and Results.
                     mDownloadRequest.downloadImage(uri,
-                                                   mDownloadCallback);
+                                                   mDownloadResults);
                 } catch(RemoteException e) {
                     e.printStackTrace();
                 }
@@ -255,8 +255,8 @@ public class DownloadActivity extends DownloadBase {
     }
     
     // Public accessor method for testing purposes
-    public DownloadCallback getDownloadCallback() {
-    	return mDownloadCallback;
+    public DownloadResults getDownloadResults() {
+    	return mDownloadResults;
     }
     
     // Public accessor method for testing purposes

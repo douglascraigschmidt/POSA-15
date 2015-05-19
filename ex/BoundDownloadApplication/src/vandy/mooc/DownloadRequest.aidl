@@ -1,12 +1,12 @@
 package vandy.mooc;
 
-import vandy.mooc.DownloadCallback;
+import vandy.mooc.DownloadResults;
 
 /**
  * @class DownloadRequest
  *
  * @brief An AIDL interface for downloading an image from another
- *        process. The caller should provide a DownloadCallback object
+ *        process. The caller should provide a DownloadResults object
  *        so that the downloading process can return a result across
  *        process boundaries asynchronously.
  *
@@ -20,5 +20,5 @@ interface DownloadRequest {
      * file system.
      */
     oneway void downloadImage(in Uri uri, 
-                              in DownloadCallback callback); 
+                              in DownloadResults callback); 
 }
