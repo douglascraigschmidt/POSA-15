@@ -19,6 +19,6 @@ interface DownloadRequest {
      * callback object to send the downloaded file's file name on the
      * file system.
      */
-    oneway void downloadImage (in Uri uri, 
-                               in DownloadCallback callback); 
+    oneway void downloadImage(in Uri uri, 
+                              in DownloadCallback callback); 
 }
