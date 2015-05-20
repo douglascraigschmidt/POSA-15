@@ -125,8 +125,9 @@ public class AcronymOpsImpl implements AcronymOps {
             Utils.hideKeyboard(mActivity.get(),
                                mEditText.get().getWindowToken());
 
-            // Use an AsyncTask to download the Acronym data in a
-            // separate thread and then display it in the UI thread.
+            // Use an anonymous AsyncTask to download the Acronym data
+            // in a separate thread and then display any results in
+            // the UI thread.
             new AsyncTask<String, Void, List<AcronymData>> () {
                 /**
                  * Acronym we're trying to expand.
@@ -160,6 +161,8 @@ public class AcronymOpsImpl implements AcronymOps {
                                         + mAcronym
                                         + " found");
                 }
+                // Execute the AsyncTask to expand the acronym without
+                // blocking the caller.
             }.execute(acronym);
         } else {
             Log.d(TAG, "mAcronymCall was null.");
