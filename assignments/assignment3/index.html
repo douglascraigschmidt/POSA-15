@@ -29,12 +29,7 @@ return a WeatherData object to the WeatherActivity that can be used to
 display various current weather-related information for that
 location. </P>
 
-<P>To obtain weather-related information, the Bound Services will need
-to parse the Json data returned from making an HTTP GET request via
-the <A HREF="http://openweathermap.org/api">Open Weather Map API</a>.
-An example of the Json data returned by API can be seen by opening <A
-HREF="http://api.openweathermap.org/data/2.5/weather?q=Nashville,TN">this
-link</a> in your browser. You have a great degree of flexibility in
+<P> You have a great degree of flexibility in
 how you design and implement this app, as long as it meets the
 following requirements </P>
 
@@ -65,7 +60,7 @@ following requirements </P>
     in the skeletons.  The WeatherActivity should <EM>not</EM> contact
     the Weather Service web service directly, but only via the
     getCurrentWeather() methods defined by the WeatherRequest and
-    WeatherCall AIDL interfaces.  WeatherActivity should display the
+    WeatherCall AIDL interfaces. WeatherActivity should display the
     weather-related fields in WeatherData in whatever format you
     desire. </P>
 
@@ -78,10 +73,23 @@ following requirements </P>
     calls during the intervening time period should be serviced from
     the cache. </P>
 
+    <LI> <P> To obtain weather-related information, the Bound Services
+    will need to parse the Json data returned from making an HTTP GET
+    request via the <A HREF="http://openweathermap.org/api">Open
+    Weather Map API</a>.  An example of the Json data returned by API
+    can be seen by opening <A
+    HREF="http://api.openweathermap.org/data/2.5/weather?q=Nashville,TN">this
+    link</a> in your browser.  In addition to the videos on HTTP
+    programming from week 3 and 4, helpful information about creating
+    Plain Ol' Java Objects (POJOs) from Json schemes is available <A
+    HREF="http://www.jsonschema2pojo.org">here</a>. There's also
+    overview of a JsonReader parser <A
+    HREF="https://developer.android.com/reference/android/util/JsonReader.html">here</a>.</P>
+
     </UL>
 
-    The material necessary to complete assignment 3 is available in
-    videos from Weeks 3 and 4 of the MOOC. <P>
+    <P>The material necessary to complete assignment 3 is available in
+    videos from Weeks 3 and 4 of the MOOC. </P>
 
   <hr width=50% align=left>
   <h4>Skeleton Code</h4>
@@ -110,4 +118,3 @@ run into problems.  </p>
 
 </body>
 </html>
-
