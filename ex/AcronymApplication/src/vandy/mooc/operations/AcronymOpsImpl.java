@@ -128,12 +128,19 @@ public class AcronymOpsImpl implements AcronymOps {
             // Use an AsyncTask to download the Acronym data in a
             // separate thread and then display it in the UI thread.
             new AsyncTask<String, Void, List<AcronymData>> () {
+                /**
+                 * Acronym we're trying to expand.
+                 */
+                private String mAcronym;
 
-                // Retrieve the expanded acronym results via a
-                // synchronous two-way method call, which runs in a
-                // background thread to avoid blocking the UI thread.
+                /**
+                 * Retrieve the expanded acronym results via a
+                 * synchronous two-way method call, which runs in a
+                 * background thread to avoid blocking the UI thread.
+                 */
                 protected List<AcronymData> doInBackground(String... acronyms) {
                     try {
+                        mAcronym = acronyms[0];
                         return acronymCall.expandAcronym(acronyms[0]);
                     } catch (RemoteException e) {
                         e.printStackTrace();
@@ -141,9 +148,17 @@ public class AcronymOpsImpl implements AcronymOps {
                     return null;
                 }
 
-                // Display the results in the UI Thread.
+                /**
+                 * Display the results in the UI Thread.
+                 */
                 protected void onPostExecute(List<AcronymData> acronymDataList) {
-                    displayResults(acronymDataList);
+                    if (acronymDataList.size() > 0)
+                        displayResults(acronymDataList);
+                    else 
+                        Utils.showToast(mActivity.get(),
+                                        "no expansions for "
+                                        + mAcronym
+                                        + " found");
                 }
             }.execute(acronym);
         } else {

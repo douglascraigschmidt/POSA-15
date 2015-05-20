@@ -134,7 +134,7 @@ public class MainActivity extends LifecycleLoggingActivity {
      * the "Look Up Sync" button.
      */
     public void expandAcronymSync(View v) {
-        mAcronymOps.expandAcronymAsync(v);
+        mAcronymOps.expandAcronymSync(v);
     }
 
     /*
