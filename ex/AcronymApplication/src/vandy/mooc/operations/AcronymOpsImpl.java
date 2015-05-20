@@ -281,14 +281,14 @@ public class AcronymOpsImpl implements AcronymOps {
         // running via a call to bindService(), which binds this
         // activity to the AcronymService* if they aren't already
         // bound.
-        if (mServiceConnectionAsync.getInterface() == null) 
-            mActivity.get().bindService(AcronymServiceAsync.makeIntent(mActivity.get()),
-                                        mServiceConnectionAsync,
-                                        Context.BIND_AUTO_CREATE);
-        
         if (mServiceConnectionSync.getInterface() == null) 
             mActivity.get().bindService(AcronymServiceSync.makeIntent(mActivity.get()),
                                         mServiceConnectionSync,
+                                        Context.BIND_AUTO_CREATE);
+
+        if (mServiceConnectionAsync.getInterface() == null) 
+            mActivity.get().bindService(AcronymServiceAsync.makeIntent(mActivity.get()),
+                                        mServiceConnectionAsync,
                                         Context.BIND_AUTO_CREATE);
     }
 
