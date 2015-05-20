@@ -80,6 +80,7 @@ public class AcronymJSONParser {
                         acronyms = parseAcronymLongFormArray(reader);
                     break outerloop;
                 default:
+		    reader.skipValue();
                     Log.d(TAG, "weird problem with " + name + " field");
                     break;
                 }
