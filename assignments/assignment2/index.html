@@ -1,0 +1,77 @@
+<html>
+
+<title>Downloaded Image Viewer (P2 - Assignment 2)</title>
+
+<body text = "#000000"
+      link="#000fff"
+      vlink="#ff0f0f"
+      bgcolor="#ffffff">
+
+  <hr>
+  <h3>Downloaded Image Viewer (P2 - Assignment 2)</h3>
+
+  <hr width=50% align=left>
+  <h4>Overview of the Downloaded Image Viewer Assignment</h4>
+
+  <p> 
+
+    The purpose of this assignment is to give you experience using
+    Android Services by developing an app containing a main Activity
+    that prompts the user for URLs of images to download concurrently
+    via a DownloadImagesService and then view via a
+    DisplayImagesActivity.  DownloadImagesService is implemented via
+    an Android <A
+    HREF="http://developer.android.com/guide/components/bound-services.html">Bound
+    Service</A>, as covered in <A
+    HREF="https://www.youtube.com/watch?v=yMaTUNVdeBI&index=36&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">this
+    video</a>, and several instances of the Android <A
+    HREF="http://developer.android.com/reference/android/os/Messenger.html">Messenger</a>
+    class, which is covered in the following videos:
+
+    <UL>
+
+    <LI> <A
+    HREF="https://www.youtube.com/watch?v=Bfu14K74DxQ&index=41&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">Service to Activity Communication via Android Messenger</a>.
+    <LI> <a HREF="https://www.youtube.com/watch?v=rGH0U_p1pow&index=42&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">Programming Bound Services with Messengers (Part 1)</a>
+    <LI> <a HREF="https://www.youtube.com/watch?v=cRFw7xaZ_Mg&index=43&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">Programming Bound Services with Messengers (Part 2)</a>
+    </UL>
+
+  In addition, the RequestHandler (which is associated with the
+  DownloadImagesBoundService) will use an Java ExecutorService to
+  concurrently download images and send their URIs back to the
+  Activity.  The Java ExecutorService is covered
+  in <A HREF="https://www.youtube.com/watch?v=2NAlvSkK9-k&index=27&list=PLZ9NgFYEMxp4KSJPUyaQCj7x--NQ6kvcX">this</a>
+  video.  Material presented during lectures in Weeks 2 of the class
+  are also relevant to this assignment.
+
+  <hr width=50% align=left>
+  <h4>Skeleton Code</h4>
+
+  <p> Skeleton code for this assignment is available <a
+    href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment2">here</a>.
+    Pull the appropriate skeleton code into your repository, read it
+    carefully, and complete the "TODO" markers, which reside in the
+    following Java source files: DownloadImagesBoundService.java,
+    ImageOpsBoundService.java, RequestHandler.java, ReplyMessage.java,
+    and RequestMessage.java. </p>
+
+  <p> Note that there are no automated unit tests for this
+  assignment. Instead, you'll know the program is working when you can
+  successfully download and view an image.  However, make sure your
+  program works for both valid and invalid URL input.
+    </p>
+
+  <hr width=50% align=left>
+  <h4>Concluding Remarks</h4>
+  <p>
+
+  This assignment is designed to further your understanding with
+  programming Android Services in Java.  It's harder than the first
+  assignment since you'll need to write some code on the client-side,
+  as well as code to perform concurrent background processing with an
+  Android Bound Service on the server-side. Therefore, start early and
+  come to Virtual Office Hours if you have questions or run into
+  problems.  </p>
+
+</body>
+</html>

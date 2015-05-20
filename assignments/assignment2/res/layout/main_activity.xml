@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/enter_url"
+        android:inputType="text|textMultiLine|textUri" >
+    </EditText>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="addUrl"
+        android:text="@string/add_url" 
+        android:layout_below="@id/url"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:orientation="vertical"
+        android:layout_below="@id/button2">
+    </LinearLayout>
+
+    <ProgressBar
+      android:id="@+id/progressBar_loading"
+      style="@android:style/Widget.ProgressBar.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/button1"
+      android:visibility="invisible" 
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true"/>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="deleteDownloadedImages"
+        android:text="@string/clear_directory" 
+        android:layout_alignParentBottom="true"/>
+    
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="downloadImages"
+        android:text="@string/download_and_display_images" 
+        android:layout_above="@id/button3"/>
+</RelativeLayout>

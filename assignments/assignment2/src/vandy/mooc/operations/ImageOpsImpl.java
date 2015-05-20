@@ -6,13 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import vandy.mooc.R;
 import vandy.mooc.activities.DisplayImagesActivity;
 import vandy.mooc.activities.MainActivity;
-import vandy.mooc.services.DownloadImageService;
+import vandy.mooc.utils.ReplyMessage;
 import vandy.mooc.utils.ServiceResultHandler;
 import vandy.mooc.utils.Utils;
-import vandy.mooc.R;
-
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
@@ -29,13 +28,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
- * This class provides all the image-related operations.
+ * This abstract class defines all the image-related operations.  It
+ * plays the role of the "Implementor" in Bridge pattern and the role
+ * of the "Abstract Class" in the Template Method pattern.
  */
-public class ImageOps {
+public abstract class ImageOpsImpl {
     /**
      * Debugging tag used by the Android logger.
      */
-    private final String TAG = getClass().getSimpleName();
+    protected final String TAG = getClass().getSimpleName();
 
     /**
      * Image-related operations.
@@ -50,62 +51,62 @@ public class ImageOps {
     /**
      * Used to enable garbage collection.
      */
-    WeakReference<MainActivity> mActivity;
+    protected WeakReference<MainActivity> mActivity;
     	
     /**
      * EditText field for entering the desired URL to an image.
      */
-    private EditText mUrlEditText;
+    protected WeakReference<EditText> mUrlEditText;
 
     /**
      * Linear layout to store TextViews displaying URLs.
      */
-    private LinearLayout mLinearLayout;
+    protected WeakReference<LinearLayout> mLinearLayout;
 
     /**
      * Display progress to the user.
      */
-    protected ProgressBar mLoadingProgressBar;
+    protected WeakReference<ProgressBar> mLoadingProgressBar;
 
-    /**
-     * Stores an instance of ServiceResultHandler.
-     */
-    public Handler mServiceResultHandler = null;
-        
     /**
      * Stores the running total number of images downloaded that must
      * be handled by ServiceResultHandler.
      */
-    public int mNumImagesToHandle;
+    protected int mNumImagesToHandle;
     
     /**
      * Stores the running total number of images that have been
      * handled by the ServiceResultHandler.
      */
-    public int mNumImagesHandled;
+    protected int mNumImagesHandled;
     
     /**
      * Stores the directory to be used for all downloaded images.
      */
-    public String mDirectoryPathname = null;
+    protected String mDirectoryPathname = null;
     
     /**
      * Array of Strings that represent the valid URLs that have
      * been entered.
      */
-    public ArrayList<String> mUrlList;
+    protected ArrayList<String> mUrlList;
 
     /**
-     * Constructor.
+     * Stores an instance of ServiceResultHandler.
      */
-    public ImageOps(MainActivity activity) {
+    protected Handler mServiceResultHandler = null;
+
+    /**
+     * Constructor initializes the fields.
+     */
+    public ImageOpsImpl(MainActivity activity) {
         // Initialize the WeakReference.
         mActivity = new WeakReference<>(activity);
 
-        // Initialize the downloadHandler.
-        mServiceResultHandler =
+        // Initialize the ServiceResultHandler.
+        mServiceResultHandler = 
             new ServiceResultHandler(mActivity.get());
-                
+
         // Create a timestamp that will be unique.
         final String timestamp =
             new SimpleDateFormat("yyyyMMdd'_'HHmm").format(new Date());
@@ -122,24 +123,25 @@ public class ImageOps {
         // Finish the initialization steps.
         initializeViewFields();
         resetNonViewFields();
-    }        
+    }
 
     /**
-     * Initialize all the View fields.
+     * Initialize the View fields, which are all stored as
+     * WeakReferences to enable garbage collection.
      */
     private void initializeViewFields() {
         // Store the ProgressBar in a field for fast access.
-        mLoadingProgressBar = (ProgressBar)
-            mActivity.get().findViewById(R.id.progressBar_loading);
+        mLoadingProgressBar = new WeakReference<> 
+            ((ProgressBar) mActivity.get().findViewById(R.id.progressBar_loading));
             
         // Store the EditText that holds the urls entered by the user
         // (if any).
-        mUrlEditText = 
-            (EditText) mActivity.get().findViewById(R.id.url);
+        mUrlEditText = new WeakReference<> 
+            ((EditText) mActivity.get().findViewById(R.id.url));
 
         // Store the linear layout displaying URLs entered.
-        mLinearLayout = 
-            (LinearLayout) mActivity.get().findViewById(R.id.linearLayout);
+        mLinearLayout = new WeakReference<> 
+            ((LinearLayout) mActivity.get().findViewById(R.id.linearLayout));
     }
 
     /**
@@ -147,55 +149,129 @@ public class ImageOps {
      * redisplay linear layout.
      */
     private void resetNonViewFields() {
-        mUrlList.clear();
+        // Reset the number of images to handle and which have been
+        // handled.
         mNumImagesHandled = 0;
         mNumImagesToHandle = 0;
+
+        // Clear the URL list.
+        mUrlList.clear();
+        
+        // Redisplay the URLs, which should now be empty.
+        displayUrls();
+    }
+        
+    /**
+     * Initiate the service binding protocol.
+     */
+    public void bindService() { /* no op */ }
+
+    /**
+     * Initiate the service unbinding protocol.
+     */
+    public void unbindService() { /* no op */ }
+
+   /**
+     * Add whatever URL has been entered into the text field if that
+     * URL is valid when user presses the "Add URL" button in the UI.
+     */
+    public void addUrl() {
+        // Get the user input (if any).
+        final String url =
+            mUrlEditText.get().getText().toString();
+
+        if (URLUtil.isValidUrl(url)) {
+            // Add valid URL to running list for download.
+            mUrlList.add
+                (mUrlEditText.get().getText().toString());
+
+            // (Re)display all the URLs.
+            displayUrls();
+    	} else 
+            Utils.showToast(mActivity.get(),
+                            "Invalid URL "
+                            + url);
+    }
+
+    /**
+     * Remove a URL that couldn't be downloaded.
+     */
+    private void removeUrl(String url) {
+        // Check if passed URL is in the list of URLs.
+        if (mUrlList.contains(url)) {
+            // Remove the invalid URL from the list.
+            mUrlList.remove(url);
+        } else {
+            // Warn caller that URL was not in the list.
+            Log.w(TAG, "RemoveUrl() - passed URL ("
+                    + (url == null ? "null" : url.toString())
+                    + ") is not in URL list.");
+        }
+
+        // If there are no more downloads pending dismiss the progress
+        // bar.
+        if (allDownloadsComplete())
+            mLoadingProgressBar.get().setVisibility(View.INVISIBLE);
+
+        // (Re)display the URLs provided by the user thus far.
         displayUrls();
     }
 
     /**
-     * Start all the downloads.
+     * Display the URLs provided by the user thus far.
+     */
+    private void displayUrls() {
+        // First remove all URL views in the parent LinearLayout
+        mLinearLayout.get().removeAllViews();
+
+        // Add a each URL list entry as a text view child of the
+        // parent LinearLayout.
+        for (String url: mUrlList) {
+            TextView urlTextView = new TextView(mActivity.get());
+            urlTextView.setLayoutParams
+                (new LayoutParams(LayoutParams.WRAP_CONTENT,
+                                  LayoutParams.WRAP_CONTENT));
+            urlTextView.setText(url);
+            mLinearLayout.get().addView(urlTextView);
+        }
+
+        // Clear the URL input view.
+        mUrlEditText.get().setText("");
+    }
+
+    /**
+     * Start all the downloads.  Plays the role of the "Template
+     * Method" in the Template Method pattern.
      */
     public void startDownloads() {
         // Hide the keyboard.
         Utils.hideKeyboard(mActivity.get(),
-                           mUrlEditText.getWindowToken());
+                           mUrlEditText.get().getWindowToken());
 
         if (mUrlList.isEmpty())
             Utils.showToast(mActivity.get(),
                             "no images provided");
         else {
             // Make the progress bar visible.
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
+            mLoadingProgressBar.get().setVisibility(View.VISIBLE);
 
             // Keep track of number of images to download that must be
             // displayed.
             mNumImagesToHandle = mUrlList.size();
 
             // Iterate over each URL and start the download.
-            for (String urlString : mUrlList)
+            for (String urlString : mUrlList) 
                 startDownload(Uri.parse(urlString));
         }
     }
 
     /**
-     * Start a download.
+     * Start a download.  Plays the role of a "Primitive Operation"
+     * (aka "Hook Method") in the Template Method pattern, which is
+     * needed since the means for passing requests to a Started
+     * Service are different than for a Bound Service.
      */
-    private void startDownload(Uri url) {
-        // Create an intent to download the image.
-        Intent intent =
-            DownloadImageService.makeIntent(mActivity.get(),
-                                            OperationType.DOWNLOAD_IMAGE.ordinal(),
-                                            url,
-                                            mDirectoryPathname,
-                                            mServiceResultHandler);
-        Log.d(TAG,
-              "starting the DownloadImageService for "
-              + url.toString());
-
-        // Start the service.
-        mActivity.get().startService(intent);
-    }
+    protected abstract void startDownload(Uri url);
 
     /**
      * Handle the results returned from the Service.
@@ -215,7 +291,7 @@ public class ImageOps {
             // Handle a successful download.
             Log.d(TAG,
                   "received image at URI "
-                  + DownloadImageService.getImagePathname(data));
+                  + ReplyMessage.getImagePathname(data));
                 
         // Try to display all images received successfully.
         tryToDisplayImages(data);
@@ -225,12 +301,12 @@ public class ImageOps {
      * Launch an Activity to display all the images that were received
      * successfully if all downloads are complete.
      */
-    public void tryToDisplayImages(Bundle data) {
+    private void tryToDisplayImages(Bundle data) {
         // If this is last image handled, display images via
         // DisplayImagesActivity.
         if (allDownloadsComplete()) {
             // Dismiss the progress bar.
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            mLoadingProgressBar.get().setVisibility(View.INVISIBLE);
 
             // Initialize state for the next run.
             resetNonViewFields();
@@ -261,22 +337,22 @@ public class ImageOps {
     /**
      * Handle failure to download an image.
      */
-    public void handleDownloadFailure(Bundle data) {
+    private void handleDownloadFailure(Bundle data) {
         // Extract the URL from the message.
-        final String url =
-            DownloadImageService.getImageURL(data);
+        final Uri url =
+            ReplyMessage.getImageURL(data);
             
         Utils.showToast(mActivity.get(),
                         "image at " 
-                        + url
+                        + url.toString()
                         + " failed to download!");
 
         // Remove the URL that failed from the UI.
-        removeUrl(url);
+        removeUrl(url.toString());
 
         if (allDownloadsComplete()) {
             // Dismiss the progress bar.
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            mLoadingProgressBar.get().setVisibility(View.INVISIBLE);
         }
     }
 
@@ -293,73 +369,6 @@ public class ImageOps {
      */
     public boolean downloadsInProgress() {
         return mNumImagesToHandle > 0;
-    }
-
-   /**
-     * Add whatever URL has been entered into the text field if that
-     * URL is valid when user presses the "Add URL" button in UI.
-     */
-    public void addUrl() {
-        // Get the user input (if any).
-        final String url = mUrlEditText.getText().toString();
-
-        if (URLUtil.isValidUrl(url)) {
-            // Add valid URL to running list for download.
-            mUrlList.add
-                (mUrlEditText.getText().toString());
-
-            // (Re)display all the URLs.
-            displayUrls();
-    	} else 
-            Utils.showToast(mActivity.get(),
-                            "Invalid URL" 
-                            + url);
-    }
-
-    /**
-     * Remove a URL that couldn't be downloaded.
-     */
-    public void removeUrl(String url) {
-        // Check if passed URL is in the list of URLs.
-        if (mUrlList.contains(url)) {
-            // Remove the invalid URL from the list.
-            mUrlList.remove(url);
-        } else {
-            // Warn caller that URL was not in the list.
-            Log.w(TAG, "RemoveUrl() - passed URL ("
-                    + (url == null ? "null" : url.toString())
-                    + ") is not in URL list.");
-        }
-
-        // If there are no more downloads pending dismiss the progress
-        // bar.
-        if (allDownloadsComplete())
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
-
-        // (Re)display the URLs provided by the user thus far.
-        displayUrls();
-    }
-
-    /**
-     * Display the URLs provided by the user thus far.
-     */
-    private void displayUrls() {
-        // First remove all URL views in the parent LinearLayout
-        mLinearLayout.removeAllViews();
-
-        // Add a each URL list entry as a text view child of the
-        // parent LinearLayout.
-        for (String url: mUrlList) {
-            TextView urlTextView = new TextView(mActivity.get());
-            urlTextView.setLayoutParams
-                (new LayoutParams(LayoutParams.WRAP_CONTENT,
-                                  LayoutParams.WRAP_CONTENT));
-            urlTextView.setText(url);
-            mLinearLayout.addView(urlTextView);
-        }
-
-        // Clear the URL input view.
-        mUrlEditText.setText("");
     }
 
     /**
@@ -425,8 +434,8 @@ public class ImageOps {
         // the handler to update its outdated weak reference to the
         // ServiceResult callback implementation instance.
         if (mServiceResultHandler != null) {
-            ((ServiceResultHandler)mServiceResultHandler)
-                .onConfigurationChange(mActivity.get());
+            ((ServiceResultHandler) mServiceResultHandler)
+                    .onConfigurationChange(mActivity.get());
         }
 
         // (Re)initialize all the View fields.
@@ -436,12 +445,12 @@ public class ImageOps {
         // result of the Activity and finish it.
         if (allDownloadsComplete()) {
             // Hide the progress bar.
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            mLoadingProgressBar.get().setVisibility(View.INVISIBLE);
             Log.d(TAG,
                   "All images have finished downloading");
         } else if (downloadsInProgress()) {
             // Display the progress bar.
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
+            mLoadingProgressBar.get().setVisibility(View.VISIBLE);
 
             Log.d(TAG,
                   "Not all images have finished downloading");

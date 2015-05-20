@@ -10,14 +10,16 @@ import android.view.View;
 
 /**
  * The main Activity that prompts the user for URLs of images to
- * download concurrently via the DownloadImageService and view via the
- * DisplayImagesActivity.  Also allows the user to delete downloaded
- * images.  Extends LifecycleLoggingActivity so its lifecycle hook
- * methods are logged automatically.  Also implements ServiceResult so
- * that the onServiceResult() hook method is called back when an image
- * has been downloaded.  This implementation uses the
- * RetainedFragmentManager class to handle runtime reconfigurations
- * robustly.
+ * download concurrently via various implementations of
+ * DownloadImages*Service and view via the DisplayImagesActivity.
+ * Also allows the user to delete downloaded images.  Extends
+ * LifecycleLoggingActivity so its lifecycle hook methods are logged
+ * automatically and implements ServiceResult so that the
+ * onServiceResult() hook method is called back when an image has been
+ * downloaded.  This implementation uses the RetainedFragmentManager
+ * class to handle runtime reconfigurations robustly.  As a result,
+ * MainActivity plays the role of the "Caretaker" in the Memento
+ * pattern.
  */
 public class MainActivity extends LifecycleLoggingActivity
                           implements ServiceResult {
@@ -55,6 +57,37 @@ public class MainActivity extends LifecycleLoggingActivity
     }
 
     /**
+     * Hook method called after onCreate() or after onRestart() (when
+     * the activity is being restarted from stopped state).  
+     */	
+    @Override
+    protected void onStart(){
+        // Always call super class for necessary
+        // initialization/implementation.
+        super.onStart();
+
+        // Initiate the service binding protocol (which may be a
+        // no-op, depending on which type of DownloadImages*Service is
+        // used).
+        mImageOps.bindService();
+    }
+
+    /**
+     * Hook method called by Android when this Activity becomes
+     * invisible.
+     */
+    @Override
+    protected void onStop() {
+        // Unbind from the Service (which may be a no-op, depending on
+        // which type of DownloadImages*Service is used).
+        mImageOps.unbindService();
+
+        // Always call super class for necessary operations when
+        // stopping.
+        super.onStop();
+    }
+
+    /**
      * Handle hardware reconfigurations, such as rotating the display.
      */
     protected void handleConfigurationChanges() {
@@ -64,21 +97,26 @@ public class MainActivity extends LifecycleLoggingActivity
             Log.d(TAG,
                   "First time onCreate() call");
 
-            // Create the ImageOps object one time.
-            mImageOps = new ImageOps(this);
+            // Create the ImageOps object one time.  The "true"
+            // parameter instructs ImageOps to use the
+            // DownloadImagesBoundService.
+            mImageOps = new ImageOps(this, true);
 
             // Store the ImageOps into the RetainedFragmentManager.
             mRetainedFragmentManager.put("IMAGE_OPS_STATE",
                                          mImageOps);
             
         } else {
+            // The RetainedFragmentManager was previously initialized,
+            // which means that a runtime configuration change
+            // occured.
+
             Log.d(TAG,
                   "Second or subsequent onCreate() call");
 
-            // The RetainedFragmentManager was previously initialized,
-            // which means that a runtime configuration change
-            // occured, so obtain the ImageOps object and inform it
-            // that the runtime configuration change has completed.
+
+            // Obtain the ImageOps object from the
+            // RetainedFragmentManager.
             mImageOps = 
                 mRetainedFragmentManager.get("IMAGE_OPS_STATE");
 
@@ -86,8 +124,10 @@ public class MainActivity extends LifecycleLoggingActivity
             // circumtances, but it's better to lose state than to
             // crash!
             if (mImageOps == null) {
-                // Create the ImageOps object one time.
-                mImageOps = new ImageOps(this);
+                // Create the ImageOps object one time.  The "true"
+                // parameter instructs ImageOps to use the
+                // DownloadImagesBoundService.
+                mImageOps = new ImageOps(this, true);
 
                 // Store the ImageOps into the
                 // RetainedFragmentManager.

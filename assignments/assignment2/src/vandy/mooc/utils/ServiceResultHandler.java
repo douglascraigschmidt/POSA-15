@@ -2,7 +2,6 @@ package vandy.mooc.utils;
 
 import java.lang.ref.WeakReference;
 
-import vandy.mooc.services.DownloadImageService;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,17 +24,17 @@ public class ServiceResultHandler extends Handler {
     private WeakReference<ServiceResult> mResult;
     
     /**
-     * Constructor.
+     * Constructor stores @a serviceResult into a WeakReference.
      */
     public ServiceResultHandler(ServiceResult serviceResult) {
         mResult = new WeakReference<>(serviceResult);
     }
     
     /**
-     * Called to reset ServiceResult callback instance (MainActivity)
-     * after a configuration change, which will have caused the
-     * garbage collector to destroy the Service object associated with
-     * the mResult WeakReference.
+     * Called to reset ServiceResult callback instance (e.g.,
+     * MainActivity) after a configuration change, which will have
+     * caused the garbage collector to destroy the Service object
+     * associated with the mResult WeakReference.
      */
     public void onConfigurationChange(ServiceResult serviceResult) {
         mResult = new WeakReference<>(serviceResult);
@@ -50,11 +49,15 @@ public class ServiceResultHandler extends Handler {
         Log.d(TAG,
               "handleMessage() called back");
 
+        // Convert the Message into a ReplyMessage.
+        ReplyMessage replyMessage =
+            ReplyMessage.makeReplyMessage(message);
+
+        // Extract the necessary fields from the ReplyMessage.
         final int requestCode =
-            DownloadImageService.getRequestCode(message);
-        final int resultCode =
-            DownloadImageService.getResultCode(message);
-        final Bundle data = message.getData();
+            replyMessage.getRequestCode();
+        final int resultCode = replyMessage.getResultCode();
+        final Bundle data = replyMessage.getData();
 
         if (mResult.get() == null) {
             // Warn programmer that mResult callback reference has
@@ -63,7 +66,8 @@ public class ServiceResultHandler extends Handler {
             Log.w(TAG, "Configuration change handling not implemented correctly;"
                     + " lost weak reference to ServiceResult callback)");
         } else {
-            // Forward result to callback implementation.
+            // Forward result to ServiceResult callback
+            // implementation.
             mResult.get().onServiceResult(requestCode,
                                           resultCode,
                                           data);
