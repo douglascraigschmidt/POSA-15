@@ -1,0 +1,113 @@
+<html>
+
+<title>Weather Service App (P2 - Assignment 3)</title>
+
+<body text = "#000000"
+      link="#000fff"
+      vlink="#ff0f0f"
+      bgcolor="#ffffff">
+
+  <hr>
+  <h3>Weather Service App (P2 - Assignment 3)</h3>
+
+  <hr width=50% align=left>
+  <h4>Overview of the Weather Service App</h4>
+
+  <p> 
+
+The purpose of this "mini-project" assignment is to give you
+experience using Android to develop a complete Weather Service app
+largely "from scratch".  This app should contain a WeatherActivity
+that uses two Android Bound Services--one implementing a synchronous
+AIDL-based two-way mechanism (e.g., WeatherServiceSync) and one
+implementing an asynchronous AIDL-based two-way mechanism (e.g.,
+WeatherServiceAsync)--to obtain weather information from a Weather
+Service web service.  The Bound Services will require AIDL interfaces
+to specify the methods they support, which provide a location obtained
+via the WeatherActivity as a String (such as "Nashville, TN") and
+return a WeatherData object to the WeatherActivity that can be used to
+display various current weather-related information for that
+location. </P>
+
+<P>To obtain weather-related information, the Bound Services will need
+to parse the Json data returned from making an HTTP GET request via
+the <A HREF="http://openweathermap.org/api">Open Weather Map API</a>.
+An example of the Json data returned by API can be seen by opening <A
+HREF="http://api.openweathermap.org/data/2.5/weather?q=Nashville,TN">this
+link</a> in your browser. You have a great degree of flexibility in
+how you design and implement this app, as long as it meets the
+following requirements </P>
+
+    <UL> 
+
+    <LI> <p> WeatherActivity should support both synchronous and
+    asynchronous AIDL-based two-way mechanisms for interacting with
+    the WeatherServiceSync and WeatherServiceAsync, which are covered
+    in the Week 3 videos on "The Android Interface Definition Language
+    and Binder Framework".  To avoid blocking the UI Thread in the
+    WeatherActivity, the synchronous two-way mechanism should use an
+    AsyncTask, which is covered <A
+    HREF="https://www.youtube.com/watch?v=tQJnejqcAZw&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=32">here</a>
+    and <A
+    HREF="https://www.youtube.com/watch?v=2-o92SLinqk&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=33">here</a>. </P>
+
+    <LI> <P> The app must handle runtime configuration changes
+    properly.  Information on how to handle these types of changes is
+    available <A
+    HREF="http://developer.android.com/guide/topics/resources/runtime-changes.html">here</a>
+    A video outlining several approaches to runtime configuration
+    changes appears <A
+    HREF="https://class.coursera.org/posacommunication-001/lecture/235">here</a>. </P>
+
+    <LI> <P> The interfaces and parcelable WeatherData object used to
+    communicate between the WeatherActivity and the WeatherServiceSync
+    and WeatherServiceAsync should conform to the AIDL files provided
+    in the skeletons.  The WeatherActivity should <EM>not</EM> contact
+    the Weather Service web service directly, but only via the
+    getCurrentWeather() methods defined by the WeatherRequest and
+    WeatherCall AIDL interfaces.  WeatherActivity should display the
+    weather-related fields in WeatherData in whatever format you
+    desire. </P>
+
+    <LI> <P> Since weather data doesn't change instantaeously, the
+    WeatherServiceSync and WeatherServiceAsync should implement a
+    caching scheme whereby a call by WeatherActivity to
+    getCurrentWeather() retrieves weather data from the WeatherService
+    web service only every 10 seconds, regardless of the number of
+    times getCurrentWeather() is called by the WeatherActivity.  Any
+    calls during the intervening time period should be serviced from
+    the cache. </P>
+
+    </UL>
+
+    The material necessary to complete assignment 3 is available in
+    videos from Weeks 3 and 4 of the MOOC. <P>
+
+  <hr width=50% align=left>
+  <h4>Skeleton Code</h4>
+
+  <p> Skeleton code for this assignment is available <a
+    href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment3">here</a>.
+    The skeletons are intentionally incomplete to provide you with
+    maximal creativity in your solution.  As a result, there are no
+    automated unit tests for this assignment.  Therefore, make sure
+    that your program works properly for both valid and invalid
+    locations entered by the user. </p>
+
+<hr width=50% align=left>
+<h4>Concluding Remarks</h4>
+<p>
+
+This assignment is designed to deepen your understanding with
+programming Android Bound Services using the AIDL and Binder framework
+in Java.  It will also give you experience parsing Json data retrieved
+from a web service.  It's highly recommended to watch the videos
+listed above and look at the various Bound Service examples <A
+HREF="https://github.com/douglascraigschmidt/POSA-15/tree/master/ex">here</A>
+to gain a better understanding of how to structure your solution.
+Start early and come to Virtual Office Hours if you have questions or
+run into problems.  </p>
+
+</body>
+</html>
+
