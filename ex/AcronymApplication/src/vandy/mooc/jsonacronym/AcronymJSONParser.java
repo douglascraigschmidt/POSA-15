@@ -65,6 +65,7 @@ public class AcronymJSONParser {
 
         List<JsonAcronym> acronyms = null;
         reader.beginObject();
+
         try {
             outerloop:
             while (reader.hasNext()) {

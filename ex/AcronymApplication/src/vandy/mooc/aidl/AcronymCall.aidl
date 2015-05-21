@@ -14,5 +14,5 @@ interface AcronymCall {
     * service and returns a list of AcronymData containing the results
     * from the Web service back to the AcronymActivity.
     */
-    List<AcronymData> expandAcronym (in String acronym); 
+    List<AcronymData> expandAcronym (in String acronym);
 }

@@ -77,6 +77,85 @@ public class AcronymOpsImpl implements AcronymOps {
         initializeNonViewFields();
     }
 
+    /**
+     * Initialize the View fields, which are all stored as
+     * WeakReferences to enable garbage collection.
+     */
+    private void initializeViewFields() {
+        // Get references to the UI components.
+        mActivity.get().setContentView(R.layout.main_activity);
+
+        // Store the EditText that holds the urls entered by the user
+        // (if any).
+        mEditText = new WeakReference<>
+            ((EditText) mActivity.get().findViewById(R.id.editText1));
+
+        // Store the ListView for displaying the results entered.
+        mListView = new WeakReference<>
+            ((ListView) mActivity.get().findViewById(R.id.listView1));
+    }
+
+    /**
+     * (Re)initialize the non-view fields (e.g.,
+     * GenericServiceConnection objects).
+     */
+    private void initializeNonViewFields() {
+        mServiceConnectionSync = 
+            new GenericServiceConnection<AcronymCall>(AcronymCall.class);
+
+        mServiceConnectionAsync =
+            new GenericServiceConnection<AcronymRequest>(AcronymRequest.class);
+    }
+        
+    /**
+     * Initiate the service binding protocol.
+     */
+    @Override
+    public void bindService() {
+        Log.d(TAG, "calling bindService()");
+
+        // Launch the Acronym Bound Services if they aren't already
+        // running via a call to bindService(), which binds this
+        // activity to the AcronymService* if they aren't already
+        // bound.
+        if (mServiceConnectionSync.getInterface() == null) 
+            mActivity.get().bindService(AcronymServiceSync.makeIntent(mActivity.get()),
+                                        mServiceConnectionSync,
+                                        Context.BIND_AUTO_CREATE);
+
+        if (mServiceConnectionAsync.getInterface() == null) 
+            mActivity.get().bindService(AcronymServiceAsync.makeIntent(mActivity.get()),
+                                        mServiceConnectionAsync,
+                                        Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * Initiate the service unbinding protocol.
+     */
+    @Override
+    public void unbindService() {
+        // Unbind the Async Service if it is connected.
+        if (mServiceConnectionAsync.getInterface() != null)
+            mActivity.get().unbindService(mServiceConnectionAsync);
+
+        // Unbind the Sync Service if it is connected.
+        if (mServiceConnectionSync.getInterface() != null)
+            mActivity.get().unbindService(mServiceConnectionSync);
+    }
+
+    /**
+     * Called by the AcronymOps constructor and after a runtime
+     * configuration change occurs to finish the initialization steps.
+     */
+    public void onConfigurationChange(MainActivity activity) {
+        // Reset the mActivity WeakReference.
+        mActivity = new WeakReference<>(activity);
+
+        // (Re)initialize all the View and NonView fields.
+        initializeViewFields();
+        initializeNonViewFields();
+    }
+
     /*
      * Initiate the asynchronous acronym lookup when the user presses
      * the "Look Up Async" button.
@@ -142,7 +221,7 @@ public class AcronymOpsImpl implements AcronymOps {
                 protected List<AcronymData> doInBackground(String... acronyms) {
                     try {
                         mAcronym = acronyms[0];
-                        return acronymCall.expandAcronym(acronyms[0]);
+                        return acronymCall.expandAcronym(mAcronym);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -239,84 +318,4 @@ public class AcronymOpsImpl implements AcronymOps {
         // Set the adapter to the ListView.
         mListView.get().setAdapter(mAdapter);
     }
-
-    /**
-     * Initialize the View fields, which are all stored as
-     * WeakReferences to enable garbage collection.
-     */
-    private void initializeViewFields() {
-        // Get references to the UI components.
-        mActivity.get().setContentView(R.layout.main_activity);
-
-        // Store the EditText that holds the urls entered by the user
-        // (if any).
-        mEditText = new WeakReference<>
-            ((EditText) mActivity.get().findViewById(R.id.editText1));
-
-        // Store the ListView for displaying the results entered.
-        mListView = new WeakReference<>
-            ((ListView) mActivity.get().findViewById(R.id.listView1));
-    }
-
-    /**
-     * (Re)initialize the non-view fields (e.g.,
-     * GenericServiceConnection objects).
-     */
-    private void initializeNonViewFields() {
-        mServiceConnectionSync = 
-            new GenericServiceConnection<AcronymCall>(AcronymCall.class);
-
-        mServiceConnectionAsync =
-            new GenericServiceConnection<AcronymRequest>(AcronymRequest.class);
-    }
-        
-    /**
-     * Initiate the service binding protocol.
-     */
-    @Override
-    public void bindService() {
-        Log.d(TAG, "calling bindService()");
-
-        // Launch the Acronym Bound Services if they aren't already
-        // running via a call to bindService(), which binds this
-        // activity to the AcronymService* if they aren't already
-        // bound.
-        if (mServiceConnectionSync.getInterface() == null) 
-            mActivity.get().bindService(AcronymServiceSync.makeIntent(mActivity.get()),
-                                        mServiceConnectionSync,
-                                        Context.BIND_AUTO_CREATE);
-
-        if (mServiceConnectionAsync.getInterface() == null) 
-            mActivity.get().bindService(AcronymServiceAsync.makeIntent(mActivity.get()),
-                                        mServiceConnectionAsync,
-                                        Context.BIND_AUTO_CREATE);
-    }
-
-    /**
-     * Initiate the service unbinding protocol.
-     */
-    @Override
-    public void unbindService() {
-        // Unbind the Async Service if it is connected.
-        if (mServiceConnectionAsync.getInterface() != null)
-            mActivity.get().unbindService(mServiceConnectionAsync);
-
-        // Unbind the Sync Service if it is connected.
-        if (mServiceConnectionSync.getInterface() != null)
-            mActivity.get().unbindService(mServiceConnectionSync);
-    }
-
-    /**
-     * Called by the AcronymOps constructor and after a runtime
-     * configuration change occurs to finish the initialization steps.
-     */
-    public void onConfigurationChange(MainActivity activity) {
-        // Reset the mActivity WeakReference.
-        mActivity = new WeakReference<>(activity);
-
-        // (Re)initialize all the View and NonView fields.
-        initializeViewFields();
-        initializeNonViewFields();
-    }
-
 }

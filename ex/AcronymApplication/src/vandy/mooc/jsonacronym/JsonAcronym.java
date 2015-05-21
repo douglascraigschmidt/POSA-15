@@ -85,5 +85,4 @@ public class JsonAcronym {
     public void setSince(int since) {
         mSince = since;
     }
-
 }

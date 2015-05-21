@@ -30,25 +30,7 @@ import android.util.Log;
  *        interprocess communication details are hidden behind the
  *        AIDL interfaces.
  */
-@SuppressWarnings("deprecation")
 public class AcronymServiceSync extends LifecycleLoggingService {
-    /**
-     * Logging tag.
-     */
-    private final static String TAG =
-        AcronymServiceSync.class.getCanonicalName();
-
-    /**
-     * Called when a client (e.g., AcronymActivity) calls
-     * bindService() with the proper Intent.  Returns the
-     * implementation of AcronymCall, which is implicitly cast as an
-     * IBinder.
-     */
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mAcronymCallImpl;
-    }
-
     /**
      * Factory method that makes an Intent used to start the
      * AcronymServiceSync when passed to bindService().
@@ -59,6 +41,17 @@ public class AcronymServiceSync extends LifecycleLoggingService {
     public static Intent makeIntent(Context context) {
         return new Intent(context,
                           AcronymServiceSync.class);
+    }
+
+    /**
+     * Called when a client (e.g., AcronymActivity) calls
+     * bindService() with the proper Intent.  Returns the
+     * implementation of AcronymCall, which is implicitly cast as an
+     * IBinder.
+     */
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mAcronymCallImpl;
     }
 
     /**
@@ -88,7 +81,6 @@ public class AcronymServiceSync extends LifecycleLoggingService {
                     Utils.getResults(acronym);
 
                 if (acronymResults != null) {
-
                     Log.d(TAG, "" 
                           + acronymResults.size() 
                           + " results for acronym: " 
@@ -98,6 +90,9 @@ public class AcronymServiceSync extends LifecycleLoggingService {
                     // AcronymActivity.
                     return acronymResults;
                 } else {
+                    // Create a zero-sized acronymResults object to
+                    // indicate to the caller that the acronym had no
+                    // expansions.
                     acronymResults = new ArrayList<AcronymData>();
                     return acronymResults;
                 }
