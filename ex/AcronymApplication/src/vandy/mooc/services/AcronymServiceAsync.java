@@ -75,8 +75,8 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
              * callback.
              */
             @Override
-            public void expandAcronym(AcronymResults callback,
-                                      String acronym)
+            public void expandAcronym(String acronym,
+                                      AcronymResults callback)
                 throws RemoteException {
 
                 // Call the Acronym Web service to get the list of

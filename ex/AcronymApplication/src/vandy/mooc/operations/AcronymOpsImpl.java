@@ -178,8 +178,8 @@ public class AcronymOpsImpl implements AcronymOps {
                 // sendResults() method of the mAcronymResults
                 // callback object, which runs in a Thread from the
                 // Thread pool managed by the Binder framework.
-                acronymRequest.expandAcronym(mAcronymResults,
-                                             acronym);
+                acronymRequest.expandAcronym(acronym,
+                                             mAcronymResults);
             } catch (RemoteException e) {
                 Log.e(TAG, "RemoteException:" + e.getMessage());
             }

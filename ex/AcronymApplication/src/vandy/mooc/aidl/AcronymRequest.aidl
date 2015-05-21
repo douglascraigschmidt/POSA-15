@@ -16,6 +16,6 @@ interface AcronymRequest {
     * containing the results from the Web service back to the
     * AcronymActivity.
     */
-    oneway void expandAcronym (in AcronymResults results,
-                               in String acronym); 
+    oneway void expandAcronym (in String acronym,
+                               in AcronymResults results);
 }
