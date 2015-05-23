@@ -71,7 +71,9 @@ following requirements </P>
     web service only every 10 seconds, regardless of the number of
     times getCurrentWeather() is called by the WeatherActivity.  Any
     calls during the intervening time period should be serviced from
-    the cache. </P>
+    the cache. Although the cache should be thread-safe, you're free
+    to make its data persistent (or not), as well as to share the
+    cache (or not) between the two Bound Service implementations.</P>
 
     <LI> <P> To obtain weather-related information, the Bound Services
     will need to parse the Json data returned from making an HTTP GET
