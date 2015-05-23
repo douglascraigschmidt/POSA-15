@@ -22,6 +22,9 @@ import android.os.Parcelable;
  * "deg":310.002 }, "clouds":{ "all":36 }, "dt":1431435983,
  * "id":4644585, "name":"Nashville", "cod":200 }
  *
+ * The meaning of these Json fields is documented at 
+ * http://openweathermap.org/weather-data#current.
+ *
  * Parcelable defines an interface for marshaling/de-marshaling
  * https://en.wikipedia.org/wiki/Marshalling_(computer_science)
  * to/from a format that Android uses to allow data transport between
