@@ -56,24 +56,27 @@ following requirements </P>
 
     <LI> <P> The interfaces and parcelable WeatherData object used to
     communicate between the WeatherActivity and the WeatherServiceSync
-    and WeatherServiceAsync should conform to the AIDL files provided
-    in the skeletons.  The WeatherActivity should <EM>not</EM> contact
-    the Weather Service web service directly, but only via the
-    getCurrentWeather() methods defined by the WeatherRequest and
-    WeatherCall AIDL interfaces. WeatherActivity should display the
-    weather-related fields in WeatherData in whatever format you
-    desire. </P>
+    and WeatherServiceAsync should at least support the functionality
+    defined by the AIDL files provided in the skeletons, though you're
+    welcome to add further capabilities or edit these files as you see
+    fit.  The WeatherActivity should <EM>not</EM> contact the Weather
+    Service web service directly, but only via the getCurrentWeather()
+    methods defined by the WeatherRequest and WeatherCall AIDL
+    interfaces. WeatherActivity should display the weather-related
+    fields in WeatherData in whatever format you desire. </P>
 
     <LI> <P> Since weather data doesn't change instantaeously, the
-    WeatherServiceSync and WeatherServiceAsync should implement a
-    caching scheme whereby a call by WeatherActivity to
+    WeatherServiceSync and WeatherServiceAsync should implement some
+    for of <A
+    HREF="http://kircher-schwanninger.de/michael/publications/Caching.pdf">caching
+    pattern</A>, whereby a call by WeatherActivity to
     getCurrentWeather() retrieves weather data from the WeatherService
     web service only every 10 seconds, regardless of the number of
     times getCurrentWeather() is called by the WeatherActivity.  Any
     calls during the intervening time period should be serviced from
-    the cache. Although the cache should be thread-safe, you're free
+    the cache.  Although the cache should be thread-safe, you're free
     to make its data persistent (or not), as well as to share the
-    cache (or not) between the two Bound Service implementations.</P>
+    cache (or not) between the two Bound Service implementations. </P>
 
     <LI> <P> To obtain weather-related information, the Bound Services
     will need to parse the Json data returned from making an HTTP GET
