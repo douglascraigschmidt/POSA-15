@@ -32,7 +32,7 @@ public class AcronymJSONParser {
         try (JsonReader reader =
              new JsonReader(new InputStreamReader(inputStream,
                                                   "UTF-8"))) {
-            Log.d(TAG, "Parsing the results returned as an array");
+            // Log.d(TAG, "Parsing the results returned as an array");
 
             // Handle the array returned from the Acronym Service.
             return parseAcronymServiceResults(reader);
@@ -72,17 +72,17 @@ public class AcronymJSONParser {
                 String name = reader.nextName();
                 switch (name) {
                 case JsonAcronym.sf_JSON:
-                    Log.d(TAG, "reading sf field");
+                    // Log.d(TAG, "reading sf field");
                     reader.nextString();
                     break;
                 case JsonAcronym.lfs_JSON:
-                    Log.d(TAG, "reading lfs field");
+                    // Log.d(TAG, "reading lfs field");
                     if (reader.peek() == JsonToken.BEGIN_ARRAY)
                         acronyms = parseAcronymLongFormArray(reader);
                     break outerloop;
                 default:
 		    reader.skipValue();
-                    Log.d(TAG, "weird problem with " + name + " field");
+                    // Log.d(TAG, "weird problem with " + name + " field");
                     break;
                 }
             }
@@ -99,7 +99,7 @@ public class AcronymJSONParser {
     public List<JsonAcronym> parseAcronymLongFormArray(JsonReader reader)
         throws IOException {
 
-        Log.d(TAG, "reading lfs elements");
+        // Log.d(TAG, "reading lfs elements");
 
         reader.beginArray();
 
@@ -130,19 +130,19 @@ public class AcronymJSONParser {
                 switch (name) {
                 case JsonAcronym.lf_JSON:
                     acronym.setLongForm(reader.nextString());
-                    Log.d(TAG, "reading lf " + acronym.getLongForm());
+                    // Log.d(TAG, "reading lf " + acronym.getLongForm());
                     break;
                 case JsonAcronym.freq_JSON:
                     acronym.setFreq(reader.nextInt());
-                    Log.d(TAG, "reading freq " + acronym.getFreq());
+                    // Log.d(TAG, "reading freq " + acronym.getFreq());
                     break;
                 case JsonAcronym.since_JSON:
                     acronym.setSince(reader.nextInt());
-                    Log.d(TAG, "reading since " + acronym.getSince());
+                    // Log.d(TAG, "reading since " + acronym.getSince());
                     break;
                 default:
                     reader.skipValue();
-                    Log.d(TAG, "ignoring " + name);
+                    // Log.d(TAG, "ignoring " + name);
                     break;
                 }
             } 

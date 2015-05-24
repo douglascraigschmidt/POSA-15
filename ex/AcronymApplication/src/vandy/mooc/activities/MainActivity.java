@@ -1,9 +1,10 @@
 package vandy.mooc.activities;
 
-import vandy.mooc.R;
 import vandy.mooc.operations.AcronymOps;
 import vandy.mooc.operations.AcronymOpsImpl;
 import vandy.mooc.utils.RetainedFragmentManager;
+import vandy.mooc.utils.Utils;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,6 +76,22 @@ public class MainActivity extends LifecycleLoggingActivity {
         // Always call super class for necessary operations when
         // stopping.
         super.onStop();
+    }
+
+    /**
+     * Hook method invoked when the screen orientation changes.
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen.
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 
+            Log.d(TAG,
+                  "Now in landscape mode");
+        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+            Log.d(TAG,
+                  "Now in portrait mode");
     }
 
     /**
