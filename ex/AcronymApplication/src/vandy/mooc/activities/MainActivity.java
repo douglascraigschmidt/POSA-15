@@ -46,8 +46,8 @@ public class MainActivity extends LifecycleLoggingActivity {
         // initialization/implementation.
         super.onCreate(savedInstanceState);
 
-        // Handle any configuration change.
-        handleConfigurationChanges();
+        // Create the AcronymOps object one time.
+        mAcronymOps = new AcronymOpsImpl(this);
     }
 
     /**
@@ -85,61 +85,7 @@ public class MainActivity extends LifecycleLoggingActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen.
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 
-            Log.d(TAG,
-                  "Now in landscape mode");
-        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-            Log.d(TAG,
-                  "Now in portrait mode");
-    }
-
-    /**
-     * Handle hardware reconfigurations, such as rotating the display.
-     */
-    protected void handleConfigurationChanges() {
-        // If this method returns true then this is the first time the
-        // Activity has been created.
-        if (mRetainedFragmentManager.firstTimeIn()) {
-            Log.d(TAG,
-                  "First time onCreate() call");
-
-            // Create the AcronymOps object one time.
-            mAcronymOps = new AcronymOpsImpl(this);
-
-            // Store the AcronymOps into the RetainedFragmentManager.
-            mRetainedFragmentManager.put("ACRONYM_OPS_STATE",
-                                         mAcronymOps);
-            
-        } else {
-            // The RetainedFragmentManager was previously initialized,
-            // which means that a runtime configuration change
-            // occured.
-
-            Log.d(TAG,
-                  "Second or subsequent onCreate() call");
-
-            // Obtain the AcronymOps object from the
-            // RetainedFragmentManager.
-            mAcronymOps = 
-                mRetainedFragmentManager.get("ACRONYM_OPS_STATE");
-
-            // This check shouldn't be necessary under normal
-            // circumtances, but it's better to lose state than to
-            // crash!
-            if (mAcronymOps == null) {
-                // Create the AcronymOps object one time.
-                mAcronymOps = new AcronymOpsImpl(this);
-
-                // Store the AcronymOps into the
-                // RetainedFragmentManager.
-                mRetainedFragmentManager.put("ACRONYM_OPS_STATE",
-                                             mAcronymOps);
-            } else 
-                // Inform it that the runtime configuration change has
-                // completed.
-                mAcronymOps.onConfigurationChange(this);
-        }
+        mAcronymOps.onConfigurationChanged(newConfig);
     }
 
     /*

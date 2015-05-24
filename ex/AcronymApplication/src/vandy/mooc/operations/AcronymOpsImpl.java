@@ -15,6 +15,7 @@ import vandy.mooc.utils.AcronymDataArrayAdapter;
 import vandy.mooc.utils.GenericServiceConnection;
 import vandy.mooc.utils.Utils;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.util.Log;
@@ -125,16 +126,17 @@ public class AcronymOpsImpl implements AcronymOps {
     }
 
     /**
-     * Called by the AcronymOps constructor and after a runtime
-     * configuration change occurs to finish the initialization steps.
+     * Called after a runtime configuration change occurs.
      */
-    public void onConfigurationChange(MainActivity activity) {
-        // Reset the mActivity WeakReference.
-        mActivity = new WeakReference<>(activity);
-
-        // (Re)initialize all the View and NonView fields.
-        initializeViewFields();
-        initializeNonViewFields();
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // Checks the orientation of the screen.
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 
+            Log.d(TAG,
+                  "Now in landscape mode");
+        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+            Log.d(TAG,
+                  "Now in portrait mode");
     }
 
     /**
@@ -149,13 +151,13 @@ public class AcronymOpsImpl implements AcronymOps {
         // activity to the AcronymService* if they aren't already
         // bound.
         if (mServiceConnectionSync.getInterface() == null) 
-            mActivity.get().getApplicationContext().bindService
+            mActivity.get().bindService
                 (AcronymServiceSync.makeIntent(mActivity.get()),
                  mServiceConnectionSync,
                  Context.BIND_AUTO_CREATE);
 
         if (mServiceConnectionAsync.getInterface() == null) 
-            mActivity.get().getApplicationContext().bindService
+            mActivity.get().bindService
                 (AcronymServiceAsync.makeIntent(mActivity.get()),
                  mServiceConnectionAsync,
                  Context.BIND_AUTO_CREATE);
@@ -170,12 +172,12 @@ public class AcronymOpsImpl implements AcronymOps {
 
         // Unbind the Async Service if it is connected.
         if (mServiceConnectionAsync.getInterface() != null)
-            mActivity.get().getApplicationContext().unbindService
+            mActivity.get().unbindService
                 (mServiceConnectionAsync);
 
         // Unbind the Sync Service if it is connected.
         if (mServiceConnectionSync.getInterface() != null)
-            mActivity.get().getApplicationContext().unbindService
+            mActivity.get().unbindService
                 (mServiceConnectionSync);
     }
 
