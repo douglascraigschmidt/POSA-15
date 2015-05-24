@@ -2,11 +2,8 @@ package vandy.mooc.activities;
 
 import vandy.mooc.operations.AcronymOps;
 import vandy.mooc.operations.AcronymOpsImpl;
-import vandy.mooc.utils.RetainedFragmentManager;
-import vandy.mooc.utils.Utils;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -14,20 +11,9 @@ import android.view.View;
  * various implementations of AcronymServiceSync and
  * AcronymServiceAsync and view via the results.  Extends
  * LifecycleLoggingActivity so its lifecycle hook methods are logged
- * automatically.  This implementation uses the
- * RetainedFragmentManager class to handle runtime reconfigurations
- * robustly.  As a result, MainActivity plays the role of the
- * "Caretaker" in the Memento pattern.
+ * automatically.
  */
 public class MainActivity extends LifecycleLoggingActivity {
-    /**
-     * Used to retain the AcronymOps state between runtime configuration
-     * changes.
-     */
-    protected final RetainedFragmentManager mRetainedFragmentManager = 
-        new RetainedFragmentManager(this.getFragmentManager(),
-                                    TAG);
-
     /**
      * Provides acronym-related operations.
      */
