@@ -9,10 +9,9 @@ import java.util.List;
  */
 interface AcronymResults {
     /**
-     * This one-way (non-blocking) method allows the
-     * AcyronymServiceAsync to return the List of AcronymData results
-     * associated with a one-way AcronymRequest.callAcronymRequest()
-     * call.
+     * This one-way (non-blocking) method allows AcyronymServiceAsync
+     * to return the List of AcronymData results associated with a
+     * one-way AcronymRequest.callAcronymRequest() call.
      */
     oneway void sendResults(in List<AcronymData> results);
 

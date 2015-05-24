@@ -28,14 +28,14 @@ public class MainActivity extends LifecycleLoggingActivity {
                                     TAG);
 
     /**
-     * Provides image-related operations.
+     * Provides acronym-related operations.
      */
     private AcronymOps mAcronymOps;
 
     /**
      * Hook method called when a new instance of Activity is created.
-     * One time initialization code goes here, e.g., UI layout
-     * initialization and runtime configuration changes.
+     * One time initialization code goes here, e.g., runtime
+     * configuration changes.
      *
      * @param Bundle object that contains saved state information.
      */
@@ -44,9 +44,6 @@ public class MainActivity extends LifecycleLoggingActivity {
         // Always call super class for necessary
         // initialization/implementation.
         super.onCreate(savedInstanceState);
-
-        // Set the default layout.
-        setContentView(R.layout.main_activity);
 
         // Handle any configuration change.
         handleConfigurationChanges();
@@ -121,8 +118,7 @@ public class MainActivity extends LifecycleLoggingActivity {
                 // RetainedFragmentManager.
                 mRetainedFragmentManager.put("ACRONYM_OPS_STATE",
                                              mAcronymOps);
-            }            
-            else 
+            } else 
                 // Inform it that the runtime configuration change has
                 // completed.
                 mAcronymOps.onConfigurationChange(this);

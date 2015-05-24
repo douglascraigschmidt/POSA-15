@@ -62,14 +62,14 @@ public class Utils {
             // Sends the GET request and reads the Json results.
             try (InputStream in =
                  new BufferedInputStream(urlConnection.getInputStream())) {
-                    // Create the parser.
-                    final AcronymJSONParser parser =
-                        new AcronymJSONParser();
+                 // Create the parser.
+                 final AcronymJSONParser parser =
+                     new AcronymJSONParser();
 
-                    // Parse the Json results and create JsonAcronym data
-                    // objects.
-                    jsonAcronyms = parser.parseJsonStream(in);
-                } finally {
+                // Parse the Json results and create JsonAcronym data
+                // objects.
+                jsonAcronyms = parser.parseJsonStream(in);
+            } finally {
                 urlConnection.disconnect();
             }
         } catch (IOException e) {

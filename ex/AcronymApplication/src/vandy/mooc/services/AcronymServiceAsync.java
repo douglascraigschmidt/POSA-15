@@ -32,25 +32,7 @@ import android.util.Log;
  *        interprocess communication details are hidden behind the
  *        AIDL interfaces.
  */
-@SuppressWarnings("deprecation")
 public class AcronymServiceAsync extends LifecycleLoggingService {
-    /**
-     * Logging tag.
-     */
-    private final static String TAG =
-        AcronymServiceAsync.class.getCanonicalName();
-
-    /**
-     * Called when a client (e.g., AcronymActivity) calls
-     * bindService() with the proper Intent.  Returns the
-     * implementation of AcronymRequest, which is implicitly cast as
-     * an IBinder.
-     */
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mAcronymRequestImpl;
-    }
-
     /**
      * Factory method that makes an Intent used to start the
      * AcronymServiceAsync when passed to bindService().
@@ -61,6 +43,17 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
     public static Intent makeIntent(Context context) {
         return new Intent(context,
                           AcronymServiceAsync.class);
+    }
+
+    /**
+     * Called when a client (e.g., AcronymActivity) calls
+     * bindService() with the proper Intent.  Returns the
+     * implementation of AcronymRequest, which is implicitly cast as
+     * an IBinder.
+     */
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mAcronymRequestImpl;
     }
 
     /**
@@ -82,8 +75,8 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
              * callback.
              */
             @Override
-            public void expandAcronym(AcronymResults callback,
-                                      String acronym)
+            public void expandAcronym(String acronym,
+                                      AcronymResults callback)
                 throws RemoteException {
 
                 // Call the Acronym Web service to get the list of
@@ -94,11 +87,11 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
                 // Invoke a one-way callback to send list of acronym
                 // expansions back to the AcronymActivity.
                 if (acronymResults != null) {
-                    callback.sendResults(acronymResults);
                     Log.d(TAG, "" 
                           + acronymResults.size() 
                           + " results for acronym: " 
                           + acronym);
+                    callback.sendResults(acronymResults);
                 } else
                     callback.sendError("No expansions for " 
                                        + acronym
