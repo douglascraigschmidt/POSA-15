@@ -128,15 +128,14 @@ public class AcronymOpsImpl implements AcronymOps {
     /**
      * Called after a runtime configuration change occurs.
      */
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         // Checks the orientation of the screen.
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 
             Log.d(TAG,
-                  "Now in landscape mode");
+                  "Now running in landscape mode");
         else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
             Log.d(TAG,
-                  "Now in portrait mode");
+                  "Now running in portrait mode");
     }
 
     /**
