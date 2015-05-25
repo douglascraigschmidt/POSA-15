@@ -34,34 +34,23 @@ public class MainActivity extends LifecycleLoggingActivity {
 
         // Create the AcronymOps object one time.
         mAcronymOps = new AcronymOpsImpl(this);
-    }
-
-    /**
-     * Hook method called after onCreate() or after onRestart() (when
-     * the activity is being restarted from stopped state).  
-     */	
-    @Override
-    protected void onStart(){
-        // Always call super class for necessary
-        // initialization/implementation.
-        super.onStart();
 
         // Initiate the service binding protocol.
         mAcronymOps.bindService();
     }
 
     /**
-     * Hook method called by Android when this Activity becomes
-     * invisible.
+     * Hook method called by Android when this Activity is
+     * destroyed.
      */
     @Override
-    protected void onStop() {
+    protected void onDestory() {
         // Unbind from the Service.
         mAcronymOps.unbindService();
 
-        // Always call super class for necessary operations when
-        // stopping.
-        super.onStop();
+        // Always call super class for necessary operations when an
+        // Activity is destroyed.
+        super.onDestroy();
     }
 
     /**
