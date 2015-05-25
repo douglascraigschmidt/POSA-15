@@ -44,7 +44,7 @@ public class MainActivity extends LifecycleLoggingActivity {
      * destroyed.
      */
     @Override
-    protected void onDestory() {
+    protected void onDestroy() {
         // Unbind from the Service.
         mAcronymOps.unbindService();
 
