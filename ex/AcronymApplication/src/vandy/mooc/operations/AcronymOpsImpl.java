@@ -15,6 +15,7 @@ import vandy.mooc.utils.AcronymDataArrayAdapter;
 import vandy.mooc.utils.GenericServiceConnection;
 import vandy.mooc.utils.Utils;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.util.Log;
@@ -48,10 +49,15 @@ public class AcronymOpsImpl implements AcronymOps {
     protected WeakReference<EditText> mEditText;
 
     /**
+     * List of results to display (if any).
+     */
+    protected List<AcronymData> mResults;
+
+    /**
      * A custom ArrayAdapter used to display the list of AcronymData
      * objects.
      */
-    protected AcronymDataArrayAdapter mAdapter;
+    protected WeakReference<AcronymDataArrayAdapter> mAdapter;
 
     /**
      * This GenericServiceConnection is used to receive results after
@@ -93,6 +99,14 @@ public class AcronymOpsImpl implements AcronymOps {
         // Store the ListView for displaying the results entered.
         mListView = new WeakReference<>
             ((ListView) mActivity.get().findViewById(R.id.listView1));
+
+        // Create a local instance of our custom Adapter for our
+        // ListView.
+        mAdapter = new WeakReference<>
+            (new AcronymDataArrayAdapter(mActivity.get()));
+
+        // Set the adapter to the ListView.
+        mListView.get().setAdapter(mAdapter.get());
     }
 
     /**
@@ -105,8 +119,25 @@ public class AcronymOpsImpl implements AcronymOps {
 
         mServiceConnectionAsync =
             new GenericServiceConnection<AcronymRequest>(AcronymRequest.class);
+
+        // Display results if any (due to runtime configuration change).
+        if (mResults != null)
+            displayResults(mResults);
     }
-        
+
+    /**
+     * Called after a runtime configuration change occurs.
+     */
+    public void onConfigurationChanged(Configuration newConfig) {
+        // Checks the orientation of the screen.
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 
+            Log.d(TAG,
+                  "Now running in landscape mode");
+        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+            Log.d(TAG,
+                  "Now running in portrait mode");
+    }
+
     /**
      * Initiate the service binding protocol.
      */
@@ -119,14 +150,16 @@ public class AcronymOpsImpl implements AcronymOps {
         // activity to the AcronymService* if they aren't already
         // bound.
         if (mServiceConnectionSync.getInterface() == null) 
-            mActivity.get().bindService(AcronymServiceSync.makeIntent(mActivity.get()),
-                                        mServiceConnectionSync,
-                                        Context.BIND_AUTO_CREATE);
+            mActivity.get().bindService
+                (AcronymServiceSync.makeIntent(mActivity.get()),
+                 mServiceConnectionSync,
+                 Context.BIND_AUTO_CREATE);
 
         if (mServiceConnectionAsync.getInterface() == null) 
-            mActivity.get().bindService(AcronymServiceAsync.makeIntent(mActivity.get()),
-                                        mServiceConnectionAsync,
-                                        Context.BIND_AUTO_CREATE);
+            mActivity.get().bindService
+                (AcronymServiceAsync.makeIntent(mActivity.get()),
+                 mServiceConnectionAsync,
+                 Context.BIND_AUTO_CREATE);
     }
 
     /**
@@ -134,26 +167,17 @@ public class AcronymOpsImpl implements AcronymOps {
      */
     @Override
     public void unbindService() {
+        Log.d(TAG, "calling unbindService()");
+
         // Unbind the Async Service if it is connected.
         if (mServiceConnectionAsync.getInterface() != null)
-            mActivity.get().unbindService(mServiceConnectionAsync);
+            mActivity.get().unbindService
+                (mServiceConnectionAsync);
 
         // Unbind the Sync Service if it is connected.
         if (mServiceConnectionSync.getInterface() != null)
-            mActivity.get().unbindService(mServiceConnectionSync);
-    }
-
-    /**
-     * Called by the AcronymOps constructor and after a runtime
-     * configuration change occurs to finish the initialization steps.
-     */
-    public void onConfigurationChange(MainActivity activity) {
-        // Reset the mActivity WeakReference.
-        mActivity = new WeakReference<>(activity);
-
-        // (Re)initialize all the View and NonView fields.
-        initializeViewFields();
-        initializeNonViewFields();
+            mActivity.get().unbindService
+                (mServiceConnectionSync);
     }
 
     /*
@@ -169,8 +193,7 @@ public class AcronymOpsImpl implements AcronymOps {
             final String acronym =
                 mEditText.get().getText().toString();
 
-            Utils.hideKeyboard(mActivity.get(),
-                               mEditText.get().getWindowToken());
+            resetDisplay();
 
             try {
                 // Invoke a one-way AIDL call, which does not block
@@ -201,8 +224,7 @@ public class AcronymOpsImpl implements AcronymOps {
             final String acronym =
                 mEditText.get().getText().toString();
 
-            Utils.hideKeyboard(mActivity.get(),
-                               mEditText.get().getWindowToken());
+            resetDisplay();
 
             // Use an anonymous AsyncTask to download the Acronym data
             // in a separate thread and then display any results in
@@ -300,22 +322,25 @@ public class AcronymOpsImpl implements AcronymOps {
      * Display the results to the screen.
      * 
      * @param results
-     *            List of Resultes to be displayed.
+     *            List of Results to be displayed.
      */
     private void displayResults(List<AcronymData> results) {
-        // Create custom ListView Adapter and fill it with our data.
-        if (mAdapter == null) {
-            // Create a local instance of our custom Adapter for our
-            // ListView.
-            mAdapter = new AcronymDataArrayAdapter(mActivity.get(), results);
-        } else {
-            // If adapter already existed, then change data set.
-            mAdapter.clear();
-            mAdapter.addAll(results);
-            mAdapter.notifyDataSetChanged();
-        }
+        mResults = results;
 
-        // Set the adapter to the ListView.
-        mListView.get().setAdapter(mAdapter);
+        // Set/change data set.
+        mAdapter.get().clear();
+        mAdapter.get().addAll(mResults);
+        mAdapter.get().notifyDataSetChanged();
+    }
+
+    /**
+     * Reset the display prior to attempting to expand a new acronym.
+     */
+    private void resetDisplay() {
+        Utils.hideKeyboard(mActivity.get(),
+                           mEditText.get().getWindowToken());
+        mResults = null;
+        mAdapter.get().clear();
+        mAdapter.get().notifyDataSetChanged();
     }
 }

@@ -1,6 +1,6 @@
 package vandy.mooc.operations;
 
-import vandy.mooc.activities.MainActivity;
+import android.content.res.Configuration;
 import android.view.View;
 
 /**
@@ -30,8 +30,7 @@ public interface AcronymOps {
     public void expandAcronymAsync(View v);
 
     /**
-     * Called after a runtime configuration change occurs to finish
-     * the initialization steps.
+     * Called after a runtime configuration change occurs.
      */
-    public void onConfigurationChange(MainActivity activity);
+    public void onConfigurationChanged(Configuration newConfig);
 }

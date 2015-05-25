@@ -22,6 +22,14 @@ public class AcronymDataArrayAdapter extends ArrayAdapter<AcronymData> {
      * Construtor that declares which layout file is used as the
      * layout for each row.
      */
+    public AcronymDataArrayAdapter(Context context) {
+        super(context, R.layout.acronym_data_row);
+    }
+
+    /**
+     * Construtor that declares which layout file is used as the
+     * layout for each row.
+     */
     public AcronymDataArrayAdapter(Context context,
                                    List<AcronymData> objects) {
         super(context, R.layout.acronym_data_row, objects);
