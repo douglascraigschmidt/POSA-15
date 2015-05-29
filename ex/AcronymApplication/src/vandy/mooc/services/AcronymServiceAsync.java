@@ -8,7 +8,6 @@ import vandy.mooc.aidl.AcronymResults;
 import vandy.mooc.utils.Utils;
 import android.content.Context;
 import android.content.Intent;
-import android.net.http.AndroidHttpClient;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -83,19 +82,21 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
                 // possible expansions of the designated acronym.
                 List<AcronymData> acronymResults = 
                     Utils.getResults(acronym);
+                
+                Log.d(TAG, "" 
+                        + acronymResults.size() 
+                        + " results for acronym: " 
+                        + acronym);
 
                 // Invoke a one-way callback to send list of acronym
                 // expansions back to the AcronymActivity.
-                if (acronymResults != null) {
-                    Log.d(TAG, "" 
-                          + acronymResults.size() 
-                          + " results for acronym: " 
-                          + acronym);
+                if (acronymResults.size() > 0) {
                     callback.sendResults(acronymResults);
-                } else
+                } else {
                     callback.sendError("No expansions for " 
                                        + acronym
                                        + " found");
+                }
             }
 	};
 }

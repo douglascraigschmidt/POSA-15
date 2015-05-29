@@ -1,6 +1,5 @@
 package vandy.mooc.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import vandy.mooc.aidl.AcronymCall;
@@ -80,22 +79,14 @@ public class AcronymServiceSync extends LifecycleLoggingService {
                 List<AcronymData> acronymResults = 
                     Utils.getResults(acronym);
 
-                if (acronymResults != null) {
-                    Log.d(TAG, "" 
-                          + acronymResults.size() 
-                          + " results for acronym: " 
-                          + acronym);
+                Log.d(TAG, "" 
+                		+ acronymResults.size() 
+                		+ " results for acronym: " 
+                		+ acronym);
 
-                    // Return the list of acronym expansions back to the
-                    // AcronymActivity.
-                    return acronymResults;
-                } else {
-                    // Create a zero-sized acronymResults object to
-                    // indicate to the caller that the acronym had no
-                    // expansions.
-                    acronymResults = new ArrayList<AcronymData>();
-                    return acronymResults;
-                }
+                // Return the list of acronym expansions back to the
+                // AcronymActivity.
+                return acronymResults;
             }
 	};
 }
