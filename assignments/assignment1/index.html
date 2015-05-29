@@ -1,6 +1,6 @@
 <html>
 
-<title>Downloaded Image Viewer (P1 - Assignment 1)</title>
+<title>Downloaded Image Viewer (P2 - Assignment 1)</title>
 
 <body text = "#000000"
       link="#000fff"
@@ -8,7 +8,7 @@
       bgcolor="#ffffff">
 
   <hr>
-  <h3>Downloaded Image Viewer (P1 - Assignment 1)</h3>
+  <h3>Downloaded Image Viewer (P2 - Assignment 1)</h3>
 
   <hr width=50% align=left>
   <h4>Overview of the Downloaded Image Viewer Assignment</h4>
@@ -16,36 +16,29 @@
   <p>
 
     The purpose of this assignment is to give you experience using
-    Android to develop an app that contains a MainActivity that
-    prompts the user for a URL to an image and then uses Intents and
-    the DownloadImageActivity to download the image and view it via
-    the Gallery app. The DownloadImageActivity should use the Android
-    "HaMeR" concurrency framework, which is covered in <A
-    HREF="https://www.youtube.com/watch?v=6cV54pxU6bc&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=28">this
-    video</a>. <P>
-
-  <p> In addition to the lectures on Android we'll present in
-    class during Weeks 1 and 2, the following resources may be helpful
-    in completing portions of this assignment: </p>
-
-  <ul>
-    <li> <A HREF="https://www.youtube.com/watch?v=GtqZrzBuers&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=7">Introduction to Android Concurrency</A>
-    <li> <A HREF="https://www.youtube.com/watch?v=x8TTL_u0dNU&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=9">Motivations for Concurrency</A>
-  </ul>
+    Android Services by developing an app containing a main Activity
+    that prompts the user for URLs of images to download concurrently
+    via the DownloadImageService and then view via the
+    DisPlayImagesActivity.  The DownloadImageService should use the
+    Android <A
+    HREF="http://developer.android.com/reference/android/app/IntentService.html">IntentService</a>
+    framework, which is covered in <A
+    HREF="https://www.youtube.com/watch?v=N9tx9sRmn48&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=39">this
+    video</a>. Material presented in lectures during Week 1 and 2 of
+    this class are also relevant to this assignment. </p>
 
   <hr width=50% align=left>
   <h4>Skeleton Code</h4>
 
   <p> Skeleton code for this assignment is available <a
-    href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment1">here</a>.
+    href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment1"">here</a>.
     Pull the appropriate skeleton code in your repository, read it
     carefully, and complete the "TODO" markers.  </p>
 
   <p> Note that there are no automated unit tests for this
   assignment. Instead, you'll know the program is working when you can
-  successfully download and view an image.  Make sure that your
-  program works properly for both valid and invalid URLs entered by
-  the user.
+  successfully download and view an image.  However, make sure your
+  program works for both valid and invalid URL input.
 
     </p>
 
@@ -53,10 +46,10 @@
   <h4>Concluding Remarks</h4>
   <p>
 
-  This assignment is designed to help you get familiar with concurrent
-  programming Android in Java.  Make sure you start early and come to
-  Virtual Office Hours if you have questions or run into problems.
-  </p>
+  This assignment is designed to further your understanding with
+  programming Android Started Services and the IntentService framework
+  in Java. Start early and come to Virtual Office Hours if you have
+  questions or run into problems.  </p>
 
 </body>
 </html>
