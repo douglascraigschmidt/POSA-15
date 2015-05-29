@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.util.JsonReader;
@@ -48,9 +49,9 @@ public class AcronymJSONParser {
 
         reader.beginArray();
         try {
-            // If the acronym wasn't expanded return null;
+            // If the acronym wasn't expanded return an empty list;
             if (reader.peek() == JsonToken.END_ARRAY)
-                return null;
+                return Collections.emptyList();
 
             // Create a JsonAcronym object for each element in the
             // Json array.
@@ -63,7 +64,7 @@ public class AcronymJSONParser {
     public List<JsonAcronym> parseAcronymMessage(JsonReader reader)
         throws IOException {
 
-        List<JsonAcronym> acronyms = null;
+        List<JsonAcronym> acronyms = new ArrayList<>();
         reader.beginObject();
 
         try {

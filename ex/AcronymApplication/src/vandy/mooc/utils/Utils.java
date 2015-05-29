@@ -44,10 +44,10 @@ public class Utils {
         // Create a List that will return the AcronymData obtained
         // from the Acronym Service web service.
         final List<AcronymData> returnList = 
-            new ArrayList<AcronymData>();
+            new ArrayList<>();
             
         // A List of JsonAcronym objects.
-        List<JsonAcronym> jsonAcronyms = null;
+        List<JsonAcronym> jsonAcronyms = new ArrayList<>();
 
         try {
             // Append the location to create the full URL.
@@ -76,17 +76,15 @@ public class Utils {
             e.printStackTrace();
         }
 
-        if (jsonAcronyms != null && jsonAcronyms.size() > 0) {
-            // Convert the JsonAcronym data objects to our AcronymData
-            // object, which can be passed between processes.
-            for (JsonAcronym jsonAcronym : jsonAcronyms)
-                returnList.add(new AcronymData(jsonAcronym.getLongForm(),
-                                               jsonAcronym.getFreq(),
-                                               jsonAcronym.getSince()));
-             // Return the List of AcronymData.
-             return returnList;
-        }  else
-            return null;
+        // Convert the JsonAcronym data objects to our AcronymData
+        // object, which can be passed between processes.
+        for (JsonAcronym jsonAcronym : jsonAcronyms)
+        	returnList.add(new AcronymData(jsonAcronym.getLongForm(),
+        			jsonAcronym.getFreq(),
+        			jsonAcronym.getSince()));
+
+        // Return the List of AcronymData.
+        return returnList;
     }
 
     /**
