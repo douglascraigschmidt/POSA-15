@@ -52,7 +52,8 @@ public class ServiceResultHandler extends Handler {
 
         final int requestCode =
             DownloadImageService.getRequestCode(message);
-        final int resultCode = message.arg1;
+        final int resultCode =
+            DownloadImageService.getResultCode(message);
         final Bundle data = message.getData();
 
         if (mResult.get() == null) {

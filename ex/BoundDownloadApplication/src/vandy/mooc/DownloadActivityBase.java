@@ -28,11 +28,11 @@ import android.widget.ImageView;
  * methods, such as onStart() or onPause(), is also an example of the
  * Template Method pattern.
  */
-public class DownloadBase extends Activity {
+public class DownloadActivityBase extends Activity {
     /**
      * Used for debugging.
      */
-    private final String TAG = this.getClass().getSimpleName(); 
+    public final String TAG = this.getClass().getSimpleName(); 
 
     /**
      * This is the reference to the text box that allows the user to
@@ -121,26 +121,5 @@ public class DownloadBase extends Activity {
         // reset the image when a button is pressed.
         mCurrentBitmap = ((BitmapDrawable)(mImageView.getDrawable())).getBitmap();
         mDefaultBitmap = mCurrentBitmap;
-        
-        /**
-         * Turn off strict mode. 
-         * 
-         * Normally, if you try to do any networking from the main UI
-         * thread, the Android framework will throw an exception and
-         * stop working. However, part of this application uses a
-         * synchronous AIDL interface to demonstrate how to execute
-         * functions in services synchronously. For this purpose, we
-         * turn off strict mode so that the Android framework will
-         * work without complaining.
-         * 
-         *  Please note that this is for demonstration purposes ONLY,
-         *  and you should NEVER, EVER turn off strict mode in
-         *  production code. You should also not do networking
-         *  operations on the main thread, because it might cause your
-         *  application to crash.
-         */
-        StrictMode.ThreadPolicy policy =
-            new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
     }
 }

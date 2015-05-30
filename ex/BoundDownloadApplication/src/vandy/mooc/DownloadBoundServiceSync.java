@@ -46,9 +46,9 @@ public class DownloadBoundServiceSync extends Service {
              */
             @Override
             public String downloadImage(Uri uri) throws RemoteException {
-                // TODO You fill in here to download the file using
-                // the appropriate helper method in DownloadUtils and
-                // then return the pathname back to the client.
+                // Download the file using the appropriate helper
+                // method in DownloadUtils and then return the
+                // pathname back to the client.
                 return DownloadUtils.downloadFile
                     (DownloadBoundServiceSync.this,
                      uri);
@@ -66,14 +66,13 @@ public class DownloadBoundServiceSync extends Service {
     }
 	
     /**
-     * Make an Intent that will start this service when passed to
-     * bindService().
+     * Make an explicit Intent that will start this service when
+     * passed to bindService().
      *
      * @param context		The context of the calling component.
      */
     public static Intent makeIntent(Context context) {
-        // TODO - create the appropriate Intent and return it to the
-        // caller.
+        // Create an explicit Intent and return it to the caller.
         return new Intent(context,
                           DownloadBoundServiceSync.class);		
     }

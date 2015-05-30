@@ -55,6 +55,44 @@
     ImageOpsBoundService.java, RequestHandler.java, ReplyMessage.java,
     and RequestMessage.java. </p>
 
+  <P> The motivations for the pattern-oriented design of this
+  assignment include making it easy to do the following:
+
+  <UL>
+
+  <LI> <P> Handle runtime configuration changes by placing the bulk of
+  the state in the ImageOpsImpl class and using the
+  RetainedFragmentManager to store/retrieve this state during runtime
+  configuration changes. </P>
+
+  <LI> <P> Support both Started and Bound Service implementations
+  seamlessly within a common framework. </P>
+
+  <LI> <P> Plug in different concurrency models for the Bound and/or
+  Started Services without affecting other parts of the app
+  design/implementation. </P>
+
+  <LI> <P> Change the request and reply message formats without
+  affecting other parts of the app design/implementation. </P>
+
+  <LI> <P> Change the way in which the downloaded images are displayed
+  without affecting other parts of the app design/implementation. </P>
+
+  <LI> <P> Support totally different application requirements (e.g.,
+  retrieving/displaying weather data from a web service
+  vs. downloading/displaying images) with minimal impact on other
+  parts of the app design/implementation. </P>
+
+  </UL> 
+
+  <P> These are all useful capabilities, irrespective of the details
+  of an Android application.  The key point of the POSA MOOCs is to
+  teach <EM>by example</EM> how to solve complex, real-world problems
+  with concurrency and communication by applying patterns and
+  frameworks.  The best way to do this is by getting experience
+  reading and writing these sorts of pattern-oriented applications and
+  frameworks. </P>
+
   <p> Note that there are no automated unit tests for this
   assignment. Instead, you'll know the program is working when you can
   successfully download and view an image.  However, make sure your

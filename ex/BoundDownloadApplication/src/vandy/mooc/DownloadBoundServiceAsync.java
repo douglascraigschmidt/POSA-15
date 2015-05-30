@@ -17,10 +17,10 @@ import android.os.RemoteException;
  *        component can then interact with this service by making
  *        normal calls on the DownloadRequest object. Specifically,
  *        the component can ask this service to download an image,
- *        passing in a DownloadCallback object.  Once the download is
+ *        passing in a DownloadResults object.  Once the download is
  *        finished, this service should send the pathname of the
  *        downloaded file back to the calling component by calling
- *        sendPath() on the DownloadCallback object.
+ *        sendPath() on the DownloadResults object.
  *  
  *        AIDL is an example of the Broker Pattern, in which all
  *        interprocess communication details are hidden behind the
@@ -40,23 +40,21 @@ public class DownloadBoundServiceAsync extends Service{
             /**
              * Download the image at the given Uri and return a
              * pathname to the file on the Android file system by
-             * calling the sendPath() method on the provided callback
+             * calling the sendPath() method on the provided Results
              * 
              * Use the methods defined in DownloadUtils for code brevity.
              */
             @Override
             public void downloadImage(Uri uri,
-                                      DownloadCallback callback)
+                                      DownloadResults results)
                 throws RemoteException {
-                // TODO You fill in here to download the file using
-                // the appropriate helper method in DownloadUtils and
-                // then send the pathname back to the client via the
-                // callback object.
-                callback.sendPath(DownloadUtils.downloadFile
+                // Download the file using the appropriate helper
+                // method in DownloadUtils and then send the pathname
+                // back to the client via the Results object.
+                results.sendPath(DownloadUtils.downloadFile
                                   (DownloadBoundServiceAsync.this,
                                    uri));
             }
-		
 	};
 	
     /**
@@ -70,14 +68,14 @@ public class DownloadBoundServiceAsync extends Service{
     }
 
     /**
-     * Make an Intent that will start this service when passed to
-     * bindService().
+     * Make an explicit Intent that will start this service when
+     * passed to bindService().
      *
      * @param context		The context of the calling component.
      */
     public static Intent makeIntent(Context context) {
-        // TODO - create the appropriate Intent and return it to the
-        // caller.
-        return new Intent(context, DownloadBoundServiceAsync.class);		
+        // Create an explicit Intent and return it to the caller.
+        return new Intent(context,
+                          DownloadBoundServiceAsync.class);		
     }
 }
