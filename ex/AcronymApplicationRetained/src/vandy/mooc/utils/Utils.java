@@ -76,6 +76,7 @@ public class Utils {
             e.printStackTrace();
         }
 
+        // See if we parsed any valid data.
         if (jsonAcronyms != null && jsonAcronyms.size() > 0) {
             // Convert the JsonAcronym data objects to our AcronymData
             // object, which can be passed between processes.

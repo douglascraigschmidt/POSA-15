@@ -66,7 +66,8 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
      * This implementation plays the role of Invoker in the Broker
      * Pattern.
      */
-    AcronymRequest.Stub mAcronymRequestImpl = new AcronymRequest.Stub() {
+    private final AcronymRequest.Stub mAcronymRequestImpl =
+        new AcronymRequest.Stub() {
             /**
              * Implement the AIDL AcronymRequest expandAcronym()
              * method, which forwards to DownloadUtils getResults() to
@@ -81,18 +82,20 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
 
                 // Call the Acronym Web service to get the list of
                 // possible expansions of the designated acronym.
-                List<AcronymData> acronymResults = 
+                final List<AcronymData> acronymResults = 
                     Utils.getResults(acronym);
 
-                // Invoke a one-way callback to send list of acronym
-                // expansions back to the AcronymActivity.
                 if (acronymResults != null) {
                     Log.d(TAG, "" 
                           + acronymResults.size() 
                           + " results for acronym: " 
                           + acronym);
+                    // Invoke a one-way callback to send list of
+                    // acronym expansions back to the AcronymActivity.
                     callback.sendResults(acronymResults);
                 } else
+                    // Invoke a one-way callback to send an error
+                    // message back to the AcronymActivity.
                     callback.sendError("No expansions for " 
                                        + acronym
                                        + " found");

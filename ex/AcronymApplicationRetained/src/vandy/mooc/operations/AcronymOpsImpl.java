@@ -16,6 +16,7 @@ import vandy.mooc.utils.GenericServiceConnection;
 import vandy.mooc.utils.Utils;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
@@ -71,6 +72,69 @@ public class AcronymOpsImpl implements AcronymOps {
     private GenericServiceConnection<AcronymRequest> mServiceConnectionAsync;
 
     /**
+     * This Handler is used to post Runnables to the UI from the
+     * mWeatherResults callback methods to avoid a dependency on the
+     * Activity, which may be destroyed in the UI Thread during a
+     * runtime configuration change.
+     */
+    private final Handler mDisplayHandler = new Handler();
+
+    /**
+     * The implementation of the AcronymResults AIDL Interface, which
+     * will be passed to the Acronym Web service using the
+     * AcronymRequest.expandAcronym() method.
+     * 
+     * This implementation of AcronymResults.Stub plays the role of
+     * Invoker in the Broker Pattern since it dispatches the upcall to
+     * sendResults().
+     */
+    private final AcronymResults.Stub mAcronymResults =
+        new AcronymResults.Stub() {
+            /**
+             * This method is invoked by the AcronymServiceAsync to
+             * return the results back to the AcronymActivity.
+             */
+            @Override
+            public void sendResults(final List<AcronymData> acronymDataList)
+                throws RemoteException {
+                // Since the Android Binder framework dispatches this
+                // method in a background Thread we need to explicitly
+                // post a runnable containing the results to the UI
+                // Thread, where it's displayed.  We use the
+                // mDisplayHandler to avoid a dependency on the
+                // Activity, which may be destroyed in the UI Thread
+                // during a runtime configuration change.
+                mDisplayHandler.post(new Runnable() {
+                        public void run() {
+                            displayResults(acronymDataList);
+                        }
+                    });
+            }
+
+            /**
+             * This method is invoked by the AcronymServiceAsync to
+             * return error results back to the AcronymActivity.
+             */
+            @Override
+            public void sendError(final String reason)
+                throws RemoteException {
+                // Since the Android Binder framework dispatches this
+                // method in a background Thread we need to explicitly
+                // post a runnable containing the results to the UI
+                // Thread, where it's displayed.  We use the
+                // mDisplayHandler to avoid a dependency on the
+                // Activity, which may be destroyed in the UI Thread
+                // during a runtime configuration change.
+                mDisplayHandler.post(new Runnable() {
+                        public void run() {
+                            Utils.showToast(mActivity.get(),
+                                            reason);
+                        }
+                    });
+            }
+	};
+
+    /**
      * Constructor initializes the fields.
      */
     public AcronymOpsImpl(MainActivity activity) {
@@ -118,10 +182,12 @@ public class AcronymOpsImpl implements AcronymOps {
      */
     private void initializeNonViewFields() {
         mServiceConnectionSync = 
-            new GenericServiceConnection<AcronymCall>(AcronymCall.class);
+            new GenericServiceConnection<AcronymCall>
+                (AcronymCall.class);
 
         mServiceConnectionAsync =
-            new GenericServiceConnection<AcronymRequest>(AcronymRequest.class);
+            new GenericServiceConnection<AcronymRequest>
+                (AcronymRequest.class);
     }
 
     /**
@@ -129,7 +195,8 @@ public class AcronymOpsImpl implements AcronymOps {
      */
     @Override
     public void bindService() {
-        Log.d(TAG, "calling bindService()");
+        Log.d(TAG,
+              "calling bindService()");
 
         // Launch the Acronym Bound Services if they aren't already
         // running via a call to bindService(), which binds this
@@ -192,7 +259,7 @@ public class AcronymOpsImpl implements AcronymOps {
      * the "Look Up Async" button.
      */
     public void expandAcronymAsync(View v) {
-        AcronymRequest acronymRequest = 
+        final AcronymRequest acronymRequest = 
             mServiceConnectionAsync.getInterface();
 
         if (acronymRequest != null) {
@@ -216,7 +283,8 @@ public class AcronymOpsImpl implements AcronymOps {
                       + e.getMessage());
             }
         } else {
-            Log.d(TAG, "acronymRequest was null.");
+            Log.d(TAG,
+                  "acronymRequest was null.");
         }
     }
 
@@ -278,54 +346,6 @@ public class AcronymOpsImpl implements AcronymOps {
             Log.d(TAG, "mAcronymCall was null.");
         }
     }
-
-    /**
-     * The implementation of the AcronymResults AIDL Interface, which
-     * will be passed to the Acronym Web service using the
-     * AcronymRequest.expandAcronym() method.
-     * 
-     * This implementation of AcronymResults.Stub plays the role of
-     * Invoker in the Broker Pattern since it dispatches the upcall to
-     * sendResults().
-     */
-    private AcronymResults.Stub mAcronymResults = new AcronymResults.Stub() {
-            /**
-             * This method is invoked by the AcronymServiceAsync to
-             * return the results back to the AcronymActivity.
-             */
-            @Override
-            public void sendResults(final List<AcronymData> acronymDataList)
-                throws RemoteException {
-                // Since the Android Binder framework dispatches this
-                // method in a background Thread we need to explicitly
-                // post a runnable containing the results to the UI
-                // Thread, where it's displayed.
-                mActivity.get().runOnUiThread(new Runnable() {
-                        public void run() {
-                            displayResults(acronymDataList);
-                        }
-                    });
-            }
-
-            /**
-             * This method is invoked by the AcronymServiceAsync to
-             * return error results back to the AcronymActivity.
-             */
-            @Override
-            public void sendError(final String reason)
-                throws RemoteException {
-                // Since the Android Binder framework dispatches this
-                // method in a background Thread we need to explicitly
-                // post a runnable containing the results to the UI
-                // Thread, where it's displayed.
-                mActivity.get().runOnUiThread(new Runnable() {
-                        public void run() {
-                            Utils.showToast(mActivity.get(),
-                                            reason);
-                        }
-                    });
-            }
-	};
 
     /**
      * Display the results to the screen.
