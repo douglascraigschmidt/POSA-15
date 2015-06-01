@@ -39,27 +39,6 @@ public class AcronymOpsImpl implements AcronymOps {
     protected WeakReference<MainActivity> mActivity;
     	
     /**
-     * The ListView that will display the results to the user.
-     */
-    protected WeakReference<ListView> mListView;
-
-    /**
-     * Acronym entered by the user.
-     */
-    protected WeakReference<EditText> mEditText;
-
-    /**
-     * List of results to display (if any).
-     */
-    protected List<AcronymData> mResults;
-
-    /**
-     * A custom ArrayAdapter used to display the list of AcronymData
-     * objects.
-     */
-    protected WeakReference<AcronymDataArrayAdapter> mAdapter;
-
-    /**
      * This GenericServiceConnection is used to receive results after
      * binding to the AcronymServiceSync Service using bindService().
      */
@@ -70,6 +49,11 @@ public class AcronymOpsImpl implements AcronymOps {
      * binding to the AcronymServiceAsync Service using bindService().
      */
     private GenericServiceConnection<AcronymRequest> mServiceConnectionAsync;
+
+    /**
+     * List of results to display (if any).
+     */
+    protected List<AcronymData> mResults;
 
     /**
      * This Handler is used to post Runnables to the UI from the
@@ -106,7 +90,10 @@ public class AcronymOpsImpl implements AcronymOps {
                 // during a runtime configuration change.
                 mDisplayHandler.post(new Runnable() {
                         public void run() {
-                            displayResults(acronymDataList);
+                            mResults = acronymDataList;
+                            mActivity.get().displayResults
+                                (acronymDataList,
+                                 null);
                         }
                     });
             }
@@ -127,8 +114,8 @@ public class AcronymOpsImpl implements AcronymOps {
                 // during a runtime configuration change.
                 mDisplayHandler.post(new Runnable() {
                         public void run() {
-                            Utils.showToast(mActivity.get(),
-                                            reason);
+                            mActivity.get().displayResults(null,
+                                                           reason);
                         }
                     });
             }
@@ -141,53 +128,35 @@ public class AcronymOpsImpl implements AcronymOps {
         // Initialize the WeakReference.
         mActivity = new WeakReference<>(activity);
 
-        // Finish the initialization steps.
-        initializeViewFields();
-        initializeNonViewFields();
-    }
-
-    /**
-     * Initialize the View fields, which are all stored as
-     * WeakReferences to enable garbage collection.
-     */
-    private void initializeViewFields() {
-        // Get references to the UI components.
-        mActivity.get().setContentView(R.layout.main_activity);
-
-        // Store the EditText that holds the urls entered by the user
-        // (if any).
-        mEditText = new WeakReference<>
-            ((EditText) mActivity.get().findViewById(R.id.editText1));
-
-        // Store the ListView for displaying the results entered.
-        mListView = new WeakReference<>
-            ((ListView) mActivity.get().findViewById(R.id.listView1));
-
-        // Create a local instance of our custom Adapter for our
-        // ListView.
-        mAdapter = new WeakReference<>
-            (new AcronymDataArrayAdapter(mActivity.get()));
-
-        // Set the adapter to the ListView.
-        mListView.get().setAdapter(mAdapter.get());
-
-        // Display results if any (due to runtime configuration change).
-        if (mResults != null)
-            displayResults(mResults);
-    }
-
-    /**
-     * (Re)initialize the non-view fields (e.g.,
-     * GenericServiceConnection objects).
-     */
-    private void initializeNonViewFields() {
+        // Initialize the GenericServiceConnection objects.
         mServiceConnectionSync = 
-            new GenericServiceConnection<AcronymCall>
-                (AcronymCall.class);
+            new GenericServiceConnection<AcronymCall>(AcronymCall.class);
 
         mServiceConnectionAsync =
-            new GenericServiceConnection<AcronymRequest>
-                (AcronymRequest.class);
+            new GenericServiceConnection<AcronymRequest>(AcronymRequest.class);
+    }
+
+    /**
+     * Called after a runtime configuration change occurs to finish
+     * the initialization steps.
+     */
+    public void onConfigurationChange(MainActivity activity) {
+        Log.d(TAG,
+              "onConfigurationChange() called");
+
+        // Reset the mActivity WeakReference.
+        mActivity = new WeakReference<>(activity);
+
+        updateResultsDisplay();
+    }
+
+    /**
+     * Display results if any (due to runtime configuration change).
+     */
+    private void updateResultsDisplay() {
+        if (mResults != null)
+            mActivity.get().displayResults(mResults, 
+                                           null);
     }
 
     /**
@@ -239,36 +208,15 @@ public class AcronymOpsImpl implements AcronymOps {
         }
     }
 
-    /**
-     * Called after a runtime configuration change occurs to finish
-     * the initialization steps.
-     */
-    public void onConfigurationChange(MainActivity activity) {
-        Log.d(TAG,
-              "onConfigurationChange() called");
-
-        // Reset the mActivity WeakReference.
-        mActivity = new WeakReference<>(activity);
-
-        // (Re)initialize all the View fields.
-        initializeViewFields();
-    }
-
     /*
      * Initiate the asynchronous acronym lookup when the user presses
      * the "Look Up Async" button.
      */
-    public void expandAcronymAsync(View v) {
+    public void expandAcronymAsync(String acronym) {
         final AcronymRequest acronymRequest = 
             mServiceConnectionAsync.getInterface();
 
         if (acronymRequest != null) {
-            // Get the acronym entered by the user.
-            final String acronym =
-                mEditText.get().getText().toString();
-
-            resetDisplay();
-
             try {
                 // Invoke a one-way AIDL call, which does not block
                 // the client.  The results are returned via the
@@ -292,17 +240,11 @@ public class AcronymOpsImpl implements AcronymOps {
      * Initiate the synchronous acronym lookup when the user presses
      * the "Look Up Sync" button.
      */
-    public void expandAcronymSync(View v) {
+    public void expandAcronymSync(String acronym) {
         final AcronymCall acronymCall = 
             mServiceConnectionSync.getInterface();
 
         if (acronymCall != null) {
-            // Get the acronym entered by the user.
-            final String acronym =
-                mEditText.get().getText().toString();
-
-            resetDisplay();
-
             // Use an anonymous AsyncTask to download the Acronym data
             // in a separate thread and then display any results in
             // the UI thread.
@@ -331,13 +273,11 @@ public class AcronymOpsImpl implements AcronymOps {
                  * Display the results in the UI Thread.
                  */
                 protected void onPostExecute(List<AcronymData> acronymDataList) {
-                    if (acronymDataList.size() > 0)
-                        displayResults(acronymDataList);
-                    else 
-                        Utils.showToast(mActivity.get(),
-                                        "no expansions for "
-                                        + mAcronym
-                                        + " found");
+                    mResults = acronymDataList;
+                    mActivity.get().displayResults(acronymDataList,
+                                                   "no expansions for "
+                                                   + mAcronym
+                                                   + " found");
                 }
                 // Execute the AsyncTask to expand the acronym without
                 // blocking the caller.
@@ -345,31 +285,5 @@ public class AcronymOpsImpl implements AcronymOps {
         } else {
             Log.d(TAG, "mAcronymCall was null.");
         }
-    }
-
-    /**
-     * Display the results to the screen.
-     * 
-     * @param results
-     *            List of Results to be displayed.
-     */
-    private void displayResults(List<AcronymData> results) {
-        mResults = results;
-
-        // Set/change data set.
-        mAdapter.get().clear();
-        mAdapter.get().addAll(mResults);
-        mAdapter.get().notifyDataSetChanged();
-    }
-
-    /**
-     * Reset the display prior to attempting to expand a new acronym.
-     */
-    private void resetDisplay() {
-        Utils.hideKeyboard(mActivity.get(),
-                           mEditText.get().getWindowToken());
-        mResults = null;
-        mAdapter.get().clear();
-        mAdapter.get().notifyDataSetChanged();
     }
 }

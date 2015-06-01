@@ -21,13 +21,13 @@ public interface AcronymOps {
      * Initiate the synchronous acronym lookup when the user presses
      * the "Look Up Sync" button.
      */
-    public void expandAcronymSync(View v);
+    public void expandAcronymSync(String acronym);
 
     /*
      * Initiate the asynchronous acronym lookup when the user presses
      * the "Look Up Async" button.
      */
-    public void expandAcronymAsync(View v);
+    public void expandAcronymAsync(String acronym);
 
     /**
      * Called after a runtime configuration change occurs.
