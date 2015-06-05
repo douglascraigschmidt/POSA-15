@@ -1,14 +1,14 @@
 package vandy.mooc.services;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import vandy.mooc.aidl.AcronymData;
 import vandy.mooc.aidl.AcronymRequest;
 import vandy.mooc.aidl.AcronymResults;
-import vandy.mooc.utils.Utils;
 import android.content.Context;
 import android.content.Intent;
-import android.net.http.AndroidHttpClient;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -32,7 +32,15 @@ import android.util.Log;
  *        interprocess communication details are hidden behind the
  *        AIDL interfaces.
  */
-public class AcronymServiceAsync extends LifecycleLoggingService {
+public class AcronymServiceAsync extends AcronymServiceBase {
+    /**
+     * Reference to the ExecutorService that manages a pool of
+     * threads.  We need this feature since Android's Binder framework
+     * apparently executes oneway methods from a client in a single
+     * thread rather than a pool of thread.
+     */
+    private ExecutorService mExecutorService;
+
     /**
      * Factory method that makes an Intent used to start the
      * AcronymServiceAsync when passed to bindService().
@@ -57,6 +65,33 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
     }
 
     /**
+     * Hook method called when the Service is created.
+     */
+    @Override
+    public void onCreate() {
+        // Call up to the super onCreate() method to perform its
+        // initialization operations.
+        super.onCreate();
+
+        // Create an ExecutorService that manages a pool of threads.
+        mExecutorService = Executors.newCachedThreadPool();
+    }
+
+    /**
+     * Hook method called when the last client unbinds from the
+     * Service.
+     */
+    @Override
+    public void onDestroy() {
+        // Immediately shutdown the ExecutorService.
+        mExecutorService.shutdownNow(); 
+
+        // Call up to the super onCreate() method to perform its
+        // destruction operations.
+        super.onDestroy();
+    }
+
+    /**
      * The concrete implementation of the AIDL Interface
      * AcronymRequest, which extends the Stub class that implements
      * AcronymRequest, thereby allowing Android to handle calls across
@@ -70,35 +105,55 @@ public class AcronymServiceAsync extends LifecycleLoggingService {
         new AcronymRequest.Stub() {
             /**
              * Implement the AIDL AcronymRequest expandAcronym()
-             * method, which forwards to DownloadUtils getResults() to
-             * obtain the results from the Acronym Web service and
-             * then sends the results back to the Activity via a
-             * callback.
+             * method, which forwards to getAcronymResults() to obtain
+             * the results and then sends these results back to the
+             * client via a callback.
              */
             @Override
-            public void expandAcronym(String acronym,
-                                      AcronymResults callback)
+            public void expandAcronym(final String acronym,
+                                      final AcronymResults callback)
                 throws RemoteException {
+                final Runnable getCurrentAcronymRunnable = new Runnable() {
+                    public void run() {
+                        try {
+                            // Call the Acronym Web service to get the
+                            // list of possible expansions of the
+                            // designated location.
+                            final List<AcronymData> acronymResults =
+                                getAcronymResults(acronym);
 
-                // Call the Acronym Web service to get the list of
-                // possible expansions of the designated acronym.
-                final List<AcronymData> acronymResults = 
-                    Utils.getResults(acronym);
+                            if (acronymResults != null) {
+                                Log.d(TAG, "" 
+                                      + acronymResults.size() 
+                                      + " result(s) for Acronym: "
+                                      + acronym);
+                                // Invoke a one-way callback to send
+                                // list of Acronym expansions back to
+                                // the client.
+                                callback.sendResults(acronymResults);
+                            } else {
+                                Log.d(TAG, 
+                                      "No expansion for \""
+                                      + acronym
+                                      + "\" found");
 
-                if (acronymResults != null) {
-                    Log.d(TAG, "" 
-                          + acronymResults.size() 
-                          + " results for acronym: " 
-                          + acronym);
-                    // Invoke a one-way callback to send list of
-                    // acronym expansions back to the AcronymActivity.
-                    callback.sendResults(acronymResults);
-                } else
-                    // Invoke a one-way callback to send an error
-                    // message back to the AcronymActivity.
-                    callback.sendError("No expansions for " 
-                                       + acronym
-                                       + " found");
+                                // Invoke a one-way callback to send
+                                // an error message back to the
+                                // client.
+                                callback.sendError("No expansion for \""
+                                                   + acronym
+                                                   + "\" found");
+                            }
+                        } catch (Exception e) {
+                            Log.d(TAG,
+                                  "getCurrentAcronym() "
+                                  + e);
+                        }
+                    }
+
+                };
+                // Execute the getCurrentAcronymRunnable.
+                mExecutorService.execute(getCurrentAcronymRunnable);
             }
 	};
 }

@@ -30,7 +30,7 @@ import android.util.Log;
  *        interprocess communication details are hidden behind the
  *        AIDL interfaces.
  */
-public class AcronymServiceSync extends LifecycleLoggingService {
+public class AcronymServiceSync extends AcronymServiceBase {
     /**
      * Factory method that makes an Intent used to start the
      * AcronymServiceSync when passed to bindService().
@@ -68,9 +68,9 @@ public class AcronymServiceSync extends LifecycleLoggingService {
         new AcronymCall.Stub() {
             /**
              * Implement the AIDL AcronymCall expandAcronym() method,
-             * which forwards to DownloadUtils getResults() to obtain
-             * the results from the Acronym Web service and then
-             * returns the results back to the Activity.
+             * which forwards to getAcronymResults() to obtain the
+             * results and then returns these results back to the
+             * client.
              */
             @Override
             public List<AcronymData> expandAcronym(String acronym)
@@ -79,7 +79,7 @@ public class AcronymServiceSync extends LifecycleLoggingService {
                 // Call the Acronym Web service to get the list of
                 // possible expansions of the designated acronym.
                 final List<AcronymData> acronymResults = 
-                    Utils.getResults(acronym);
+                    getAcronymResults(acronym);
 
                 if (acronymResults != null) {
                     Log.d(TAG, "" 
