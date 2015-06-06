@@ -139,7 +139,7 @@ public class AcronymServiceAsync extends AcronymServiceBase {
 
                                 // Invoke a one-way callback to send
                                 // an error message back to the
-                                // client.
+                                // client.es
                                 callback.sendError("No expansion for \""
                                                    + acronym
                                                    + "\" found");
@@ -152,8 +152,19 @@ public class AcronymServiceAsync extends AcronymServiceBase {
                     }
 
                 };
-                // Execute the getCurrentAcronymRunnable.
-                mExecutorService.execute(getCurrentAcronymRunnable);
+                boolean isOnUiThread =
+                    Thread.currentThread() == Looper.getMainLooper().getThread();
+
+                if (isOnUiThread)
+                    // Execute getCurrentAcronymRunnable in a separate
+                    // thread if this service has been configured to
+                    // be collocated with an Activity.
+                    mExecutorService.execute(getCurrentAcronymRunnable);
+                else 
+                    // Run the getCurrentAcronymRunnable in the pool
+                    // thread if this service has been configured to
+                    // run in its own process.
+                    getCurrentAcronymRunnable.run();
             }
 	};
 }
