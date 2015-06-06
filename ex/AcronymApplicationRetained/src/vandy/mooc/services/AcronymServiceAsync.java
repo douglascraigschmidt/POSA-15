@@ -152,6 +152,7 @@ public class AcronymServiceAsync extends AcronymServiceBase {
                     }
 
                 };
+                // Determine if we're on the UI thread or not.  
                 boolean isOnUiThread =
                     Thread.currentThread() == Looper.getMainLooper().getThread();
 
