@@ -103,17 +103,26 @@ public class ExecutorServiceTimeoutCache<K, V>
                 }
             };
 
-
         // Put a new CacheValues object into the ConcurrentHashMap
         // associated with the key and return the previous
-        // CacheValues. There is no need to cancel the future
-        // from any previous cacheValues object that may be replaced
-        // by this put request since it's cleanupCacheRunnable future
-        // will not match this cacheValues object.
-        mResults.put(key, cacheValues);
+        // CacheValues.
+        CacheValues prevCacheValues =
+            mResults.put(key,
+                         cacheValues);
 
-        // Create a ScheduledFuture that will execute the
-        // cleanupCacheRunnable after the designated timeout.
+        // If there was a previous CacheValues associated with this
+        // key then cancel the future immediately.  Note that there is
+        // no race condition between the ScheduledExecutorService
+        // running the cleanupCacheRunnable and canceling the future
+        // here since the ConcurrentHashMap.remove() call won't
+        // actually remove the key unless the value is equal to the
+        // original cacheValues reference.
+        if (prevCacheValues != null)
+            prevCacheValues.mFuture.cancel(true);
+        
+        // Create a ScheduledFuture for the new cacheValues object that
+        // will execute the cleanupCacheRunnable after the designated
+        // timeout.
         ScheduledFuture<?> future =
             mScheduledExecutorService.schedule(cleanupCacheRunnable,
                                                timeout,
@@ -125,7 +134,7 @@ public class ExecutorServiceTimeoutCache<K, V>
         // cache is because it is possible (but unlikely) for the future 
         // to trigger in the small time window between when it is started
         // and returned from the ScheduledExecutorService and when the 
-        // put() call is made to add it to the.
+        // put() call is made to add it to the cache.
         cacheValues.setFuture(future);
     }
 
