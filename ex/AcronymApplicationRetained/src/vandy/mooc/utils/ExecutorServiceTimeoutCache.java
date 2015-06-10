@@ -176,6 +176,6 @@ public class ExecutorServiceTimeoutCache<K, V>
      */
     @Override
     protected void close() {
-        mScheduledExecutorService.shutdown();
+        mScheduledExecutorService.shutdownNow();
     }
 }
