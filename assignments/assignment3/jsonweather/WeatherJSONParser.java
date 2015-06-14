@@ -30,15 +30,6 @@ public class WeatherJSONParser {
     }
 
     /**
-     * Parse a single Json stream and convert it into a JsonWeather
-     * object.
-     */
-    public JsonWeather parseJsonStreamSingle(JsonReader reader)
-        throws IOException {
-        // TODO -- you fill in here.
-    }
-
-    /**
      * Parse a Json stream and convert it into a List of JsonWeather
      * objects.
      */
