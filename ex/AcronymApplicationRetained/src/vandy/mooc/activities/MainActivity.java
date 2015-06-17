@@ -171,9 +171,13 @@ public class MainActivity extends LifecycleLoggingActivity {
         
         // Reset the display for the next acronym expansion.
         resetDisplay();
-
-        // Asynchronously expand the acronym. 
-        mAcronymOps.expandAcronymSync(acronym);
+            
+        if (acronym.isEmpty())
+            Utils.showToast(this,
+                            "no acronym provided");
+        else 
+            // Asynchronously expand the acronym. 
+            mAcronymOps.expandAcronymSync(acronym);
     }
 
     /*
@@ -187,9 +191,13 @@ public class MainActivity extends LifecycleLoggingActivity {
         
         // Reset the display for the next acronym expansion.
         resetDisplay();
-        
-        // Asynchronously expand the acronym. 
-        mAcronymOps.expandAcronymAsync(acronym);
+
+        if (acronym.isEmpty())
+            Utils.showToast(this,
+                            "no acronym provided");
+        else 
+            // Asynchronously expand the acronym. 
+            mAcronymOps.expandAcronymAsync(acronym);
     }
 
     /**

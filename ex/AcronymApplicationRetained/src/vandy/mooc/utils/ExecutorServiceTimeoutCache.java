@@ -1,5 +1,6 @@
 package vandy.mooc.utils;
 
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -176,6 +177,15 @@ public class ExecutorServiceTimeoutCache<K, V>
      */
     @Override
     protected void close() {
+        // Get a Collection containing all the CacheValues in the map.
+        Collection<CacheValues> cvsCollection = mResults.values();
+
+        // Cancel all remaining futures.
+        for (CacheValues cvs : cvsCollection)
+            if (cvs.mFuture != null)
+                cvs.mFuture.cancel(true);
+
+        // Shutdown the ScheduledExecutorService immediately.
         mScheduledExecutorService.shutdownNow();
     }
 }
