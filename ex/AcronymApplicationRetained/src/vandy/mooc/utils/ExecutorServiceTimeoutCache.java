@@ -177,11 +177,8 @@ public class ExecutorServiceTimeoutCache<K, V>
      */
     @Override
     protected void close() {
-        // Get a Collection containing all the CacheValues in the map.
-        Collection<CacheValues> cvsCollection = mResults.values();
-
         // Cancel all remaining futures.
-        for (CacheValues cvs : cvsCollection)
+        for (CacheValues cvs : mResults.values())
             if (cvs.mFuture != null)
                 cvs.mFuture.cancel(true);
 
