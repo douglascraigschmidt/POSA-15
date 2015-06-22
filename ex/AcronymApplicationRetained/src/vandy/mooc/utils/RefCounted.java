@@ -52,5 +52,3 @@ public abstract class RefCounted {
      */
     protected abstract void close();
 }
-
-

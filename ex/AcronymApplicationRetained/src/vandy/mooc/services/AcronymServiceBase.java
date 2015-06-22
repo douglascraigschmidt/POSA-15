@@ -65,8 +65,10 @@ public class AcronymServiceBase extends LifecycleLoggingService {
         super.onDestroy();
         // Decrement the reference count for the AcronymCache
         // singleton, which shuts it down when the count drops to 0.
+        // When this happens, the GenericSingleton needs to remove the
+        // AcronymCache.class entry in its map.
         if (GenericSingleton.instance(AcronymCache.class).decrementRefCount() == 0)
-            GenericSingleton.destroy(AcronymCache.class);
+            GenericSingleton.remove(AcronymCache.class);
     }
 
     /**

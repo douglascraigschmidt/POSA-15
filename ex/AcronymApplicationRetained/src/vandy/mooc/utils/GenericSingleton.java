@@ -69,15 +69,15 @@ public class GenericSingleton {
 
     /**
      * If @a classOf is in the singleton map then set it to null so
-     * it's destroyed properly by the garbage collector. 
+     * it's cleaned up properly by the garbage collector.
      *
-     * @return True if @a classOf is found/destroyed, else false.
+     * @return True if @a classOf is found/removed, else false.
      */
-    public static <T> boolean destroy(Class<T> classOf) {
+    public static <T> boolean remove(Class<T> classOf) {
         synchronized(sInstance) {
             // Try to get the one and only instance of Class<T> that's
-            // stored in the map and if it's found, set it to null to
-            // destroy it.
+            // stored in the map and if it's found, set it to null so
+            // it will be garbage collected.
             if (sInstance.mMap.get(classOf) != null) {
                 sInstance.mMap.put(classOf, 
                                    null);
