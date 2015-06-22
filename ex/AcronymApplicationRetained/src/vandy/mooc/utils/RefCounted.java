@@ -40,9 +40,11 @@ public abstract class RefCounted {
      * Atomically decrement the reference count by one and calls the 
      * close() hook method on the object so it can clean itself up.
      */
-    public void decrementRefCount() {
-        if (mRefcount.decrementAndGet() == 0)
+    public int decrementRefCount() {
+        int count = mRefcount.decrementAndGet();
+        if (count == 0)
             close();
+        return count;
     }
     
     /**
