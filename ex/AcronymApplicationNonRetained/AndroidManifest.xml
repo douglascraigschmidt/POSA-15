@@ -13,7 +13,7 @@
   <application
     android:label="@string/app_name">
 
-    <activity android:name=".activities.MainActivity"
+    <activity android:name=".view.AcronymExpansionActivity"
               android:configChanges="orientation|screenSize|keyboardHidden"
               android:label="@string/app_name">
       <intent-filter>
@@ -22,13 +22,22 @@
       </intent-filter>
     </activity>
 
+    <activity
+       android:name=".view.DisplayExpansionActivity"
+       android:label="@string/app_name">
+      <intent-filter >
+        <action android:name="vandy.mooc.intent.action.ACRONYMS" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+
     <service
-       android:name=".services.AcronymServiceAsync"
+       android:name=".model.services.AcronymServiceAsync"
        android:process=":remote1"> 
     </service>
 
     <service
-       android:name=".services.AcronymServiceSync"
+       android:name=".model.services.AcronymServiceSync"
        android:process=":remote2">
     </service>
 

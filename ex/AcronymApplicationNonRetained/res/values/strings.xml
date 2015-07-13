@@ -4,6 +4,9 @@
     <string name="action_settings">Settings</string>
     <string name="row_result_tv">Result</string>
     <string name="result_string">Result</string>
-    <string name="refernces_string">References</string>
+    <string name="references_string">References</string>
     <string name="year_string">Year</string>
+    <string name="hint_enter_acronym">Please enter an acronym to look up</string>
+    <string name="lookup_acronym_sync">Lookup Acronym Sync</string>
+    <string name="lookup_acronym_async">Lookup Acronym Async</string>
 </resources>

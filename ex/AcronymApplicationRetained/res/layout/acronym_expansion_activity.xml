@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.walkernation.aidlservice.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/hint_enter_acronym" >
+        <requestFocus />
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+      <Button
+         android:id="@+id/button1"
+         android:layout_width="0dp"
+         android:layout_weight="0.5"
+         android:layout_height="wrap_content"
+         android:onClick="expandAcronymSync"
+         android:text="@string/lookup_acronym_sync" />
+      
+      <Button
+         android:id="@+id/button2"
+         android:layout_width="0dp"
+         android:layout_weight="0.5"
+         android:layout_height="wrap_content"
+         android:onClick="expandAcronymAsync"
+         android:text="@string/lookup_acronym_async" />
+
+    </LinearLayout>
+
+</LinearLayout>
