@@ -11,7 +11,6 @@ import vandy.mooc.model.AcronymModel;
 import vandy.mooc.model.aidl.AcronymExpansion;
 import vandy.mooc.model.aidl.AcronymResults;
 import android.content.Context;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;

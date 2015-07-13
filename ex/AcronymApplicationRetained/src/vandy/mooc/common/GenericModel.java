@@ -12,8 +12,8 @@ public class GenericModel<RequiredModelOps,
     /**
      * Debugging tag used by the Android logger.
      */
-    protected final static String TAG = 
-        GenericModel.class.getSimpleName();
+    protected final String TAG = 
+        getClass().getSimpleName();
 
     /**
      * Instance of the operations ("Ops") type.

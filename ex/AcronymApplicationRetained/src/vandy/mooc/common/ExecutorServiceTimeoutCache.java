@@ -17,7 +17,8 @@ public class ExecutorServiceTimeoutCache<K, V>
     /**
      * Debugging tag used by the Android logger.
      */
-    protected final String TAG = getClass().getSimpleName();
+    protected final String TAG =
+        getClass().getSimpleName();
  
     /**
      * A thread-safe HashMap that supports full concurrency of

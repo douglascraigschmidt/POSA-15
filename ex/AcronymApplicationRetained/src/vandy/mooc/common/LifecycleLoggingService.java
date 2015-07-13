@@ -13,7 +13,8 @@ public abstract class LifecycleLoggingService extends Service {
     /**
      * Debugging tag used by the Android logger.
      */
-    protected final String TAG = getClass().getSimpleName();
+    protected final String TAG = 
+        getClass().getSimpleName();
 
     /**
      * Hook method called when the Service is created.

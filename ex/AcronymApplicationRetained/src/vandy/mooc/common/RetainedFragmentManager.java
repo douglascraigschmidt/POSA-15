@@ -18,7 +18,8 @@ public class RetainedFragmentManager {
     /**
      * Debugging tag used by the Android logger.
      */
-    protected final String TAG = getClass().getSimpleName();
+    protected final String TAG =
+        getClass().getSimpleName();
 
     /**
      * Name used to identify the RetainedFragment.

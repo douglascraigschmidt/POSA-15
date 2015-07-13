@@ -2,10 +2,10 @@ package vandy.mooc.view;
 
 import java.util.List;
 
+import vandy.mooc.MVP;
 import vandy.mooc.R;
 import vandy.mooc.common.GenericActivity;
 import vandy.mooc.common.Utils;
-import vandy.mooc.MVP;
 import vandy.mooc.model.aidl.AcronymExpansion;
 import vandy.mooc.presenter.AcronymPresenter;
 import android.content.Intent;
@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.EditText;
 
 /**
- * This Activity prompts the user for acronyms to expand via Retrofit
- * and view via the results via the DisplayAcronymActivity.  This
- * class plays the role of the "View" in the Model-View-Presenter
- * (MVP) pattern.  It extends GenericActivity that provides a
- * framework for automatically handling runtime configuration changes
- * of an AcronymPresenter object, which plays the role of the "Presenter" in
+ * This Activity prompts the user for acronyms to expand via Android
+ * Bound Services and display the results via DisplayAcronymActivity.
+ * It plays the role of the "View" in the Model-View-Presenter (MVP)
+ * pattern.  It extends that GenericActivity framework that
+ * automatically handles runtime configuration changes of an
+ * AcronymPresenter object, which plays the role of the "Presenter" in
  * the MVP pattern.  The MPV.RequiredViewOps and MVP.ProvidedViewOps
  * interfaces are used to minimize dependencies between the View and
  * Presenter layers.
@@ -35,7 +35,7 @@ public class AcronymExpansionActivity
 	
     /**
      * Hook method called when a new instance of Activity is created.
-     * One time initialization code goes here, e.g., storing Views and
+     * One-time initialization code goes here, e.g., storing Views and
      * initializing the Presenter layer.
      * 
      * @param savedInstanceState
@@ -43,6 +43,9 @@ public class AcronymExpansionActivity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Perform first part of initializing the super class.
+        super.onCreate(savedInstanceState);
+
         // Get references to the UI components.
         setContentView(R.layout.acronym_expansion_activity);
 
@@ -50,12 +53,8 @@ public class AcronymExpansionActivity
         // (if any).
         mEditText = (EditText) findViewById(R.id.editText1);
 
-        // Invoke the special onCreate() method in GenericActivity,
-        // passing in the AcronymPresenter class to instantiate/manage and
-        // "this" to provide AcronymPresenter with the
-        // AcronymPresenter.RequiredViewOps instance.
-        super.onCreate(savedInstanceState,
-                       AcronymPresenter.class,
+        // Perform second part of initializing the super class.
+        super.onCreate(AcronymPresenter.class,
                        this);
     }
 
@@ -77,6 +76,10 @@ public class AcronymExpansionActivity
      * the "Lookup Acronym Async" button.
      */
     public void expandAcronymAsync(View v) {
+        // Hide the keyboard.
+        Utils.hideKeyboard(this, 
+                           mEditText.getWindowToken());
+
         // Try to get an acronym entered by the user.
         final String acronym =
             Utils.uppercaseInput(this,
@@ -106,6 +109,10 @@ public class AcronymExpansionActivity
      * the "Lookup Acronym Sync" button.
      */
     public void expandAcronymSync(View v) {
+        // Hide the keyboard.
+        Utils.hideKeyboard(this, 
+                           mEditText.getWindowToken());
+
         // Try to get an acronym entered by the user.
         final String acronym =
             Utils.uppercaseInput(this,

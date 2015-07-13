@@ -1,7 +1,6 @@
 package vandy.mooc.common;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 
 /**
@@ -33,53 +32,80 @@ public abstract class GenericActivity<RequiredViewOps,
     private OpsType mOpsInstance;
 
     /**
-     * Lifecycle hook method that's called when the GenericActivity is
-     * created.
+     * Initialize or reinitialize the Presenter layer.  This must be
+     * called *after* the onCreate(Bundle saveInstanceState) method.
      *
-     * @param savedInstanceState
-     *            Object that contains saved state information.
      * @param opsType 
      *            Class object that's used to create an operations
      *            ("Ops") object.  
      * @param view
      *            Reference to the RequiredViewOps in the View layer.
      */
-    public void onCreate(Bundle savedInstanceState,
-                         Class<OpsType> opsType,
+    public void onCreate(Class<OpsType> opsType,
                          RequiredViewOps view) {
-        // Call up to the super class.
-        super.onCreate(savedInstanceState);
-
-        // Handle configuration-related events, including the
-        // initial creation of an Activity and any subsequent
-        // runtime configuration changes.
+        // Handle configuration-related events, including the initial
+        // creation of an Activity and any subsequent runtime
+        // configuration changes.
         try {
             // If this method returns true it's the first time the
             // Activity has been created.
             if (mRetainedFragmentManager.firstTimeIn()) {
                 Log.d(TAG,
-                      "First time onCreate() call");
+                      "First time calling onCreate()");
 
                 // Initialize the GenericActivity fields.
                 initialize(opsType,
                            view);
             } else {
+                Log.d(TAG,
+                      "Second (or subsequent) time calling onCreate()");
+
                 // The RetainedFragmentManager was previously
                 // initialized, which means that a runtime
-                // configuration change occured.
-                Log.d(TAG,
-                      "Second or subsequent onCreate() call");
+                // configuration change occurred.
                 reinitialize(opsType,
                              view);
             }
         } catch (InstantiationException
                  | IllegalAccessException e) {
             Log.d(TAG, 
-                  "handleConfiguration " 
+                  "onCreate() " 
                   + e);
             // Propagate this as a runtime exception.
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Return the initialized ProvidedOps instance for use by the
+     * application.
+     */
+    @SuppressWarnings("unchecked")
+    public ProvidedViewOps getOps() {
+        return (ProvidedViewOps) mOpsInstance;
+    }
+
+    /**
+     * Return the RetainedFragmentManager.
+     */
+    public RetainedFragmentManager getRetainedFragmentManager() {
+        return mRetainedFragmentManager;
+    }
+
+    /**
+     * Return the Activity context.
+     */
+    @Override
+    public Context getActivityContext() {
+        return this;
+    }
+    
+    /**
+     * Return the Application context.
+     */
+    @Override
+    public Context getApplicationContext() {
+        return super.getApplicationContext();
     }
 
     /**
@@ -127,38 +153,6 @@ public abstract class GenericActivity<RequiredViewOps,
             // Inform it that the runtime configuration change has
             // completed.
             mOpsInstance.onConfigurationChange(view);
-    }
-
-    /**
-     * Return the initialized ProvidedOps instance for use by the
-     * application.
-     */
-    @SuppressWarnings("unchecked")
-    public ProvidedViewOps getOps() {
-        return (ProvidedViewOps) mOpsInstance;
-    }
-
-    /**
-     * Return the RetainedFragmentManager.
-     */
-    public RetainedFragmentManager getRetainedFragmentManager() {
-        return mRetainedFragmentManager;
-    }
-
-    /**
-     * Return the Activity context.
-     */
-    @Override
-    public Context getActivityContext() {
-        return this;
-    }
-    
-    /**
-     * Return the Application context.
-     */
-    @Override
-    public Context getApplicationContext() {
-        return super.getApplicationContext();
     }
 }
 

@@ -11,7 +11,8 @@ public abstract class RefCounted {
     /**
      * Debugging tag used by the Android logger.
      */
-    protected final String TAG = getClass().getSimpleName();
+    protected final String TAG =
+        getClass().getSimpleName();
  
     /**
      * Ensure atomic increments and decrements of the reference count.
