@@ -92,6 +92,10 @@ public class AcronymExpansionActivity
      * the "Look Up Sync" button.
      */
     public void expandAcronymSync(View v) {
+        // Hide the keyboard.
+        Utils.hideKeyboard(this, 
+                           mEditText.getWindowToken());
+
         // Try to get an acronym entered by the user.
         final String acronym =
             Utils.uppercaseInput(this,
@@ -121,6 +125,10 @@ public class AcronymExpansionActivity
      * the "Look Up Async" button.
      */
     public void expandAcronymAsync(View v) {
+        // Hide the keyboard.
+        Utils.hideKeyboard(this, 
+                           mEditText.getWindowToken());
+
         // Try to get an acronym entered by the user.
         final String acronym =
             Utils.uppercaseInput(this,
