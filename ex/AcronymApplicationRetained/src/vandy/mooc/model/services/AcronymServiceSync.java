@@ -15,14 +15,14 @@ import android.util.Log;
  * @class AcronymServiceSync
  * 
  * @brief This class uses synchronous AIDL interactions to expand
- *        acronyms via an Acronym Web service.  The AcronymActivity
- *        that binds to this Service will receive an IBinder that's an
+ *        acronyms via an Acronym Web service.  The AcronymModel that
+ *        binds to this Service will receive an IBinder that's an
  *        instance of AcronymCall, which extends IBinder.  The
- *        Activity can then interact with this Service by making
+ *        AcronymModel can then interact with this Service by making
  *        two-way method calls on the AcronymCall object asking this
  *        Service to lookup the meaning of the Acronym string.  After
  *        the lookup is finished, this Service sends the Acronym
- *        results back to the Activity by returning a List of
+ *        results back to the AcronymModel by returning a List of
  *        AcronymData.
  * 
  *        AIDL is an example of the Broker Pattern, in which all
@@ -44,10 +44,9 @@ public class AcronymServiceSync
     }
 
     /**
-     * Called when a client (e.g., AcronymActivity) calls
-     * bindService() with the proper Intent.  Returns the
-     * implementation of AcronymCall, which is implicitly cast as an
-     * IBinder.
+     * Called when a client (e.g., AcronymModel) calls bindService()
+     * with the proper Intent.  Returns the implementation of
+     * AcronymCall, which is implicitly cast as an IBinder.
      */
     @Override
     public IBinder onBind(Intent intent) {
@@ -70,7 +69,7 @@ public class AcronymServiceSync
              * Implement the AIDL AcronymCall expandAcronym() method,
              * which forwards to getAcronymResults() to obtain the
              * results and then returns these results back to the
-             * client.
+             * AcronymModel.
              */
             @Override
             public List<AcronymExpansion> expandAcronym(String acronym)
@@ -87,15 +86,14 @@ public class AcronymServiceSync
                           + " results for acronym: " 
                           + acronym);
 
-                    // Return the list of acronym expansions back to the
-                    // AcronymActivity.
+                    // Return the list of acronym expansions back to
+                    // the AcronymModel.
                     return acronymExpansions;
-                } else {
+                } else 
                     // Create a zero-sized acronymResults object to
                     // indicate to the caller that the acronym had no
                     // expansions.
                     return new ArrayList<AcronymExpansion>();
-                }
             }
 	};
 }

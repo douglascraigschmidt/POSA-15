@@ -16,15 +16,16 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * This class plays the role of the "Presenter" in the
- * Model-View-Presenter pattern by acting upon the Model and the View,
- * i.e., it retrieves data from the Model (e.g., AcronymModel) and
- * formats it for display in the View (e.g.,
- * DisplayExpansionActivity).  It implements GenericModel so it can be
+ * This class plays the "Presenter" role in the Model-View-Presenter
+ * (MVP) pattern by acting upon the Model and the View, i.e., it
+ * retrieves data from the Model (e.g., AcronymModel) and formats it
+ * for display in the View (e.g., DisplayExpansionActivity).  It
+ * expends the GenericModel superclass and implements
+ * MVP.ProvidedViewOps and MVP.RequiredModelOps so it can be
  * created/managed by the GenericModel framework.  It implements
  * GenericAsyncTaskOps so its doInBackground() method runs in a
  * background task.  It implements AcronymResults so it can be the
- * target of callback methods.
+ * target of asynchronous callback methods from the Model layer.
  */
 public class AcronymPresenter
        extends GenericModel<MVP.RequiredModelOps, MVP.ProvidedModelOps, AcronymModel>
@@ -33,20 +34,14 @@ public class AcronymPresenter
                   MVP.RequiredModelOps,
                   AcronymResults {
     /**
-     * Debugging tag used by the Android logger.
-     */
-    protected final static String TAG = 
-        AcronymPresenter.class.getSimpleName();
-
-    /**
      * A WeakReference used to access methods in the View layer.  The
      * WeakReference enables garbage collection.
      */
     private WeakReference<MVP.RequiredViewOps> mAcronymView;
     	
     /**
-     * The GenericAsyncTask used to expand an acronym in a background
-     * thread via the Acronym web service.
+     * The GenericAsyncTask used to synchronously expand an acronym in
+     * a background thread via the Model layer.
      */
     private GenericAsyncTask<String, 
         Void,
@@ -122,7 +117,8 @@ public class AcronymPresenter
 
     /**
      * Initiate the synchronous acronym lookup when the user presses
-     * the "Lookup Acronym Sync" button.  It uses an AsyncTask.
+     * the "Lookup Acronym Sync" button.  It uses an AsyncTask to
+     * avoid blocking the UI thread.
      *
      * @return false if a call is already in progress, else true.
      */
@@ -151,7 +147,7 @@ public class AcronymPresenter
      */
     @Override
     public List<AcronymExpansion> doInBackground(String... acronyms) {
-        // Get the acronym expansions asynchronously.
+        // Get the acronym expansions synchronously.
         return getModel().getAcronymExpansions(acronyms[0]);
     }
 
@@ -182,7 +178,9 @@ public class AcronymPresenter
             // Store this for error reporting purposes.
             mAcronym = acronym;
 
-            // Get the acronym expansions asynchronously.
+            // Get the acronym expansions asynchronously.  The results
+            // are returned via the sendResults() and sendError() hook
+            // methods below.
             getModel().getAcronymExpansions(acronym,
                                             this);
             return true;
@@ -190,7 +188,8 @@ public class AcronymPresenter
     }
 
     /**
-     * This method returns results back to AcronymExpansionActivity.
+     * This hook method is called back by the Model layer and returns
+     * AcronymExpansion results back to the View layer.
      */
     public void sendResults(final List<AcronymExpansion> acronymExpansions)
         throws RemoteException {
@@ -199,8 +198,8 @@ public class AcronymPresenter
     }
 
     /**
-     * This method returns error results back to the
-     * AcronymExpansionActivity.
+     * This hook method is called back by the Model layer and returns
+     * error results back to the View layer.
      */
     public void sendError(final String reason)
         throws RemoteException {
@@ -238,9 +237,8 @@ public class AcronymPresenter
     }
 
     /**
-     * If the activity is being torn down in order to be 
-     * recreated with a new configuration, returns true; 
-     * else returns false.
+     * If the activity is being torn down in order to be recreated
+     * with a new configuration, returns true; else returns false.
      */
     @Override
     public boolean isChangingConfigurations() {
@@ -248,7 +246,8 @@ public class AcronymPresenter
     }
 
     /**
-     * A no-op needed to make the compiler happy.
+     * A no-op needed to make the compiler happy since we implement
+     * the AcronymResult interface.
      */
     @Override
     public IBinder asBinder() {

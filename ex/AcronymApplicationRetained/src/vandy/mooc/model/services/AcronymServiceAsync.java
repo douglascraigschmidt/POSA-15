@@ -18,15 +18,15 @@ import android.util.Log;
  * @class AcronymServiceAsync
  * 
  * @brief This class uses asynchronous AIDL interactions to expand
- *        acronyms via an Acronym Web service.  The AcronymActivity
- *        that binds to this Service will receive an IBinder that's an
+ *        acronyms via an Acronym Web service.  The AcronymModel that
+ *        binds to this Service will receive an IBinder that's an
  *        instance of AcronymRequest, which extends IBinder.  The
- *        Activity can then interact with this Service by making
+ *        AcronymModel can then interact with this Service by making
  *        one-way method calls on the AcronymRequest object asking
  *        this Service to lookup the Acronym's meaning, passing in an
  *        AcronymResults object and the Acronym string.  After the
  *        lookup is finished, this Service sends the Acronym results
- *        back to the Activity by calling sendResults() on the
+ *        back to the AcronymModel by calling sendResults() on the
  *        AcronymResults object.
  * 
  *        AIDL is an example of the Broker Pattern, in which all
@@ -37,8 +37,8 @@ public class AcronymServiceAsync extends AcronymServiceBase {
     /**
      * Reference to the ExecutorService that manages a pool of
      * threads.  We need this feature since Android's Binder framework
-     * apparently executes oneway methods from a client in a single
-     * thread rather than a pool of thread.
+     * executes oneway methods from a client in a single thread rather
+     * than a pool of thread.
      */
     private ExecutorService mExecutorService;
 
@@ -55,10 +55,9 @@ public class AcronymServiceAsync extends AcronymServiceBase {
     }
 
     /**
-     * Called when a client (e.g., AcronymActivity) calls
-     * bindService() with the proper Intent.  Returns the
-     * implementation of AcronymRequest, which is implicitly cast as
-     * an IBinder.
+     * Called when a client (e.g., AcronymModel) calls bindService()
+     * with the proper Intent.  Returns the implementation of
+     * AcronymRequest, which is implicitly cast as an IBinder.
      */
     @Override
     public IBinder onBind(Intent intent) {
@@ -93,8 +92,8 @@ public class AcronymServiceAsync extends AcronymServiceBase {
     }
 
     /**
-     * The concrete implementation of the AIDL Interface
-     * AcronymRequest, which extends the Stub class that implements
+     * The concrete implementation of the AIDL AcronymRequest
+     * interface, which extends the Stub class that implements
      * AcronymRequest, thereby allowing Android to handle calls across
      * process boundaries.  This method runs in a separate Thread as
      * part of the Android Binder framework.
@@ -108,7 +107,7 @@ public class AcronymServiceAsync extends AcronymServiceBase {
              * Implement the AIDL AcronymRequest expandAcronym()
              * method, which forwards to getAcronymResults() to obtain
              * the results and then sends these results back to the
-             * client via a callback.
+             * AcronymModel via a callback.
              */
             @Override
             public void expandAcronym(final String acronym,
@@ -153,11 +152,9 @@ public class AcronymServiceAsync extends AcronymServiceBase {
                     }
 
                 };
-                // Determine if we're on the UI thread or not.  
-                boolean isOnUiThread =
-                    Thread.currentThread() == Looper.getMainLooper().getThread();
 
-                if (isOnUiThread)
+                // Determine if we're on the UI thread or not.  
+                if (Utils.runningOnUiThread())
                     // Execute getCurrentAcronymRunnable in a separate
                     // thread if this service has been configured to
                     // be collocated with an Activity.

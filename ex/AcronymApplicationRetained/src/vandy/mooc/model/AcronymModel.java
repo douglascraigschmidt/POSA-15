@@ -16,11 +16,11 @@ import android.os.RemoteException;
 import android.util.Log;
 
 /**
- * This class plays the role of the "Model" in the
- * Model-View-Presenter pattern by defining an interface for the data
- * to be displayed or otherwise acted upon in the user interface.  It
- * implements the MVP.ProvidedModelOps so it can be created/managed by
- * the GenericModel framework.
+ * This class plays the "Model" role in the Model-View-Presenter (MVP)
+ * pattern by defining an interface for providing data that will be
+ * acted upon by the "Presenter" and "View" layers in the MVP pattern.
+ * It implements the MVP.ProvidedModelOps so it can be created/managed
+ * by the GenericModel framework.
  */
 public class AcronymModel 
        implements MVP.ProvidedModelOps {
