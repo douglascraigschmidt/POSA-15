@@ -1,4 +1,4 @@
-package vandy.mooc;
+package vandy.mooc.model.aidl;
 
 /**
  * @class DownloadCall
@@ -14,5 +14,5 @@ interface DownloadCall {
      * Download the image at the given web uri then return a string to
      * its location on the file system.
      */
-    String downloadImage(in Uri uri);
+    Uri downloadImage(in Uri uri);
 }

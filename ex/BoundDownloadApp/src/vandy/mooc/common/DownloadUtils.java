@@ -23,7 +23,8 @@ public class DownloadUtils {
     /**
      * Used for debugging.
      */
-    static final String TAG = "DownloadActivity";
+    static final static String TAG = 
+        DownloadUtils.class.getSimpleName();
     
     /**
     * If you have access to a stable Internet connection for testing
@@ -54,35 +55,41 @@ public class DownloadUtils {
      * 
      * @return          the path to the downloaded file on the file system
      */
-    public static String downloadFile (Context context,
-                                       Uri uri) {
+    public static Uri downloadFile(Context context,
+                                   Uri uri) {
         // If we're offline, write the image in our resources to disk,
         // then return that pathname.
         if (DOWNLOAD_OFFLINE) {
-	        	
             // Store the image on the file system. We can store it as
             // private since the test project runs in the same process
-            // as the target project
+            // as the target project.
             try (FileOutputStream out =
                      context.openFileOutput(OFFLINE_FILENAME, 0);
                  InputStream in =
                  context.getResources().openRawResource(OFFLINE_TEST_IMAGE)) {
                  // Write the resource to disk.
-                copy(in, out);
+                copy(in, 
+                     out);
             } catch (Exception e) {
-                Log.e(TAG, "Exception while downloading. Returning null.");
-                Log.e(TAG, e.toString());
+                Log.e(TAG,
+                      "Exception while downloading. Returning null.");
+                Log.e(TAG,
+                      e.toString());
                 e.printStackTrace();
                 return null;
             }
-            return context.getFilesDir().toString() + File.separator + OFFLINE_FILENAME;
+            return Uri.parse(context.getFilesDir().toString() 
+                             + File.separator 
+                             + OFFLINE_FILENAME);
         }
         // Otherwise, go ahead and download the file
         else {
             // Create a temp file.
             final File file = getTemporaryFile(context,
                                                uri.toString());
-            Log.d(TAG, "    downloading to " + file);
+            Log.d(TAG,
+                  "    downloading to " 
+                  + file);
 	
             // Download the contents at the URL, which should
             // reference an image.
@@ -92,15 +99,19 @@ public class DownloadUtils {
                      new FileOutputStream(file)) {
                  // Copy the contents of the downloaded image to the
                  // temp file.
-                 copy(in, os);
+                 copy(in, 
+                      os);
             } catch (Exception e) {
-                Log.e(TAG, "Exception while downloading. Returning null.");
-                Log.e(TAG, e.toString());
+                Log.e(TAG,
+                      "Exception while downloading. Returning null.");
+                Log.e(TAG,
+                      e.toString());
                 e.printStackTrace();
                 return null;
             }
+
             // Return the pathname of the temp file.
-            return file.getAbsolutePath();
+            return Uri.parse(file.getAbsolutePath());
         }
     }
         
@@ -112,8 +123,8 @@ public class DownloadUtils {
      * @return
      * @throws IOException
      */
-    static private File getTemporaryFile(final Context context,
-                                         final String url) {
+    static private File getTemporaryFile(Context context,
+                                         String url) {
         // This is what you'd normally call to get a unique temporary
         // file, but for testing purposes we always name the file the
         // same to avoid filling up student phones with numerous

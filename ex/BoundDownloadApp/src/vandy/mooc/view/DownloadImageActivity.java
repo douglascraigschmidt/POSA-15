@@ -51,8 +51,8 @@ import android.view.View;
  * applications from tedious and error-prone aspects of inter-process
  * communication.
  */
-public class DownloadActivity 
-       extends LifecycleLoggingActivity 
+public class DownloadImageActivity
+       extends LifecycleLoggingActivity
        implements {
     /**
      * This is the reference to the text box that allows the user to
@@ -60,50 +60,6 @@ public class DownloadActivity
      */
     private EditText mUrlEditText;
 
-    /**
-     * This is a reference to the container of an image in the UI.
-     * When we finish downloading, we update this to display the image
-     * we just stored on the file system.
-     */
-    private ImageView mImageView;
-
-    /**
-     * The original bitmap (used for reseting the image).
-     */
-    private Bitmap mDefaultBitmap;
-    
-    /**
-     * Store the current bitmap for testing purposes.
-     */
-    public Bitmap mCurrentBitmap;
-    
-    /**
-     * Display the given file in the ImageView. Use
-     * BitmapFactory.decodeFile().  Store the bitmap used to update
-     * the file to make testing easier.
-     */
-    void displayBitmap (String pathname) {
-    	mCurrentBitmap = BitmapFactory.decodeFile(pathname);
-    	
-    	mImageView.setImageBitmap(mCurrentBitmap);
-    }
-    
-    /**
-     * Gets the URL from the EditText
-     */
-    String getUrlString () {
-    	return mUrlEditText.getText().toString();
-    }
-    
-    /**
-     * Resets image to the default image stored with the program.
-     */
-    public void resetImage(View view) {
-    	mImageView.setImageBitmap(mDefaultBitmap);
-    	mCurrentBitmap = mDefaultBitmap;
-        Log.d(TAG, "reset Image");
-    }
-    
     /**
      * This is called when the Activity is initially created. This is
      * where we setup the UI for the activity and initialize any
@@ -122,15 +78,6 @@ public class DownloadActivity
         // EditText and ImageView objects by providing their ids to
         // the Android framework.
         mUrlEditText = (EditText) findViewById(R.id.url);
-        mImageView = (ImageView) findViewById(R.id.imageView1);
-        
-        // Store whatever image is originally displayed in the
-        // ImageView as a local Bitmap object so that we can quickly
-        // reset the image when a button is pressed.
-        mCurrentBitmap = ((BitmapDrawable)(mImageView.getDrawable())).getBitmap();
-        mDefaultBitmap = mCurrentBitmap;
-
-        super.onCreate();
     }
 
     /**

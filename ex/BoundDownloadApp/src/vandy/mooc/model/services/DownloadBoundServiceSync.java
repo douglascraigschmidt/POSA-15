@@ -1,4 +1,4 @@
-package vandy.mooc;
+package vandy.mooc.model.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -45,7 +45,7 @@ public class DownloadBoundServiceSync extends Service {
              * brevity.
              */
             @Override
-            public String downloadImage(Uri uri) throws RemoteException {
+            public Uri downloadImage(Uri uri) throws RemoteException {
                 // Download the file using the appropriate helper
                 // method in DownloadUtils and then return the
                 // pathname back to the client.
@@ -69,7 +69,8 @@ public class DownloadBoundServiceSync extends Service {
      * Make an explicit Intent that will start this service when
      * passed to bindService().
      *
-     * @param context		The context of the calling component.
+     * @param context		
+     *        The context of the calling component.
      */
     public static Intent makeIntent(Context context) {
         // Create an explicit Intent and return it to the caller.

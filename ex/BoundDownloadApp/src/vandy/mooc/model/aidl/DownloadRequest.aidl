@@ -1,4 +1,4 @@
-package vandy.mooc;
+package vandy.mooc.model.aidl;
 
 import vandy.mooc.DownloadResults;
 

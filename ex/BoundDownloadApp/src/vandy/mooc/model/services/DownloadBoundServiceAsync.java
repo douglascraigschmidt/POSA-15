@@ -1,4 +1,4 @@
-package vandy.mooc;
+package vandy.mooc.model.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -26,7 +26,7 @@ import android.os.RemoteException;
  *        interprocess communication details are hidden behind the
  *        AIDL interfaces.
  */
-public class DownloadBoundServiceAsync extends Service{
+public class DownloadBoundServiceAsync extends Service {
     /**
      * The concrete implementation of the AIDL Interface
      * DownloadRequest.  We extend the Stub class, which implements

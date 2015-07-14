@@ -1,4 +1,4 @@
-package vandy.mooc;
+package vandy.mooc.model.aidl;
 
 /**
  * @class
@@ -13,5 +13,5 @@ interface DownloadResults {
      * Send the location of a downloaded file on the file system back
      * to the caller.
      */
-    oneway void sendPath(in String filePath); 
+    oneway void sendPath(in Uri filePath);
 }
