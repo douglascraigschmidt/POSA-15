@@ -11,14 +11,16 @@ import vandy.mooc.model.aidl.AcronymResults;
 /**
  * Defines the interfaces for the Acronym application that are
  * required and provided by the layers in the Model-View-Presenter
- * pattern.  This design ensures loose coupling between the layers in
- * the app's MVP-based architecture.
+ * (MVP) pattern.  This design ensures loose coupling between the
+ * layers in the app's MVP-based architecture.
  */
 public interface MVP {
     /**
      * This interface defines the minimum API needed by the
      * AcronymPresenter class in the Presenter layer to interact with
-     * AcronymExpansionActivity in the View layer.
+     * AcronymExpansionActivity in the View layer.  It extends the
+     * ContextView interface so the Presentation layer can access
+     * Context's defined in the View layer.
      */
     public interface RequiredViewOps
            extends ContextView {
@@ -36,7 +38,10 @@ public interface MVP {
     /**
      * This interface defines the minimum public API provided by the
      * AcronymPresenter class in the Presenter layer to the
-     * AcronymExpansionActivity in the View layer.
+     * AcronymExpansionActivity in the View layer.  It extends the
+     * PresenterOps interface, which is instantiated by the
+     * MVP.RequiredViewOps interface used to define the parameter
+     * that's passed to the onConfigurationChange() method.
      */
     public interface ProvidedPresenterOps
            extends PresenterOps<MVP.RequiredViewOps> {
@@ -72,7 +77,10 @@ public interface MVP {
     /**
      * This interface defines the minimum public API provided by the
      * AcronymModel class in the Model layer to the AcronymPresenter
-     * class in the Presenter layer.
+     * class in the Presenter layer.  It extends the ModelOps
+     * interface, which is parameterized by the
+     * MVP.RequiredPresenterOps interface used to define the argument
+     * passed to the onConfigurationChange() method.
      */
     public interface ProvidedModelOps
            extends ModelOps<MVP.RequiredPresenterOps> {
