@@ -36,7 +36,7 @@ public interface MVP {
          * If the activity is being torn down in order to be recreated
          * with a new configuration, returns true; else returns false.
          */
-        public boolean isChangingConfigurations();
+        boolean isChangingConfigurations();
     }
 
     /**
@@ -61,7 +61,7 @@ public interface MVP {
          *
          * @return false if a call is already in progress, else true.
          */
-        public boolean expandAcronymSync(String acronym);
+        boolean expandAcronymSync(String acronym);
     }
 
     /**

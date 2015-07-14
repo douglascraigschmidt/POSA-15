@@ -81,7 +81,7 @@ public abstract class GenericActivity<RequiredViewOps,
      * application.
      */
     @SuppressWarnings("unchecked")
-    public ProvidedViewOps getOps() {
+    public ProvidedViewOps getPresenter() {
         return (ProvidedViewOps) mOpsInstance;
     }
 

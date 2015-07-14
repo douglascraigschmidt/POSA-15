@@ -53,7 +53,10 @@ public class AcronymExpansionActivity
         // (if any).
         mEditText = (EditText) findViewById(R.id.editText1);
 
-        // Perform second part of initializing the super class.
+        // Perform second part of initializing the super class,
+        // passing in the AcronymPresenter class to instantiate/manage
+        // and "this" to provide AcronymPresenter with the
+        // MVP.RequiredViewOps instance.
         super.onCreate(AcronymPresenter.class,
                        this);
     }
@@ -65,7 +68,7 @@ public class AcronymExpansionActivity
     @Override
     protected void onDestroy() {
         // Destroy the presenter layer.
-        getOps().onDestroy();
+        getPresenter().onDestroy();
 
     	// Call super class for necessary operations when stopping.
         super.onDestroy();
@@ -92,7 +95,7 @@ public class AcronymExpansionActivity
                   + acronym);
 
             // Synchronously expand the acronym.
-            if (getOps().expandAcronymAsync(acronym) == false)
+            if (getPresenter().expandAcronymAsync(acronym) == false)
                 // Show error message to user.
                 Utils.showToast(this,
                                 "Call already in progress");
@@ -125,7 +128,7 @@ public class AcronymExpansionActivity
                   + acronym);
 
             // Synchronously expand the acronym.
-            if (getOps().expandAcronymSync(acronym) == false)
+            if (getPresenter().expandAcronymSync(acronym) == false)
                 // Show error message to user.
                 Utils.showToast(this,
                                 "Call already in progress");
