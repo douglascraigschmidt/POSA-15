@@ -67,8 +67,9 @@ public class AcronymExpansionActivity
      */
     @Override
     protected void onDestroy() {
-        // Destroy the presenter layer.
-        getPresenter().onDestroy();
+        // Destroy the presenter layer, passing in whether this is
+        // triggered by a runtime configuration or not.
+        getPresenter().onDestroy(isChangingConfigurations());
 
     	// Call super class for necessary operations when stopping.
         super.onDestroy();
@@ -173,15 +174,5 @@ public class AcronymExpansionActivity
                 Utils.showToast(this,
                                 "No Activity found to display Acronym Expansions");
         }
-    }
-
-    /**
-     * If the activity is being torn down in order to be 
-     * recreated with a new configuration, returns true; 
-     * else returns false.
-     */
-    @Override
-    public boolean isChangingConfigurations() {
-        return super.isChangingConfigurations();
     }
 }

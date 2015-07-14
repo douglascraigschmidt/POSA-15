@@ -16,8 +16,11 @@ public interface ModelOps<RequiredModelOps> {
     void onCreate(RequiredModelOps view);
 
     /**
-     * Hook method called when an Ops object in the Model layer is
+     * Hook method called when an Ops object in the Presenter layer is
      * destroyed.
+     *
+     * @param isChangingConfigurations
+     *        True if a runtime configuration triggered the onDestroy() call.
      */
-    void onDestroy();
+    void onDestroy(boolean isChangingConfigurations);
 }

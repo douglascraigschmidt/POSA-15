@@ -66,8 +66,9 @@ public class AcronymExpansionActivity
      */
     @Override
     protected void onDestroy() {
-        // Destroy the presenter layer.
-        mAcronymPresenter.onDestroy();
+        // Destroy the presenter layer, passing in whether this is
+        // triggered by a runtime configuration or not.
+        mAcronymPresenter.onDestroy(isChangingConfigurations());
 
         // Always call super class for necessary operations when an
         // Activity is destroyed.

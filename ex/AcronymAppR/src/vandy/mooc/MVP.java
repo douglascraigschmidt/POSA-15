@@ -31,12 +31,6 @@ public interface MVP {
          */
         void displayResults(List<AcronymExpansion> results,
                             String failureReason);
-
-        /**
-         * If the activity is being torn down in order to be recreated
-         * with a new configuration, returns true; else returns false.
-         */
-        boolean isChangingConfigurations();
     }
 
     /**

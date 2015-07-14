@@ -93,12 +93,15 @@ public class AcronymPresenter
     }
 
     /**
-     * Hook method called to shutdown the Presenter layer.
+     * Hook method called to shutdown the Model layer.
+     *
+     * @param isChangeConfigurations
+     *        True if a runtime configuration triggered the onDestroy() call.
      */
     @Override
-    public void onDestroy() {
+    public void onDestroy(boolean isChangingConfigurations) {
         // Destroy the model.
-        mAcronymModel.onDestroy();
+        mAcronymModel.onDestroy(isChangingConfigurations);
     }
 
     /**
@@ -221,15 +224,6 @@ public class AcronymPresenter
     @Override
     public Context getApplicationContext() {
         return mAcronymView.get().getApplicationContext();
-    }
-
-    /**
-     * If the activity is being torn down in order to be recreated
-     * with a new configuration, returns true; else returns false.
-     */
-    @Override
-    public boolean isChangingConfigurations() {
-        return mAcronymView.get().isChangingConfigurations();
     }
 
     /**

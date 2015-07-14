@@ -73,12 +73,20 @@ public class AcronymModel
     }
 
     /**
-     * Hook method called to shutdown the Presenter layer.
+     * Hook method called to shutdown the Model layer.
+     *
+     * @param isChangeConfigurations
+     *        True if a runtime configuration triggered the onDestroy() call.
      */
     @Override
-    public void onDestroy() {
-        // Unbind from the Services.
-        unbindServices();
+    public void onDestroy(boolean isChangingConfigurations) {
+        if (isChangingConfigurations)
+            Log.d(TAG,
+                  "just a configuration change - unbindService() not called");
+        else
+            // Unbind from the Services only if onDestroy() is not
+            // triggered by a runtime configuration change.
+            unbindServices();
     }
 
     /**
@@ -116,27 +124,22 @@ public class AcronymModel
      * Initiate the protocol for unbinding the Services.
      */
     private void unbindServices() {
-        if (mAcronymPresenter.get().isChangingConfigurations()) 
-            Log.d(TAG,
-                  "just a configuration change - unbindService() not called");
-        else {
-            Log.d(TAG,
-                  "calling unbindService()");
+        Log.d(TAG,
+              "calling unbindService()");
 
-            // Unbind the Async Service if it is connected.
-            if (mServiceConnectionAsync.getInterface() != null)
-                mAcronymPresenter.get()
-                                 .getApplicationContext()
-                                 .unbindService
-                    (mServiceConnectionAsync);
+        // Unbind the Async Service if it is connected.
+        if (mServiceConnectionAsync.getInterface() != null)
+            mAcronymPresenter.get()
+                .getApplicationContext()
+                .unbindService
+                (mServiceConnectionAsync);
 
-            // Unbind the Sync Service if it is connected.
-            if (mServiceConnectionSync.getInterface() != null)
-                mAcronymPresenter.get()
-                                 .getApplicationContext()
-                                 .unbindService
-                    (mServiceConnectionSync);
-        }
+        // Unbind the Sync Service if it is connected.
+        if (mServiceConnectionSync.getInterface() != null)
+            mAcronymPresenter.get()
+                .getApplicationContext()
+                .unbindService
+                (mServiceConnectionSync);
     }
 
     /**

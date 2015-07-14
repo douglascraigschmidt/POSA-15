@@ -11,13 +11,13 @@ import vandy.mooc.model.aidl.AcronymResults;
 /**
  * Defines the interfaces for the Acronym application that are
  * required and provided by the layers in the Model-View-Presenter
- * (MVP) pattern.  This design ensures loose coupling between the
- * layers in the app's MVP-based architecture.
+ * pattern.  This design ensures loose coupling between the layers in
+ * the app's MVP-based architecture.
  */
 public interface MVP {
     /**
-     * This interface defines the minimum API needed by the AcronymOps
-     * class in the Presenter layer to interact with
+     * This interface defines the minimum API needed by the
+     * AcronymPresenter class in the Presenter layer to interact with
      * AcronymExpansionActivity in the View layer.
      */
     public interface RequiredViewOps
@@ -31,17 +31,11 @@ public interface MVP {
          */
         void displayResults(List<AcronymExpansion> results,
                             String failureReason);
-
-        /**
-         * If the activity is being torn down in order to be recreated
-         * with a new configuration, returns true; else returns false.
-         */
-        boolean isChangingConfigurations();
     }
 
     /**
      * This interface defines the minimum public API provided by the
-     * AcronymOps class in the Presenter layer to the
+     * AcronymPresenter class in the Presenter layer to the
      * AcronymExpansionActivity in the View layer.
      */
     public interface ProvidedPresenterOps
@@ -67,9 +61,9 @@ public interface MVP {
     /**
      * This interface defines the minimum API needed by the
      * AcronymModel class in the Model layer to interact with
-     * AcronymOps class in the Presenter layer.  Since this interface
-     * is identical to the one used by the RequiredViewOps interface
-     * it simply extends it.
+     * AcronymPresenter class in the Presenter layer.  Since this
+     * interface is identical to the one used by the RequiredViewOps
+     * interface it simply extends it.
      */
     public interface RequiredPresenterOps
            extends RequiredViewOps {
@@ -77,8 +71,8 @@ public interface MVP {
 
     /**
      * This interface defines the minimum public API provided by the
-     * AcronymModel class in the Model layer to the AcronymOps class
-     * in the Presenter layer.
+     * AcronymModel class in the Model layer to the AcronymPresenter
+     * class in the Presenter layer.
      */
     public interface ProvidedModelOps
            extends ModelOps<MVP.RequiredPresenterOps> {
