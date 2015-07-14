@@ -6,11 +6,8 @@ import java.util.List;
 import vandy.mooc.MVP;
 import vandy.mooc.common.GenericAsyncTask;
 import vandy.mooc.common.GenericAsyncTaskOps;
-import vandy.mooc.common.GenericServiceConnection;
 import vandy.mooc.model.AcronymModel;
-import vandy.mooc.model.aidl.AcronymCall;
 import vandy.mooc.model.aidl.AcronymExpansion;
-import vandy.mooc.model.aidl.AcronymRequest;
 import vandy.mooc.model.aidl.AcronymResults;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -24,15 +21,15 @@ import android.util.Log;
  * retrieves data from the Model (e.g., AcronymModel) and formats it
  * for display in the View (e.g., DisplayExpansionActivity).  It
  * implements GenericAsyncTaskOps so its doInBackground() method runs
- * in a background task.  It implements MVP.ProvidedViewOps and
+ * in a background task.  It implements MVP.ProvidedPresenterOps and
  * MVP.RequiredModelOps to decouple the MVP layers.  It implements
  * AcronymResults so it can be the target of asynchronous callback
  * methods from the Model layer.
  */
 public class AcronymPresenter
     implements GenericAsyncTaskOps<String, Void, List<AcronymExpansion>>,
-               MVP.ProvidedViewOps,
-               MVP.RequiredModelOps,
+               MVP.ProvidedPresenterOps,
+               MVP.RequiredPresenterOps,
                AcronymResults {
     /**
      * Debugging tag used by the Android logger.
@@ -50,19 +47,7 @@ public class AcronymPresenter
      */
     private AcronymModel mAcronymModel;
     
-    /**
-     * This GenericServiceConnection is used to receive results after
-     * binding to the AcronymServiceSync Service using bindService().
-     */
-    private GenericServiceConnection<AcronymCall> mServiceConnectionSync;
-
-    /**
-     * This GenericServiceConnection is used to receive results after
-     * binding to the AcronymServiceAsync Service using bindService().
-     */
-    private GenericServiceConnection<AcronymRequest> mServiceConnectionAsync;
-
-    /**
+       /**
      * The GenericAsyncTask used to expand an acronym in a background
      * thread via the Acronym web service.
      */

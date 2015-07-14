@@ -21,17 +21,17 @@ import android.util.Log;
  * retrieves data from the Model (e.g., AcronymModel) and formats it
  * for display in the View (e.g., DisplayExpansionActivity).  It
  * expends the GenericModel superclass and implements
- * MVP.ProvidedViewOps and MVP.RequiredModelOps so it can be
+ * MVP.ProvidedPresenterOps and MVP.RequiredModelOps so it can be
  * created/managed by the GenericModel framework.  It implements
  * GenericAsyncTaskOps so its doInBackground() method runs in a
  * background task.  It implements AcronymResults so it can be the
  * target of asynchronous callback methods from the Model layer.
  */
 public class AcronymPresenter
-       extends GenericModel<MVP.RequiredModelOps, MVP.ProvidedModelOps, AcronymModel>
+       extends GenericModel<MVP.RequiredPresenterOps, MVP.ProvidedModelOps, AcronymModel>
        implements GenericAsyncTaskOps<String, Void, List<AcronymExpansion>>,
-                  MVP.ProvidedViewOps,
-                  MVP.RequiredModelOps,
+                  MVP.ProvidedPresenterOps,
+                  MVP.RequiredPresenterOps,
                   AcronymResults {
     /**
      * A WeakReference used to access methods in the View layer.  The

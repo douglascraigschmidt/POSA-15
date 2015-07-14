@@ -21,12 +21,12 @@ import android.widget.EditText;
  * pattern.  It extends that GenericActivity framework that
  * automatically handles runtime configuration changes of an
  * AcronymPresenter object, which plays the role of the "Presenter" in
- * the MVP pattern.  The MPV.RequiredViewOps and MVP.ProvidedViewOps
- * interfaces are used to minimize dependencies between the View and
- * Presenter layers.
+ * the MVP pattern.  The MPV.RequiredViewOps and
+ * MVP.ProvidedPresenterOps interfaces are used to minimize
+ * dependencies between the View and Presenter layers.
  */
 public class AcronymExpansionActivity
-       extends GenericActivity<MVP.RequiredViewOps, MVP.ProvidedViewOps, AcronymPresenter>
+       extends GenericActivity<MVP.RequiredViewOps, MVP.ProvidedPresenterOps, AcronymPresenter>
        implements MVP.RequiredViewOps {
     /**
      * Acronym entered by the user.

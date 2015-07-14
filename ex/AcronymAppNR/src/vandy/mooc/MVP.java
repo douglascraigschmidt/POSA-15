@@ -44,7 +44,7 @@ public interface MVP {
      * AcronymOps class in the Presenter layer to the
      * AcronymExpansionActivity in the View layer.
      */
-    public interface ProvidedViewOps
+    public interface ProvidedPresenterOps
            extends PresenterOps<MVP.RequiredViewOps> {
         /**
          * Initiate the synchronous acronym lookup when the user
@@ -71,7 +71,7 @@ public interface MVP {
      * is identical to the one used by the RequiredViewOps interface
      * it simply extends it.
      */
-    public interface RequiredModelOps
+    public interface RequiredPresenterOps
            extends RequiredViewOps {
     }
 
@@ -81,7 +81,7 @@ public interface MVP {
      * in the Presenter layer.
      */
     public interface ProvidedModelOps
-           extends ModelOps<MVP.RequiredModelOps> {
+           extends ModelOps<MVP.RequiredPresenterOps> {
         /**
          * Use a two-way synchronous AIDL call to expand the @a
          * acronym parameter.  Must be called in a background thread

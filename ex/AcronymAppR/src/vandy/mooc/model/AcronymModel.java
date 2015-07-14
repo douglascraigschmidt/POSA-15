@@ -34,7 +34,7 @@ public class AcronymModel
      * A WeakReference used to access methods in the Presenter layer.
      * The WeakReference enables garbage collection.
      */
-    private WeakReference<MVP.RequiredModelOps> mAcronymPresenter;
+    private WeakReference<MVP.RequiredPresenterOps> mAcronymPresenter;
 
     /**
      * This GenericServiceConnection is used to receive results after
@@ -58,7 +58,7 @@ public class AcronymModel
      *            A reference to the Presenter layer.
      */
     @Override
-    public void onCreate(MVP.RequiredModelOps presenter) {
+    public void onCreate(MVP.RequiredPresenterOps presenter) {
         // Set the WeakReference.
         mAcronymPresenter =
             new WeakReference<>(presenter);

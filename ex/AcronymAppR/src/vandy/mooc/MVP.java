@@ -16,8 +16,8 @@ import vandy.mooc.model.aidl.AcronymResults;
  */
 public interface MVP {
     /**
-     * This interface defines the minimum API needed by the AcronymOps
-     * class in the Presenter layer to interact with
+     * This interface defines the minimum API needed by the
+     * AcronymPresenter class in the Presenter layer to interact with
      * AcronymExpansionActivity in the View layer.
      */
     public interface RequiredViewOps
@@ -41,10 +41,10 @@ public interface MVP {
 
     /**
      * This interface defines the minimum public API provided by the
-     * AcronymOps class in the Presenter layer to the
+     * AcronymPresenter class in the Presenter layer to the
      * AcronymExpansionActivity in the View layer.
      */
-    public interface ProvidedViewOps
+    public interface ProvidedPresenterOps
            extends PresenterOps<MVP.RequiredViewOps> {
         /**
          * Initiate the synchronous acronym lookup when the user
@@ -67,21 +67,21 @@ public interface MVP {
     /**
      * This interface defines the minimum API needed by the
      * AcronymModel class in the Model layer to interact with
-     * AcronymOps class in the Presenter layer.  Since this interface
-     * is identical to the one used by the RequiredViewOps interface
-     * it simply extends it.
+     * AcronymPresenter class in the Presenter layer.  Since this
+     * interface is identical to the one used by the RequiredViewOps
+     * interface it simply extends it.
      */
-    public interface RequiredModelOps
+    public interface RequiredPresenterOps
            extends RequiredViewOps {
     }
 
     /**
      * This interface defines the minimum public API provided by the
-     * AcronymModel class in the Model layer to the AcronymOps class
-     * in the Presenter layer.
+     * AcronymModel class in the Model layer to the AcronymPresenter
+     * class in the Presenter layer.
      */
     public interface ProvidedModelOps
-           extends ModelOps<MVP.RequiredModelOps> {
+           extends ModelOps<MVP.RequiredPresenterOps> {
         /**
          * Use a two-way synchronous AIDL call to expand the @a
          * acronym parameter.  Must be called in a background thread

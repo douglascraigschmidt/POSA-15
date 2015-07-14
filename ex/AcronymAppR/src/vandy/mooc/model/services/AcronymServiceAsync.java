@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import vandy.mooc.common.Utils;
 import vandy.mooc.model.aidl.AcronymExpansion;
 import vandy.mooc.model.aidl.AcronymRequest;
 import vandy.mooc.model.aidl.AcronymResults;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
