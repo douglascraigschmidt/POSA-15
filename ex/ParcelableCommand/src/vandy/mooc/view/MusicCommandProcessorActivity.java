@@ -77,6 +77,7 @@ public class MusicCommandProcessorActivity
         // Get references to the UI components.
         setContentView(R.layout.music_command_processor_activity);
 
+        // Initialize the View.
         mColorOutput =
             (TextView) findViewById(R.id.color_output);
 
@@ -88,7 +89,8 @@ public class MusicCommandProcessorActivity
         super.onCreate(MusicCommandProcessorPresenter.class,
                        this);
 
-        // Get the intent that started this activity.
+        // Get the intent that started this Activity and execute the
+        // ParcelableCommandMusic extra passed along with it.
         executeCommand(getIntent());
     }
 
@@ -114,45 +116,50 @@ public class MusicCommandProcessorActivity
     }
 
     /**
-     * Return a runnable that flashes the screen while the music plays.
+     * Return a runnable that flashes the screen while the music
+     * plays.
      */
     private Runnable makeScreenFlasher() {
         return new Runnable() {
-                @Override
-                public void run() {
-                    for (int counter = 0; ; ++counter) {
-                        final int i = counter;
-                        final Runnable flasher = new Runnable() {
-                                final int j = i;
-                                @Override
-                                public void run() {
-                                    // Change the background color every 500 milliseconds.
-                                    if ((j % 2) == 0) 
-                                        mColorOutput.setBackgroundColor(Color.WHITE);
-                                    else 
-                                        mColorOutput.setBackgroundColor(Color.BLACK);
-                                }
-                            };
+            @Override
+            public void run() {
+                // Keep iterating until this Thread is interrupted.
+                for (int counter = 0; ; ++counter) {
+                    final int i = counter;
 
-                        // Post a Runnable whose run() method instructs
-                        // the UI to print the output.
-                        runOnUiThread(flasher);
-				
-                        // Wait 500 miiliseconds before handling the next message.
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            // Set the result of the Activity and
-                            // finish it.
-                            setResult(RESULT_OK,
-                                      new Intent("",
-                                                 getIntent().getData()));
-                            finish();
-                            return;
+                    // Create a Runnable that will flash the screen.
+                    final Runnable flasher = new Runnable() {
+                        final int j = i;
+                        @Override
+                        public void run() {
+                            // Change the background color every 500 milliseconds.
+                            if ((j % 2) == 0) 
+                                mColorOutput.setBackgroundColor(Color.WHITE);
+                            else 
+                                mColorOutput.setBackgroundColor(Color.BLACK);
                         }
+                    };
+
+                    // Post a Runnable whose run() method instructs
+                    // the UI to print the output.
+                    runOnUiThread(flasher);
+				
+                    // Wait 500 miiliseconds before handling the next
+                    // message.
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        // Set the result of the Activity and finish
+                        // it when this Thread is interrupted.
+                        setResult(RESULT_OK,
+                                  new Intent("",
+                                             getIntent().getData()));
+                        finish();
+                        return;
                     }
                 }
-            };
+            }
+        };
     }
 }    
 

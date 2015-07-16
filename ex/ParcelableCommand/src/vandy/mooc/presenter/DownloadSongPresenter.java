@@ -116,12 +116,13 @@ public class DownloadSongPresenter
     }
 
     /**
-     * Downloads in background thread
+     * Perform the download in background thread.
      */
     public Uri doInBackground(Uri... params) {
         final Uri songUri = params[0];
         final Uri directoryPathname = params[1];
 
+        // Download the requested song in a background thread.
         return Utils.downloadSong
             (mView.get().getApplicationContext(),
              songUri,
@@ -129,7 +130,8 @@ public class DownloadSongPresenter
     }
 
     /**
-     * Sends result of background calculations on main thread.
+     * Send the result of background calculations to the
+     * DownloadSongActivity in the UI thread.
      */
     public void onPostExecute(Uri pathToSongFile) {
         // Return the song path back to the View layer.

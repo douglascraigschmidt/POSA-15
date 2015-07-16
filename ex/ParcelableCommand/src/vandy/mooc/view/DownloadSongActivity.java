@@ -19,7 +19,9 @@ import android.widget.ProgressBar;
  * MusicCommandProcessorActivity, which plays the song.
  */
 public class DownloadSongActivity 
-       extends GenericActivity<DownloadSongActivity, DownloadSongPresenter, DownloadSongPresenter> {
+       extends GenericActivity<DownloadSongActivity,
+                               DownloadSongPresenter,
+                               DownloadSongPresenter> {
     /**
      * Song to download and play.
      */
@@ -101,6 +103,36 @@ public class DownloadSongActivity
     }
 
     /**
+     * Start the MusicCommandProcessorActivity with the given @a
+     * playerType to play the given @a songUri.
+     */
+    private void startMusicCommandProcessorActivity(int playerType,
+                                                    String playerName,
+                                                    Uri songUri) {
+        // Create an intent that will start an Activity to play a song
+        // for the user using the given type of player.
+        final Intent intent =
+            MusicCommandProcessorActivity.makeIntent
+               (makeParcelableCommandMusic(playerType),
+                songUri);
+       
+        // Verify that the intent will resolve to an Activity.
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            Utils.showToast(this,
+                            "Playing song with the "
+                            + playerName
+                            + " player");
+
+            // Start the MusicCommandProcessorActivity with this
+            // implicit intent.
+            startActivityForResult(intent,
+                                   playerType);
+        } else
+            Utils.showToast(this,
+                            "No Activity found to play songs");
+    }
+
+    /**
      * Hook method called back by the Android Activity framework when
      * an Activity that's been launched exits, giving the requestCode
      * it was started with, the resultCode it returned, and any
@@ -137,35 +169,5 @@ public class DownloadSongActivity
             return new ParcelableCommandMusicService();
         else 
             throw new IllegalArgumentException();
-    }
-
-    /**
-     * Start the MusicCommandProcessorActivity with the given @a
-     * playerType to play the given @a songUri.
-     */
-    private void startMusicCommandProcessorActivity(int playerType,
-                                                    String playerName,
-                                                    Uri songUri) {
-        // Create an intent that will start an Activity to play a song
-        // for the user using the given type of player.
-        final Intent intent =
-            MusicCommandProcessorActivity.makeIntent
-            (makeParcelableCommandMusic(playerType),
-             songUri);
-       
-        // Verify that the intent will resolve to an Activity.
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            Utils.showToast(this,
-                            "Playing song with the "
-                            + playerName
-                            + " player");
-
-            // Start the MusicCommandProcessorActivity with this
-            // implicit intent.
-            startActivityForResult(intent,
-                                   playerType);
-        } else
-            Utils.showToast(this,
-                            "No Activity found to play songs");
     }
 }

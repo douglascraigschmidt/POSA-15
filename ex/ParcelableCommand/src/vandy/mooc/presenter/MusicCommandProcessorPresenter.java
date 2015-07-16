@@ -12,8 +12,8 @@ import android.net.Uri;
 /**
  * This class executes a ParcelableCommandMusic to play a song.  It
  * plays role of the "Presenter" in the Model-View-Presenter pattern
- * and can communicate with the CommandProcessorActivity in the "View"
- * layer.
+ * and can communicate with the MusicCommandProcessorActivity in the
+ * "View" layer.
  */
 public class MusicCommandProcessorPresenter 
        implements PresenterOps<MusicCommandProcessorActivity> {
@@ -46,7 +46,6 @@ public class MusicCommandProcessorPresenter
     public void onCreate(MusicCommandProcessorActivity view) {
         // Set the WeakReference.
         mView = new WeakReference<>(view);
-
     }
 
     /**
@@ -76,9 +75,10 @@ public class MusicCommandProcessorPresenter
     /**
      * Execute the @a parcelableCommandMusic to play the @a songUri.
      */
-    public void executeCommand(final ParcelableCommandMusic parcelableCommandMusic,
-                               Uri songUri,
-                               Runnable screenFlasher) {
+    public void executeCommand
+        (final ParcelableCommandMusic parcelableCommandMusic,
+         Uri songUri,
+         Runnable screenFlasher) {
         // Execute the command to starting playing the song.
         parcelableCommandMusic.execute
             (mView.get().getActivityContext(),
@@ -88,7 +88,7 @@ public class MusicCommandProcessorPresenter
         final Thread thread = new Thread(screenFlasher);
         thread.start();
 
-        // Schedule a timer to shut things down after 4 seconds.
+        // Schedule a timer to shut everything down after 4 seconds.
         new Timer().schedule
             (new TimerTask() { 
                     public void run() {
