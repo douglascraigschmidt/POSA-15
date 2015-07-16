@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="vandy.mooc"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".view.DownloadSongActivity"
+            android:label="@string/download_song" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".view.MusicCommandProcessorActivity"
+            android:label="@string/playing_song">
+            <intent-filter >
+                <action android:name="vandy.mooc.intent.action.MUSIC_COMMAND_PROCESSOR" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="" />
+                <data android:scheme="file" />
+                <data android:mimeType="parcelable/songs" /> 
+            </intent-filter>
+        </activity>
+
+        <service
+           android:name=".presenter.MusicService">
+        </service>
+        
+    </application>
+
+</manifest>

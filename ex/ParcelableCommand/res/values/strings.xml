@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+    <string name="app_name">SongPlayingApp</string>
+    <string name="download_song">Downloading Song</string>
+    <string name="playing_song">Playing Song</string>
+</resources>
