@@ -28,8 +28,12 @@ import android.util.Log;
  * target of asynchronous callback methods from the Model layer.
  */
 public class AcronymPresenter
-       extends GenericModel<MVP.RequiredPresenterOps, MVP.ProvidedModelOps, AcronymModel>
-       implements GenericAsyncTaskOps<String, Void, List<AcronymExpansion>>,
+       extends GenericModel<MVP.RequiredPresenterOps,
+                            MVP.ProvidedModelOps,
+                            AcronymModel>
+       implements GenericAsyncTaskOps<String,
+                                      Void,
+                                      List<AcronymExpansion>>,
                   MVP.ProvidedPresenterOps,
                   MVP.RequiredPresenterOps,
                   AcronymResults {
