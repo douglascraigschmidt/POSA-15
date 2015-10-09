@@ -64,7 +64,7 @@ public class PalantiriModel
     public void makePalantiri(int palantiriCount) {
     	// Create a list to hold the generated Palantiri.
         final List<Palantir> palantiri =
-            new ArrayList<Palantir>();		
+            new ArrayList<Palantir>(palantiriCount);
 
         // Create a new Random number generator.
         final Random random = new Random();

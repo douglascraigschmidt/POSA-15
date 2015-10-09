@@ -21,7 +21,7 @@ public class Palantir {
      * Constructor initializes the fields.
      */
     public Palantir(int id,
-             Random random) {
+                    Random random) {
         mId = id;
         mRandom = random;
     }

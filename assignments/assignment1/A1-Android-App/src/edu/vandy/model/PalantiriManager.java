@@ -39,7 +39,7 @@ public class PalantiriManager {
         // and initialize each key in the HashMap with "true" to
         // indicate it's available, and initialize the Semaphore to
         // use a "fair" implementation that mediates concurrent access
-        // to the given Palantiri.
+        // to the given number of Palantiri.
         // TODO -- you fill in here.
     }
 
@@ -53,7 +53,7 @@ public class PalantiriManager {
         // first key in the HashMap whose value is "true" (which
         // indicates it's available for use).  Replace the value of
         // this key with "false" to indicate the Palantir isn't
-        // available and then return that palantir to the client.  @@
+        // available and then return that palantir to the client.
         // TODO -- you fill in here.
 
         return null; 

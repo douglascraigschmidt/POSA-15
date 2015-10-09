@@ -216,14 +216,8 @@ public class GazingSimulationActivity
             }
         };
 
-        // Check to see if this method is called from the UI thread.
-        if (Utils.runningOnUiThread())
-            // If so, invoke the run() method directly.
-            runnable.run();
-        else 
-            // Otherwise, queue the runnable so it'll run on the UI
-            // thread.
-            runOnUiThread(runnable);
+        // Use the HaMeR framework to run runnable on the UI Thread.
+        runOnUiThread(runnable);
     }
 
     /**
@@ -249,14 +243,8 @@ public class GazingSimulationActivity
             }
         };
 
-        // Check to see if this method is called from the UI thread.
-        if (Utils.runningOnUiThread())
-            // If so, invoke the run() method directly.
-            runnable.run();
-        else 
-            // Otherwise, queue the runnable so it'll run on the UI
-            // thread.
-            runOnUiThread(runnable);
+        // Example of the HaMeR framework to run on the UI Thread.
+        runOnUiThread(runnable);
     }
 
     /**
@@ -276,6 +264,7 @@ public class GazingSimulationActivity
             }
         };
 
+        // Example of the HaMeR framework to run on the UI Thread.
         runOnUiThread(runnable);
     }
 
@@ -296,6 +285,7 @@ public class GazingSimulationActivity
             }
         };
 
+        // Example of the HaMeR framework to run on the UI Thread.
         runOnUiThread(runnable);
     }
 
@@ -375,6 +365,7 @@ public class GazingSimulationActivity
             }
         };
 
+        // Example of the HaMeR framework to run on the UI Thread.
         runOnUiThread(runnable);
     }
 
@@ -394,6 +385,7 @@ public class GazingSimulationActivity
             }
         };
 
+        // Example of the HaMeR framework to run on the UI Thread.
         runOnUiThread(runnable);
     }
     
@@ -424,6 +416,7 @@ public class GazingSimulationActivity
             }
         };
 
+        // Example of the HaMeR framework to run on the UI Thread.
         runOnUiThread(runnable);
     }
 }
