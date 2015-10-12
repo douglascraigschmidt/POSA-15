@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">BuggyBuggyDownloads</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_buggydownloads">BuggyDownloads</string>
+    <string name="buggy1">Buggy1</string>
+    <string name="buggy2">Buggy2</string>
+    <string name="resetImage">Reset Image</string>
+    <string name="defaultURL">http://www.dre.vanderbilt.edu/~schmidt/ka.png</string>
+    <string name="location">Enter URL:</string>
+
+</resources>

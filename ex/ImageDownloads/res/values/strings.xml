@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">ImageDownloads</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_imagedownloads">ImageDownloads</string>
+    <string name="runRunnable">Run\nRunnable</string>
+    <string name="runMessages">Run\nMessages</string>
+    <string name="runAsyncTask">Run\nAsync</string>
+    <string name="resetImage">Reset\nImage</string>
+    <string name="defaultURL">http://www.dre.vanderbilt.edu/~schmidt/ka.png</string>
+    <string name="location">Enter URL:</string>
+</resources>
