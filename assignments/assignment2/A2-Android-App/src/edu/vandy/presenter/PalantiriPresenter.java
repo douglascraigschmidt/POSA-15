@@ -108,7 +108,7 @@ public class PalantiriPresenter
      * A ThreadFactory object that spawns an appropriately named
      * Thread for each Being.
      */
-    private ThreadFactory mThreadFactory = 
+    private ThreadFactory mThreadFactory =
         new ThreadFactory() {
             /**
              * Give each Being a uniquely numbered name.
@@ -150,7 +150,7 @@ public class PalantiriPresenter
         mView =
             new WeakReference<>(view);
 
-        // Invoke the special onCreate() method in GenericModel,
+        // Invoke the special onCreate() method in GenericPresenter,
         // passing in the PalantiriModel class to instantiate/manage
         // and "this" to provide this MVP.RequiredModelOps instance.
         super.onCreate(PalantiriModel.class,

@@ -13,7 +13,7 @@ import edu.vandy.utils.Options;
  * gazing logic and provides a means for canceling an AsyncTask.
  */
 public class BeingAsyncTask
-       extends AsyncTask<PalantiriPresenter, 
+       extends AsyncTask<PalantiriPresenter,
                          Runnable,
                          Void> {
     /**
@@ -31,7 +31,7 @@ public class BeingAsyncTask
     /**
      * A CountDownLatch that ensures all Threads exit as a group.
      */
-    private CountDownLatch mExitBarrier;
+    private final CountDownLatch mExitBarrier;
 
     /**
      * Constructor initializes the field.

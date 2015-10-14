@@ -115,9 +115,6 @@ public class ImageDownloadsActivity
         Utils.hideKeyboard(this,
                            mUrlEditText.getWindowToken());
 
-        // Inform the user that the download is starting.
-        showDialog("downloading via Handlers and Messages");
-
         // Create and start a new Thread to download an image in the
         // background and then use Messages and MessageHandler to
         // cause it to be displayed in the UI Thread.

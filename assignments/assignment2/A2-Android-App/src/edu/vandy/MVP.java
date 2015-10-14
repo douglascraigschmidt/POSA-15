@@ -147,19 +147,8 @@ public interface MVP {
      * This interface is a no-op since the Model layer doesn't require
      * any methods from the Presenter layer.
      */
-    public interface RequiredPresenterOps 
+    public interface RequiredPresenterOps
            extends ContextView {
-        /**
-         * This method is called when the user asks to start the
-         * simulation in the context of the main UI Thread.  It creates
-         * the designated number of Palantiri and adds them to the
-         * PalantiriManager.  It then creates a Thread for each Being and
-         * has each Being attempt to acquire a Palantir for gazing,
-         * mediated by the PalantiriManager.  The BeingTheads call methods
-         * from the MVP.RequiredViewOps interface to visualize what is
-         * happening to the user.
-         **/
-        void start();
     }
 
     /**

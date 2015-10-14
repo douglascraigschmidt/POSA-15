@@ -48,6 +48,7 @@ public class DownloadWithMessages
                 // not.
                 switch (msg.what) {
                 case SHOW_DIALOG:
+                    // Inform the user that the download is starting.
                     mActivity.get().showDialog("downloading via Handlers and Messages");
                     break;
 

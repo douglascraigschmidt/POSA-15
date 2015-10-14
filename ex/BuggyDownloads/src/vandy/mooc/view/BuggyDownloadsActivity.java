@@ -77,6 +77,7 @@ public class BuggyDownloadsActivity
     public void buggy1(View view) {
         // Obtain the requested URL from the user input.
         final String url = getUrlString();
+
  
         Utils.hideKeyboard(this,
                            mUrlEditText.getWindowToken());
