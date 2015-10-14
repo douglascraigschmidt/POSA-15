@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
 public class DownloadWithRunnables
        implements Runnable {
     // The URL to download. 
-    final private final String mUrl;
+    final private String mUrl;
 
     /**
      * WeakReference enable garbage collection of Activity.
