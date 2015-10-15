@@ -55,7 +55,7 @@ public class PalantiriModel
 
     /**
      * Create a PalantiriManager that contains the designated number
-     * of Palantir with random gaze times between 1 and 5 milliseconds
+     * of Palantir with random gaze times between 1 and 5 seconds
      *
      * @param palantiriCount
      *            The number of Palantiri to add to the PalantiriManager.
