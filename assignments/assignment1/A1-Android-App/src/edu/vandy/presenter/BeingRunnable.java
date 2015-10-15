@@ -32,8 +32,7 @@ public class BeingRunnable
     /**
      * Constructor initializes the field.
      */
-    BeingRunnable(int index,
-                  PalantiriPresenter presenter) {
+    BeingRunnable(int index, PalantiriPresenter presenter) {
         mIndex = index;
         mPresenter = presenter;
     }

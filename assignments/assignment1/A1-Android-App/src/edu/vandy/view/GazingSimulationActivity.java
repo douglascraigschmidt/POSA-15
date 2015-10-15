@@ -169,13 +169,11 @@ public class GazingSimulationActivity
         // If the simulation is running and the screen-orientation
         // changed then simply inform the user the simulation is
         // continuing and return.
-        else if (configurationChangeOccurred == true
-            && simulationRunning) {
+        else if (configurationChangeOccurred == true && simulationRunning) {
             // Change the button to say "Stop Simulation."
             mSimulationButton.setText("Stop Simulation");
 
-            Utils.showToast(this,
-                            "Continuing simulation");
+            Utils.showToast(this,"Continuing simulation");
         } else
             // Change the button to say "Start Simulation."
             mSimulationButton.setText("Start Simulation");

@@ -1,12 +1,13 @@
 package edu.vandy.presenter;
 
+import android.content.Intent;
+import android.util.Log;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import android.content.Intent;
-import android.util.Log;
 import edu.vandy.MVP;
 import edu.vandy.common.GenericModel;
 import edu.vandy.common.Utils;
@@ -82,15 +83,13 @@ public class PalantiriPresenter
      * This List keeps track of how many palantiri we have and whether
      * they're in use or not.
      */
-    private List<DotColor> mPalantiriColors =
-        new ArrayList<>();
+    private List<DotColor> mPalantiriColors = new ArrayList<>();
 	
     /**
      * This List keeps track of how many beings we have and whether
      * they're gazing or not.
      */
-    private List<DotColor> mBeingsColors =
-        new ArrayList<>();
+    private List<DotColor> mBeingsColors = new ArrayList<>();
 
     /**
      * Default constructor that's needed by the GenericActivity
@@ -111,14 +110,12 @@ public class PalantiriPresenter
     @Override
     public void onCreate(MVP.RequiredViewOps view) {
         // Set the WeakReference.
-        mView =
-            new WeakReference<>(view);
+        mView = new WeakReference<>(view);
 
         // Invoke the special onCreate() method in GenericModel,
         // passing in the PalantiriModel class to instantiate/manage
         // and "this" to provide this MVP.RequiredModelOps instance.
-        super.onCreate(PalantiriModel.class,
-                       this);
+        super.onCreate(PalantiriModel.class, this);
 
         // Get the intent used to start the Activity.
         final Intent intent = view.getIntent();
@@ -268,6 +265,13 @@ public class PalantiriPresenter
         // perform the BeingRunnable logic, add them to the ArrayList,
         // and then start all the BeingThreads in the ArrayList.
         // TODO - You fill in here.
+
+        mBeingsThreads = new ArrayList<>();
+        for (int i=0; i<beingCount; i++)
+            mBeingsThreads.add(new BeingThread(new BeingRunnable(i, this), beingCount, this));
+        for (BeingThread t : mBeingsThreads)
+            t.start();
+
     }
 
     /**
@@ -279,6 +283,20 @@ public class PalantiriPresenter
         // finish and then calls mView.get().done() to inform the View
         // layer that the simulation is done.
         // @@ TODO -- you fill in here.
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                for (BeingThread t : mBeingsThreads)
+                    try {
+                        t.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
     }
 
     /**
