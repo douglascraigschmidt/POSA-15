@@ -15,8 +15,7 @@ public class PalantiriManager {
     /**
      * Debugging tag used by the Android logger.
      */
-    protected final static String TAG = 
-        PalantiriManager.class.getSimpleName();
+    protected final static String TAG = PalantiriManager.class.getSimpleName();
 
     /**
      * A counting Semaphore that limits concurrent access to the fixed
@@ -41,6 +40,11 @@ public class PalantiriManager {
         // use a "fair" implementation that mediates concurrent access
         // to the given Palantiri.
         // TODO -- you fill in here.
+        mPalantiriMap = new HashMap<Palantir, Boolean>();
+        for(Palantir p : palantiri)
+            mPalantiriMap.put(p,true);
+
+        mAvailablePalantiri = new Semaphore(palantiri.size(), true);
     }
 
     /**
@@ -55,7 +59,13 @@ public class PalantiriManager {
         // this key with "false" to indicate the Palantir isn't
         // available and then return that palantir to the client.  @@
         // TODO -- you fill in here.
-
+        mAvailablePalantiri.acquireUninterruptibly();
+        for (Palantir p : mPalantiriMap.keySet()){
+            if(mPalantiriMap.get(p)) {
+                mPalantiriMap.put(p, false);
+                return p;
+            }
+        }
         return null; 
     }
 
@@ -68,7 +78,20 @@ public class PalantiriManager {
         // in a thread-safe manner and release the Semaphore if all
         // works properly.
         // TODO -- you fill in here.
+        try {
+            synchronized (this) {
+                mPalantiriMap.put(palantir, true);
+            }
+            mAvailablePalantiri.release();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+
+
+
 
     /*
      * The following method is just intended for use by the regression
