@@ -62,6 +62,7 @@ public class ImageDownloadsActivity
      *            Activity's previously frozen state, if there was one.
      */
     public void onCreate(Bundle savedInstanceState) {
+        // Initialize the super class.
         super.onCreate(savedInstanceState);
 
         // Sets the content view specified in the
@@ -89,7 +90,7 @@ public class ImageDownloadsActivity
                            mUrlEditText.getWindowToken());
 
         // Inform the user that the download is starting.
-        showDialog("downloading via Runnables and Handlers");
+        showDialog("downloading via Handlers and Runnables");
         
         // Create and start a new Thread to download an image in the
         // background via a Runnable.  The downloaded image is then
