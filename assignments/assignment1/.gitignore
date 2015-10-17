@@ -1,0 +1,18 @@
+# IntelliJ project files
+.idea/workspace.xml
+.idea/libraries
+out/
+gen/
+
+# Maven output files
+target/
+
+# Eclipse
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
