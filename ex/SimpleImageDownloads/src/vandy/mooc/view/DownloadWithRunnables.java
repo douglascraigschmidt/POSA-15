@@ -10,12 +10,12 @@ import android.graphics.Bitmap;
 public class DownloadWithRunnables
        implements Runnable {
     // The URL to download. 
-    private final String mUrl;
+    final private String mUrl;
 
     /**
      * WeakReference enable garbage collection of Activity.
      */
-    WeakReference<ImageDownloadsActivity> mActivity;
+    final WeakReference<ImageDownloadsActivity> mActivity;
 
     /**
      * Class initializes the fields.
@@ -38,7 +38,8 @@ public class DownloadWithRunnables
      */
     public void run() {
         // Download the bitmap image.
-        final Bitmap image = mActivity.get().downloadBitmap(mUrl);
+        final Bitmap image =
+            mActivity.get().downloadBitmap(mUrl);
 
         // Display the image in the UI thread.
         mActivity.get().runOnUiThread(new Runnable() {

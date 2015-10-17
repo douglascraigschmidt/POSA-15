@@ -13,19 +13,10 @@ import android.widget.ImageView;
 
 /**
  * This Activity allows a user to download a bitmap image from a
- * remote server using the following concurrency strategies from the
- * Android HaMeR and AsyncTask frameworks:
- *
- * . Download with Runnables (HaMeR framework)
- * . Download with Messages (HaMeR framework)
- * . Download with AsyncTask (AsyncTask framework)
- *        
- * After the image is downloaded and converted into a Bitmap it is
- * displayed on the user's screen.
+ * remote server using Java Thrads.  After the image is downloaded and
+ * converted into a Bitmap it is displayed on the user's screen.
  * 
- * This implementation doesn't handle runtime configuration changes
- * robustly.  See the ImageDownloads example for a framework that
- * handles these changes via the Model-View-Presenter (MVP) pattern.
+ * This implementation is buggy!
  */
 public class BuggyDownloadsActivity
        extends LifecycleLoggingActivity {
@@ -63,6 +54,7 @@ public class BuggyDownloadsActivity
      *            Activity's previously frozen state, if there was one.
      */
     public void onCreate(Bundle savedInstanceState) {
+        // Initialize the superclass.
         super.onCreate(savedInstanceState);
 
         // Sets the content view specified in the
@@ -85,12 +77,13 @@ public class BuggyDownloadsActivity
     public void buggy1(View view) {
         // Obtain the requested URL from the user input.
         final String url = getUrlString();
+
  
         Utils.hideKeyboard(this,
                            mUrlEditText.getWindowToken());
 
         // Inform the user that the download is starting.
-        showDialog("downloading via buggy1");
+        showDialog("downloading via buggy1() method");
 
         try {
             // Download the image.
