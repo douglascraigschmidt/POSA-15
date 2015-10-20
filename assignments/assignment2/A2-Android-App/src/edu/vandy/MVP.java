@@ -30,17 +30,7 @@ public interface MVP {
          * marked as unused by default.
          */
         void showPalantiri();
-	
-        /**
-         * Mark a certain palantir as being used.
-         */
-        void markUsed(int index);
-	
-        /**
-         * Mark a certain palantir as free.
-         */
-        void markFree(int index);
-	
+        
         /**
          * Show the Beings on the screen.  All beings will be marked
          * as not gazing by default.
@@ -48,19 +38,40 @@ public interface MVP {
         void showBeings();
 	
         /**
+         * Mark a certain palantir as being used.
+         */
+        Runnable markUsed(int index);
+	
+        /**
+         * Mark a certain palantir as free.
+         */
+        Runnable markFree(int index);
+	
+        /**
          * Mark a certain being as gazing at a palantir.
          */
-        void markGazing(int index);
+        Runnable markGazing(int index);
 
+        /**
+         * Mark a specific palantir as being interrupted (makes the
+         * dot purple).
+         */ 
+        Runnable markInterrupted(final int index);
+	
         /**
          * Mark a certain being as waiting for a Palantir palantir.
          */
-        void markWaiting(int index);
+        Runnable markWaiting(int index);
 	
         /**
          * Mark a certain being as idle (i.e. not gazing or waiting)
          */
-        void markIdle(int index);
+        Runnable markIdle(int index);
+        
+        /**
+         * Tell the user that a thread was shutdown.
+         */
+        void threadShutdown(int index);
     
         /**
          * Tell the user that the simulation is done.
@@ -68,16 +79,10 @@ public interface MVP {
         void done();
     
         /**
-         * Called when a shutdown occurs.  Pops a toast to notify the
-         * user.
+         * Tell the user that a shutdown occurred.
          */
         void shutdownOccurred(int numberOfSimulationThreads);
     
-        /**
-         * Tell the user that a thread was shutdown.
-         */
-        void threadShutdown(int index);
-
         /**
          * Return the intent used to start the Activity that
          * implements the View.
@@ -102,12 +107,11 @@ public interface MVP {
          * This method is called when the user asks to start the
          * simulation in the context of the main UI Thread.  It
          * creates the number of Palantiri designated in the Options
-         * singleton and adds them to the PalantiriManager.  It then
-         * creates a Thread for each Being and has each Being attempt
-         * to acquire a Palantir for gazing, mediated by the
-         * PalantiriManager.  The Being Theads call methods in the
-         * RequiredViewOps interface to visualize what is happening to
-         * the user.
+         * singleton and adds them to the LeasePool.  It then creates
+         * a Thread for each Being and has each Being attempt to
+         * acquire a Palantir for gazing, mediated by the LeasePool.
+         * The Being Theads call methods in the RequiredViewOps
+         * interface to visualize what is happening to the user.
          **/
         void start();
 
@@ -128,7 +132,7 @@ public interface MVP {
          */
         boolean configurationChangeOccurred();
 
-       /**
+        /**
          * Returns the List of Palantiri and whether they are gazing.
          */
         List<DotColor> getPalantiriColors();
@@ -143,7 +147,8 @@ public interface MVP {
      * This interface is a no-op since the Model layer doesn't require
      * any methods from the Presenter layer.
      */
-    public interface RequiredPresenterOps {
+    public interface RequiredPresenterOps
+           extends ContextView {
     }
 
     /**
@@ -155,11 +160,11 @@ public interface MVP {
         /**
          * Create a resource manager that contains the designated
          * number of Palantir with random gaze times between 1 and 5
-         * seconds "Fair" semantics should be used to instantiate
+         * milliseconds "Fair" semantics should be used to instantiate
          * the Semaphore.
          *
          * @param palantiriCount
-         *            The number of Palantiri to add to the PalantirManager.
+         *            The number of Palantiri to add to the LeasePool.
          */
         void makePalantiri(int palantiriCount);
 

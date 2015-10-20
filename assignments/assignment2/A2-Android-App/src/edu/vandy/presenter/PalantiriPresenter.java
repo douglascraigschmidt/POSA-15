@@ -3,13 +3,20 @@ package edu.vandy.presenter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import edu.vandy.MVP;
-import edu.vandy.common.GenericModel;
 import edu.vandy.common.Utils;
+import edu.vandy.common.GenericPresenter;
 import edu.vandy.model.PalantiriModel;
 import edu.vandy.utils.Options;
 import edu.vandy.view.DotArrayAdapter.DotColor;
@@ -39,9 +46,9 @@ import edu.vandy.view.DotArrayAdapter.DotColor;
  * GenericModel framework.
  */
 public class PalantiriPresenter 
-       extends GenericModel<MVP.RequiredPresenterOps,
-                            MVP.ProvidedModelOps,
-                            PalantiriModel>
+       extends GenericPresenter<MVP.RequiredPresenterOps,
+                                MVP.ProvidedModelOps,
+                                PalantiriModel>
        implements MVP.ProvidedPresenterOps, 
                   MVP.RequiredPresenterOps {
     /**
@@ -66,12 +73,12 @@ public class PalantiriPresenter
      * The list of Beings (implemented as concurrently executing Java
      * Threads) that are attempting to acquire Palantiri for gazing.
      */
-    private List<BeingThread> mBeingsThreads;
+    private List<BeingAsyncTask> mBeingsTasks;
 
     /**
      * The number of Beings that currently have a Palantir.
      */
-    public AtomicLong mGazingThreads;
+    public AtomicLong mGazingTasks;
 
     /**
      * Tracks whether a simulation is currently running or not.
@@ -91,6 +98,35 @@ public class PalantiriPresenter
      */
     private List<DotColor> mBeingsColors =
         new ArrayList<>();
+
+    /**
+     * A CountDownLatch that ensures all Threads exit as a group.
+     */
+    private CountDownLatch mExitBarrier;
+
+    /**
+     * A ThreadFactory object that spawns an appropriately named
+     * Thread for each Being.
+     */
+    private ThreadFactory mThreadFactory =
+        new ThreadFactory() {
+            /**
+             * Give each Being a uniquely numbered name.
+             */
+            private final AtomicInteger mBeingCount =
+                new AtomicInteger(1);
+
+            /**
+             * Construct a new Thread.
+             */
+            public Thread newThread(Runnable runnable) {
+                // Create a new BeingThread whose name uniquely
+                // identifies each Being.
+                // TODO -- you fill in here by replacing "return null"
+                // with the appropriate code.
+                return null;
+            }
+        };
 
     /**
      * Default constructor that's needed by the GenericActivity
@@ -114,7 +150,7 @@ public class PalantiriPresenter
         mView =
             new WeakReference<>(view);
 
-        // Invoke the special onCreate() method in GenericModel,
+        // Invoke the special onCreate() method in GenericPresenter,
         // passing in the PalantiriModel class to instantiate/manage
         // and "this" to provide this MVP.RequiredModelOps instance.
         super.onCreate(PalantiriModel.class,
@@ -158,13 +194,13 @@ public class PalantiriPresenter
     /**
      * Hook method called to shutdown the Model layer.
      *
-     * @param isChangingConfigurations
+     * @param isChangeConfigurations
      *        True if a runtime configuration triggered the onDestroy() call.
      */
     @Override
     public void onDestroy(boolean isChangingConfigurations) {
         // Destroy the model.
-        getModel().onDestroy(isChangingConfigurations);
+        // getModel().onDestroy(isChangingConfigurations);
     }
 
     /**
@@ -223,6 +259,25 @@ public class PalantiriPresenter
     }
 
     /**
+     * This method is called if an unrecoverable exception occurs or
+     * the user explicitly stops the simulation.  It interrupts all
+     * the other threads and notifies the UI.
+     */
+    @Override
+    public void shutdown() {
+        synchronized(this) {
+            // Inform the user that we're shutting down the
+            // simulation.
+            mView.get().shutdownOccurred(mBeingsTasks.size());
+
+            // Cancel all the BeingTasks.
+            for (BeingAsyncTask bat : mBeingsTasks) 
+                // Cancel the task.
+                bat.cancel(true);
+        }
+    }
+
+    /**
      * This method is called when the user asks to start the
      * simulation in the context of the main UI Thread.  It creates
      * the designated number of Palantiri and adds them to the
@@ -234,12 +289,12 @@ public class PalantiriPresenter
      **/
     @Override
     public void start() {
-        // Initialize the PalantiriManager.
+        // Initialize the Palantiri.
         getModel().makePalantiri(Options.instance().numberOfPalantiri());
 
         // Initialize the count of the number of threads Beings use to
         // gaze.
-        mGazingThreads = new AtomicLong(0);
+        mGazingTasks = new AtomicLong(0);
 
         // Show the Beings on the UI.
         mView.get().showBeings();
@@ -247,54 +302,80 @@ public class PalantiriPresenter
         // Show the palantiri on the UI.
         mView.get().showPalantiri();
 
-        // Create and start a BeingThread for each Being.
-        beginBeingsThreads(Options.instance().numberOfBeings());
+        // Spawn a thread that waits for all the Being threads to
+        // finish.
+        joinBeingsTasks();
 
-        // Start a thread to wait for all the Being threads to finish
-        // and then inform the View layer that the simulation is done.
-        waitForBeingsThreads();
+        // Create and execute an AsyncBeingTask for each Being.
+        createAndExecuteBeingsTasks(Options.instance().numberOfBeings());
     }
 
     /**
-     * Create/start a List of BeingThreads that represent the Beings
-     * in this simulation.  Each Thread is passed a BeingRunnable
-     * parameter that performs the Being gazing logic.
+     * Spawn a thread to wait for all the Being threads to finish.
+     */
+    private void joinBeingsTasks() {
+        // First, initialize mExitBarrier that's used as an exit
+        // barrier to ensure the waiter thread doesn't finish until
+        // all the BeingTasks finish.
+        mExitBarrier =
+            new CountDownLatch(Options.instance().numberOfBeings());
+
+        // Create/start a waiter thread that uses mExitBarrier to wait
+        // for all the BeingTasks to finish.  After they are all
+        // finished then tell the UI thread this simulation is done.
+        new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // Wait for all BeingTasks to stop gazing.
+                        mExitBarrier.await();
+                    } catch (Exception e) {
+                        Log.d(TAG,
+                              "joinBeingTasks() received exception");
+                        // If we get interrupted while waiting, stop
+                        // everything.
+                        shutdown();
+                    } finally {
+                        // Tell the UI thread this simulation is done.
+                        mView.get().done();
+                    }
+                }}).start();
+    }
+
+    /**
+     * Create a List of Threads that will be used to represent the
+     * Beings in this simulation.  Each Thread is passed a
+     * BeingRunnable parameter that takes the index of the Being in
+     * the list as a parameter.
      * 
      * @param beingCount
      *            Number of Being Threads to create.
      */
-    private void beginBeingsThreads(int beingCount) {
-        // Create an empty ArrayList, create new BeingThreads that
-        // perform the BeingRunnable logic, add them to the ArrayList,
-        // and then start all the BeingThreads in the ArrayList.
+    private void createAndExecuteBeingsTasks(int beingCount) {
+        // First, create a new BeingsTasks ArrayList, iterate through
+        // all the Beings, create a new BeingAsyncTask that performs
+        // the Being logic, and add the BeingAsyncTask to the List.
+        // Next, create a ThreadPoolExecutor that contains (1) a
+        // fixed-size pool of BeingThreads corresponding to the number
+        // of Beings, (2) a LinkedBlockingQueue, and (3) the
+        // ThreadFactory instance.  Finally, iterate through all the
+        // BeingTasks and execute them on the threadPoolExecutor.
         // TODO - You fill in here.
     }
 
     /**
-     * Start a thread to wait for all the Being threads to finish and
-     * then inform the View layer that the simulation is done.
-     */
-    private void waitForBeingsThreads() {
-        // Start a Java Thread that waits for all the BeingThreads to
-        // finish and then calls mView.get().done() to inform the View
-        // layer that the simulation is done.
-        // @@ TODO -- you fill in here.
-    }
-
-    /**
-     * This method is called if an unrecoverable exception occurs or
-     * the user explicitly stops the simulation.  It shuts down all
-     * the BeingThreads and notifies the View layer that
+     * Return the Activity context.
      */
     @Override
-    public void shutdown() {
-        synchronized(this) {
-            // Shutdown all the BeingThreads.
-            BeingThread.shutdown();
-
-            // Inform the user that we're shutting down the
-            // simulation.
-            mView.get().shutdownOccurred(mBeingsThreads.size());
-        }
+    public Context getActivityContext() {
+        return mView.get().getActivityContext();
+    }
+    
+    /**
+     * Return the Application context.
+     */
+    @Override
+    public Context getApplicationContext() {
+        return mView.get().getApplicationContext();
     }
 }
