@@ -155,7 +155,7 @@ public interface MVP {
         /**
          * Create a resource manager that contains the designated
          * number of Palantir with random gaze times between 1 and 5
-         * milliseconds "Fair" semantics should be used to instantiate
+         * seconds "Fair" semantics should be used to instantiate
          * the Semaphore.
          *
          * @param palantiriCount
