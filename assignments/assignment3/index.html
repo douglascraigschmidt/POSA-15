@@ -1,0 +1,86 @@
+<html>
+
+<title>Downloaded Images Viewer (P1 - Assignment 3)</title>
+
+<body text = "#000000"
+      link="#000fff"
+      vlink="#ff0f0f"
+      bgcolor="#ffffff">
+
+  <hr>
+  <h3>Downloaded Images Viewer (P1 - Assignment 3)</h3>
+
+  <hr width=50% align=left>
+  <h4>Overview of the Downloaded Images Viewer Assignment</h4>
+
+  <p>
+
+    The purpose of this "mini-project" assignment is to give you
+    experience using Android concurrency frameworks to develop an app
+    that prompts the user for a list of URL to images and then
+    downloads these images, filters the images, and displays them.
+    You have a great degree of flexibility in how you design and
+    implement this app, as long as it meets the following requirements
+
+    <UL> 
+
+    <LI> Downloading and filtering the images should each be performed
+    concurrently via different instances of the Android AsyncTask
+    concurrency framework, which is covered <A
+    HREF="https://www.youtube.com/watch?v=tQJnejqcAZw&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=32">here</a>
+    and <A
+    HREF="https://www.youtube.com/watch?v=2-o92SLinqk&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=33">here</a>. <P>
+
+    <LI> All AsyncTasks should run concurrently using the
+    AsyncTask.THREAD_POOL_EXECUTOR and the executeOnExecutor() method. <P>
+
+    <LI> The filter(s) used to process the image should at least be
+    the gray-scale filter that's provided as part of the code
+    skeletons distributed with the assignment. You're welcome to
+    define other filters, but they are optional. <P>
+
+    <LI> The app must handle runtime configuration changes properly in
+    the context of concurrently executing instances of AsyncTask.
+    Information on how to handle these types of changes is available
+    <A
+    HREF="http://developer.android.com/guide/topics/resources/runtime-changes.html">here</a>
+    and <A
+    HREF="http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html">here</a>.
+    </UL>
+
+    The material necessary to complete assignment 3 was presented in
+    class during Weeks 2, 3, and 4.
+
+  <hr width=50% align=left>
+  <h4>Skeleton Code</h4>
+
+  <p> Skeleton code for this assignment is available <a
+    href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment3">here</a>.
+    However, you don't need to use <EM>any</EM> of the supplied code
+    if you'd like to write the app from scratch.  A quick walk-through
+    of my design/implementation of assignment 3 will be available in
+    the <A
+    href="https://class.coursera.org/posaconcurrency-003/lecture/">video
+    lectures</a>, though you are under <EM>no</EM> obligation to model
+    your solution on my approach. </p>
+
+  <p> Note that there are no automated unit tests for this
+  assignment. Instead, you'll know the program is working when you can
+  successfully download, filter, and view the filtered image.  Make
+  sure that your program works properly for both valid and invalid
+  URLs entered by the user.  You can get
+  images at various resolutions from <A
+  HREF="http://lorempixel.com/">this</A> website. </p>
+
+  <hr width=50% align=left>
+  <h4>Concluding Remarks</h4>
+  <p>
+
+  This assignment is designed to help deepen your knowledge of
+  concurrent programming with the Android AsyncTask framework, as well
+  as how to successfully handle configuration changes in an Android
+  device.  Make sure you start early and come to Virtual Office Hours
+  if you have questions or run into problems.  </p>
+
+</body>
+</html>
