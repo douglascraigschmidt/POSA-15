@@ -273,17 +273,12 @@ public class BitmapUtils {
 
         try (FileOutputStream fileOutputStream =
              new FileOutputStream(filePath)) {
-            grayScaleImage.compress(CompressFormat.JPEG, 100,
+            grayScaleImage.compress(CompressFormat.JPEG, 
+                                    100,
                                     fileOutputStream);
 
             // Create a URI from the file.
-            Uri uri = Uri.fromFile(filePath);
-
-            return Utils.createDirectoryAndSaveFile
-                (context, 
-                 new URL(uri.toString()),
-                 Uri.parse(uri.getLastPathSegment()),
-                 directoryPathname); 
+            return Uri.fromFile(filePath);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

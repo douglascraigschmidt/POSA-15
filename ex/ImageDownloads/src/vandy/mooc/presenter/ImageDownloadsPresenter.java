@@ -95,12 +95,12 @@ public class ImageDownloadsPresenter
                 R.id.messages_button,
                 R.id.async_task_button,
                 R.id.reset_image_button },
-                new ImageStrategy[] {
-                    new DownloadWithRunnables(),
-                    new DownloadWithMessages(),
-                    new DownloadWithAsyncTask(),
-                    new ResetBitmap()
-                });
+             new ImageStrategy[] {
+                new DownloadWithRunnables(),
+                new DownloadWithMessages(),
+                new DownloadWithAsyncTask(),
+                new ResetBitmap()
+             });
 
 
         // Extract the default image.
@@ -144,7 +144,8 @@ public class ImageDownloadsPresenter
             new WeakReference<>(view);
 
         // Set the default image.
-        mView.get().displayBitmap(mCurrentImage, null);
+        mView.get().displayBitmap(mCurrentImage,
+                                  null);
     }
 
     /**
@@ -170,7 +171,7 @@ public class ImageDownloadsPresenter
     private DownloadContext makeDownloadContext(String url) {
         // This command is called back after the image is displayed to
         // indicate there's no active ImageStrategy.
-        final Runnable completionCommand = 
+        final Runnable completionCommand =
             new Runnable() {
                 public void run() {
                     // Indicate there's no active ImageStrategy.
