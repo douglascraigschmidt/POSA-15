@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 
 /**
- * This class downloads a bitmap image in the background
- *        using Handlers and Messages.
+ * This class downloads a bitmap image in the background using
+ * Handlers and Messages.
  */
 public class DownloadWithMessages 
        implements Runnable {
@@ -48,6 +48,7 @@ public class DownloadWithMessages
                 // not.
                 switch (msg.what) {
                 case SHOW_DIALOG:
+                    // Inform the user that the download is starting.
                     mActivity.get().showDialog("downloading via Handlers and Messages");
                     break;
 
@@ -87,13 +88,15 @@ public class DownloadWithMessages
         // Factory creates a Message that instructs the
         // MessageHandler to begin showing the progress dialog to
         // the user.
-        Message msg = mMessageHandler.obtainMessage(SHOW_DIALOG);
+        Message msg =
+            mMessageHandler.obtainMessage(SHOW_DIALOG);
 
         // Send the Message to initiate the ProgressDialog.
         mMessageHandler.sendMessage(msg);
 
         // Download the image.
-        final Bitmap image = mActivity.get().downloadBitmap(mUrl);
+        final Bitmap image =
+            mActivity.get().downloadBitmap(mUrl);
 
         // Factory creates a Message that instructs the
         // MessageHandler to dismiss the progress dialog.
@@ -104,7 +107,7 @@ public class DownloadWithMessages
 
         // Factory creates a Message that instructs the
         // MessageHandler to display the image to the user.
-        msg = mMessageHandler.obtainMessage(DISPLAY_IMAGE, 
+        msg = mMessageHandler.obtainMessage(DISPLAY_IMAGE,
                                             image);
 
         // Send the Message to instruct the UI Thread to display the

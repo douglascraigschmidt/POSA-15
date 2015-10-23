@@ -101,7 +101,7 @@ public class DownloadWithMessages
      * Cancel the download/display.
      */
     @Override
-        public void cancel(DownloadContext downloadContext) {
+    public void cancel(DownloadContext downloadContext) {
         // Let the user know this download/display is being canceled.
         downloadContext.showToast("Canceling DownloadWithMessages in progress");
 
