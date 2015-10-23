@@ -204,7 +204,7 @@ public class BitmapUtils {
         options.inSampleSize = ratio;
         options.inJustDecodeBounds = false;
 
-        try (
+        try {
             return BitmapFactory.decodeFile(pathToImageFile.toString(),
                                             options);
         } catch (Exception e) {
