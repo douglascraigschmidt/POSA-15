@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+dependencies {
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
+}
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
