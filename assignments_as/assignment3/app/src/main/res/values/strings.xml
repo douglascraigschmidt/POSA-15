@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DownloadImagesViewer</string>
+    <string name="download_images_activity">DownLoadImagesActivity</string>
+    <string name="download_and_display_images">Download and Display Image(s)</string>
+    <string name="add_url">Add URL</string>
+    <string name="enter_url">Enter URL</string>
+    <string name="clear_directory">Delete Downloaded Image(s)</string>
+    <string name="defaultURL">http://www.dre.vanderbilt.edu/~schmidt/robot.png;http://www.dre.vanderbilt.edu/~schmidt/ka.png</string>
+    <string name="detailed_picture_view_desc_string">desc</string>
+    <string name="swipe_activity">SwipeListDisplay</string>
+</resources>
