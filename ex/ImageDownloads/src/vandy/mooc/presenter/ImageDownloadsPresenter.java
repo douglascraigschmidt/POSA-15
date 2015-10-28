@@ -13,6 +13,7 @@ import vandy.mooc.presenter.strategies.DownloadWithMessages;
 import vandy.mooc.presenter.strategies.DownloadWithRunnables;
 import vandy.mooc.presenter.strategies.ImageStrategy;
 import vandy.mooc.presenter.strategies.ResetBitmap;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -161,36 +162,6 @@ public class ImageDownloadsPresenter
     }
 
     /**
-     * Factory method that returns the DownloadContext associated with
-     * this user request, which plays the role of the "Context" in the
-     * Strategy pattern.
-     * 
-     * @param url
-     *        URL to download.
-     */
-    private DownloadContext makeDownloadContext(String url) {
-        // This command is called back after the image is displayed to
-        // indicate there's no active ImageStrategy.
-        final Runnable completionCommand =
-            new Runnable() {
-                public void run() {
-                    // Indicate there's no active ImageStrategy.
-                    mActiveImageStrategy = null;
-                }
-            };
-
-        // Create a DownloadContext that stores references to the
-        // MVP.ProvidedModelOps and completion hook objects in fields,
-        // which are used by the various concrete ButtonStrategies to
-        // download and display an image concurrently.
-        return new DownloadContext(url,
-                                   mView.get(),
-                                   this,
-                                   getModel(),
-                                   completionCommand);
-    }
-
-    /**
      * Called when a user clicks a button to download an image.
      * 
      * @param buttonResId
@@ -221,6 +192,35 @@ public class ImageDownloadsPresenter
     }
 
     /**
+     * Factory method that returns the DownloadContext associated with
+     * this user request, which plays the role of the "Context" in the
+     * Strategy pattern.
+     * 
+     * @param url
+     *        URL to download.
+     */
+    private DownloadContext makeDownloadContext(String url) {
+        // This command is called back after the image is displayed to
+        // indicate there's no active ImageStrategy.
+        final Runnable completionCommand =
+            new Runnable() {
+                public void run() {
+                    // Indicate there's no active ImageStrategy.
+                    mActiveImageStrategy = null;
+                }
+            };
+
+        // Create a DownloadContext that stores references to the
+        // MVP.ProvidedModelOps and completion hook objects in fields,
+        // which are used by the various concrete ButtonStrategies to
+        // download and display an image concurrently.
+        return new DownloadContext(url,
+                                   this,
+                                   getModel(),
+                                   completionCommand);
+    }
+
+    /**
      * Set the current image.
      */
     public void setCurrentImage(Bitmap image) {
@@ -237,6 +237,51 @@ public class ImageDownloadsPresenter
 
         // Set the default image.
         mView.get().displayBitmap(mDefaultImage, null);
+    }
+
+    /**
+     * Display a downloaded bitmap image if it's non-null; otherwise,
+     * it reports an error via a Toast that's displayed on the UI
+     * Thread.  This method can be called from either the UI Thread or
+     * a background Thread.
+     * 
+     * @param image
+     *            The bitmap image
+     * @param completionCommand
+     *            Command whose run() hook method is called after the
+     *            image is displayed.
+     */
+    public void displayBitmap(Bitmap image,
+                              Runnable completionCommand) {
+        // Check to see if we've been interrupted.
+        if (Thread.interrupted())
+            return;
+        else {
+            // Store the current image for subsequent use in case of a
+            // runtime configuration change.
+            setCurrentImage(image);
+
+            // Display this image.
+            mView.get()
+                 .displayBitmap(image,
+                                completionCommand);
+        }
+    }
+
+    /**
+     * Return the Activity context.
+     */
+    @Override
+    public Context getActivityContext() {
+        return mView.get().getActivityContext();
+    }
+    
+    /**
+     * Return the Application context.
+     */
+    @Override
+    public Context getApplicationContext() {
+        return mView.get().getApplicationContext();
     }
 }
 
