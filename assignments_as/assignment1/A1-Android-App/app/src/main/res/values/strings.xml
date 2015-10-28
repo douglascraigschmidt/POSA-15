@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="palantiri_configuration">Palantiri Configuration</string>
+    <string name="palantiri_simulation">Palantiri Simulation</string>
+    <string name="label_number_of_palantiri"># of Palantiri</string>
+    <string name="edittext_hint_palantiri">1 - 6 (4 default)</string>
+    <string name="label_number_of_beings"># of Beings</string>
+    <string name="edittext_hint_beings">1 - 10 (6 default)</string>
+    <string name="label_gazing_iterations">Gazing Iterations</string>
+    <string name="edittext_hint_iterations">1 to 100 (5 default)</string>
+    <string name="button_start_simulation">Start Simulation</string>
+</resources>

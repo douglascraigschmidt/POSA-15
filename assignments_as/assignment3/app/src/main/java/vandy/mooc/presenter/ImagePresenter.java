@@ -138,7 +138,7 @@ public class ImagePresenter
     /**
      * Hook method called to shutdown the Presenter layer.
      *
-     * @param isChangingConfigurations
+     * @param isChangeConfigurations
      *        True if a runtime configuration triggered the onDestroy() call.
      */
     @Override
