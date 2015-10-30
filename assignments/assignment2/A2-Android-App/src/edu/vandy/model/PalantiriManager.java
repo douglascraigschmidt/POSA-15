@@ -1,8 +1,11 @@
 package edu.vandy.model;
 
+import android.util.Log;
+
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Defines a mechanism that mediates concurrent access to a fixed
@@ -41,6 +44,16 @@ public class PalantiriManager {
         // Semaphore to use a "fair" implementation that mediates
         // concurrent access to the given Palantiri.
         // TODO -- you fill in here.
+        mPalantiriMap = new ConcurrentHashMap<Palantir,Boolean>();
+
+        for (Palantir eachPalantir : palantiri) {
+            mPalantiriMap.put(eachPalantir,true);
+        }
+
+        mAvailablePalantiri = new Semaphore(palantiri.size(),true);
+
+        Log.i(TAG,"Size of sempahore:"+mAvailablePalantiri.availablePermits());
+
     }
 
     /**
@@ -57,6 +70,22 @@ public class PalantiriManager {
         // be *no* synchronized statements in this method.
         // TODO -- you fill in here.
 
+        Log.i(TAG,"Size of sempahore before acquire:"+mAvailablePalantiri.availablePermits());
+
+
+        mAvailablePalantiri.acquireUninterruptibly();
+
+        Log.i(TAG, "Size of sempahore after acquire:" + mAvailablePalantiri.availablePermits());
+
+
+        for(Palantir eachPalantiri : mPalantiriMap.keySet()){
+            if(mPalantiriMap.get(eachPalantiri) == true){
+                AtomicBoolean lockPalantiri = new AtomicBoolean(false);
+                mPalantiriMap.put(eachPalantiri,lockPalantiri.get());
+                return eachPalantiri;
+            }
+        }
+
         // This shouldn't happen, but we need this here to make the
         // compiler happy.
         return null; 
@@ -72,6 +101,14 @@ public class PalantiriManager {
         // properly.  There should be *no* synchronized statements in
         // this method.
         // TODO -- you fill in here.
+
+        Log.i(TAG, "Size of sempahore in release:" + mAvailablePalantiri.availablePermits());
+        Log.i(TAG, "Palintiri being released:" + palantir.getId());
+
+        AtomicBoolean unlockPalintiri = new AtomicBoolean(true);
+        mPalantiriMap.put(palantir,unlockPalintiri.get());
+
+        mAvailablePalantiri.release();
     }
 
     /*

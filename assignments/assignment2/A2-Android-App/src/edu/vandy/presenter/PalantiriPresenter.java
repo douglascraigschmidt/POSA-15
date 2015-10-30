@@ -124,7 +124,9 @@ public class PalantiriPresenter
                 // identifies each Being.
                 // TODO -- you fill in here by replacing "return null"
                 // with the appropriate code.
-                return null;
+
+                BeingThread bm = new BeingThread(runnable,mBeingCount.getAndIncrement(),PalantiriPresenter.this);
+                return bm;
             }
         };
 
@@ -149,6 +151,8 @@ public class PalantiriPresenter
         // Set the WeakReference.
         mView =
             new WeakReference<>(view);
+
+
 
         // Invoke the special onCreate() method in GenericPresenter,
         // passing in the PalantiriModel class to instantiate/manage
@@ -194,13 +198,13 @@ public class PalantiriPresenter
     /**
      * Hook method called to shutdown the Model layer.
      *
-     * @param isChangeConfigurations
+     * @param isChangingConfigurations
      *        True if a runtime configuration triggered the onDestroy() call.
      */
     @Override
     public void onDestroy(boolean isChangingConfigurations) {
         // Destroy the model.
-        // getModel().onDestroy(isChangingConfigurations);
+         getModel().onDestroy(isChangingConfigurations);
     }
 
     /**
@@ -361,6 +365,22 @@ public class PalantiriPresenter
         // ThreadFactory instance.  Finally, iterate through all the
         // BeingTasks and execute them on the threadPoolExecutor.
         // TODO - You fill in here.
+
+        mBeingsTasks = new ArrayList<BeingAsyncTask>();
+
+        for (int i=0;i<beingCount;i++){
+            mBeingsTasks.add(i,new BeingAsyncTask(i,mExitBarrier));
+        }
+
+        LinkedBlockingQueue myQueue = new LinkedBlockingQueue(128);
+
+        ThreadPoolExecutor mExecutor = new ThreadPoolExecutor(beingCount,beingCount*2,1,TimeUnit.SECONDS,
+                myQueue,mThreadFactory);
+
+        for(BeingAsyncTask being : mBeingsTasks){
+            being.executeOnExecutor(mExecutor,PalantiriPresenter.this);
+        }
+
     }
 
     /**
