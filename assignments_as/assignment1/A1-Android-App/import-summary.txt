@@ -1,0 +1,162 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* .idea\
+* .idea\.name
+* .idea\compiler.xml
+* .idea\copyright\
+* .idea\copyright\profiles_settings.xml
+* .idea\encodings.xml
+* .idea\inspectionProfiles\
+* .idea\inspectionProfiles\Project_Default.xml
+* .idea\inspectionProfiles\profiles_settings.xml
+* .idea\misc.xml
+* .idea\modules.xml
+* .idea\vcs.xml
+* .idea\workspace.xml
+* app\
+* app\build.gradle
+* app\src\
+* app\src\androidTest\
+* app\src\androidTest\java\
+* app\src\androidTest\java\edu\
+* app\src\androidTest\java\edu\vandy\
+* app\src\androidTest\java\edu\vandy\test\
+* app\src\androidTest\java\edu\vandy\test\Test_Default.java
+* app\src\androidTest\java\edu\vandy\test\Test_Edited_Values.java
+* app\src\androidTest\java\edu\vandy\test\Test_Rotations.java
+* app\src\androidTest\java\edu\vandy\test\Test_for_Palantiri.java
+* app\src\androidTest\res\
+* app\src\androidTest\res\drawable-hdpi\
+* app\src\androidTest\res\drawable-hdpi\ic_launcher.png
+* app\src\androidTest\res\drawable-ldpi\
+* app\src\androidTest\res\drawable-ldpi\ic_launcher.png
+* app\src\androidTest\res\drawable-mdpi\
+* app\src\androidTest\res\drawable-mdpi\ic_launcher.png
+* app\src\androidTest\res\drawable-xhdpi\
+* app\src\androidTest\res\drawable-xhdpi\ic_launcher.png
+* app\src\androidTest\res\values\
+* app\src\androidTest\res\values\strings.xml
+* app\src\main\
+* app\src\main\AndroidManifest.xml
+* app\src\main\java\
+* app\src\main\java\edu\
+* app\src\main\java\edu\vandy\
+* app\src\main\java\edu\vandy\MVP.java
+* app\src\main\java\edu\vandy\common\
+* app\src\main\java\edu\vandy\common\ContextView.java
+* app\src\main\java\edu\vandy\common\GenericActivity.java
+* app\src\main\java\edu\vandy\common\GenericModel.java
+* app\src\main\java\edu\vandy\common\LifecycleLoggingActivity.java
+* app\src\main\java\edu\vandy\common\ModelOps.java
+* app\src\main\java\edu\vandy\common\PresenterOps.java
+* app\src\main\java\edu\vandy\common\RetainedFragmentManager.java
+* app\src\main\java\edu\vandy\common\Utils.java
+* app\src\main\java\edu\vandy\model\
+* app\src\main\java\edu\vandy\model\Palantir.java
+* app\src\main\java\edu\vandy\model\PalantiriManager.java
+* app\src\main\java\edu\vandy\model\PalantiriModel.java
+* app\src\main\java\edu\vandy\presenter\
+* app\src\main\java\edu\vandy\presenter\BeingRunnable.java
+* app\src\main\java\edu\vandy\presenter\BeingThread.java
+* app\src\main\java\edu\vandy\presenter\PalantiriPresenter.java
+* app\src\main\java\edu\vandy\utils\
+* app\src\main\java\edu\vandy\utils\Options.java
+* app\src\main\java\edu\vandy\view\
+* app\src\main\java\edu\vandy\view\DotArrayAdapter.java
+* app\src\main\java\edu\vandy\view\GazingSimulationActivity.java
+* app\src\main\java\edu\vandy\view\PalantiriActivity.java
+* app\src\main\res\
+* app\src\main\res\drawable-hdpi\
+* app\src\main\res\drawable-hdpi\being.png
+* app\src\main\res\drawable-hdpi\gray_dot.png
+* app\src\main\res\drawable-hdpi\green_dot.png
+* app\src\main\res\drawable-hdpi\palantir.png
+* app\src\main\res\drawable-hdpi\purple_dot.png
+* app\src\main\res\drawable-hdpi\red_dot.png
+* app\src\main\res\drawable-hdpi\yellow_dot.png
+* app\src\main\res\drawable-ldpi\
+* app\src\main\res\drawable-ldpi\being.png
+* app\src\main\res\drawable-ldpi\gray_dot.png
+* app\src\main\res\drawable-ldpi\green_dot.png
+* app\src\main\res\drawable-ldpi\palantir.png
+* app\src\main\res\drawable-ldpi\purple_dot.png
+* app\src\main\res\drawable-ldpi\red_dot.png
+* app\src\main\res\drawable-ldpi\yellow_dot.png
+* app\src\main\res\drawable-mdpi\
+* app\src\main\res\drawable-mdpi\being.png
+* app\src\main\res\drawable-mdpi\gray_dot.png
+* app\src\main\res\drawable-mdpi\green_dot.png
+* app\src\main\res\drawable-mdpi\palantir.png
+* app\src\main\res\drawable-mdpi\purple_dot.png
+* app\src\main\res\drawable-mdpi\red_dot.png
+* app\src\main\res\drawable-mdpi\yellow_dot.png
+* app\src\main\res\drawable-xhdpi\
+* app\src\main\res\drawable-xhdpi\being.png
+* app\src\main\res\drawable-xhdpi\gray_dot.png
+* app\src\main\res\drawable-xhdpi\green_dot.png
+* app\src\main\res\drawable-xhdpi\palantir.png
+* app\src\main\res\drawable-xhdpi\purple_dot.png
+* app\src\main\res\drawable-xhdpi\red_dot.png
+* app\src\main\res\drawable-xhdpi\yellow_dot.png
+* app\src\main\res\drawable-xxhdpi\
+* app\src\main\res\drawable-xxhdpi\being.png
+* app\src\main\res\drawable-xxhdpi\gray_dot.png
+* app\src\main\res\drawable-xxhdpi\green_dot.png
+* app\src\main\res\drawable-xxhdpi\palantir.png
+* app\src\main\res\drawable-xxhdpi\purple_dot.png
+* app\src\main\res\drawable-xxhdpi\red_dot.png
+* app\src\main\res\drawable-xxhdpi\yellow_dot.png
+* app\src\main\res\layout\
+* app\src\main\res\layout\being_list_element.xml
+* app\src\main\res\layout\gazing_simulation_activity.xml
+* app\src\main\res\layout\palantir_list_element.xml
+* app\src\main\res\layout\palantiri_activity.xml
+* app\src\main\res\values-w820dp\
+* app\src\main\res\values-w820dp\dimens.xml
+* app\src\main\res\values\
+* app\src\main\res\values\dimens.xml
+* app\src\main\res\values\strings.xml
+* build.gradle
+* gradle\
+* gradle\wrapper\
+* gradle\wrapper\gradle-wrapper.jar
+* gradle\wrapper\gradle-wrapper.properties
+* gradlew
+* gradlew.bat
+* ic_launcher-web.png
+* proguard-project.txt
+* settings.gradle
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+* D:\Dropbox\Coursera\POSA-15\assignments\assignment1\A1-Android-Test\res\ => app\src\androidTest\res\
+* D:\Dropbox\Coursera\POSA-15\assignments\assignment1\A1-Android-Test\src\ => app\src\androidTest\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)
