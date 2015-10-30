@@ -32,8 +32,8 @@ public class DownloadWithAsyncTask
              * perform initialization actions.
              */
             protected void onPreExecute() {
-                // Show the progress dialog before starting the download
-                // in a background Thread.
+                // Show the toast before starting the download in a
+                // background Thread.
                 downloadContext.showToast("downloading via AsyncTask");
             }
 
