@@ -24,11 +24,6 @@ public class DownloadContext {
     private final String mUrl;
     
     /**
-     * Reference to the View layer.
-     */
-    private final WeakReference<MVP.RequiredViewOps> mView;
-
-    /**
      * Reference to the Presenter layer.
      */
     private final WeakReference<MVP.RequiredPresenterOps> mPresenter;
@@ -49,12 +44,10 @@ public class DownloadContext {
      * ButtonStrategies.
      */
     public DownloadContext(String url,
-                           MVP.RequiredViewOps view,
                            MVP.RequiredPresenterOps presenter,
                            MVP.ProvidedModelOps model,
                            Runnable completionCommand) {
         mUrl = url;
-        mView = new WeakReference<MVP.RequiredViewOps>(view);
         mPresenter = new WeakReference<MVP.RequiredPresenterOps>(presenter);
         mModel = new WeakReference<MVP.ProvidedModelOps>(model);
         mCompletionCommand = completionCommand; // new WeakReference<Runnable>(completionCommand);
@@ -83,7 +76,8 @@ public class DownloadContext {
      * Show a toast message.
      */
     public void showToast(String message) {
-        Utils.showToast(mView.get().getActivityContext(),
+        Utils.showToast(mPresenter.get()
+                                  .getActivityContext(),
                         message);
     }
 
@@ -97,18 +91,8 @@ public class DownloadContext {
      *            The bitmap image
      */
     public void displayBitmap(Bitmap image) {   
-        // Check to see if we've been interrupted.
-        if (Thread.interrupted())
-            return;
-        else {
-            // Store the current image for subsequent use in case of a
-            // runtime configuration change.
-            mPresenter.get().setCurrentImage(image);
-
-            // Display this image.
-            mView.get().displayBitmap(image,
-                                      mCompletionCommand);
-        }
+        mPresenter.get().displayBitmap(image,
+                                       mCompletionCommand);
     }
 
     /**

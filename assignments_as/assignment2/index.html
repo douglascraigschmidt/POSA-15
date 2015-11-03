@@ -1,0 +1,164 @@
+<html>
+
+<title>AsyncTask and ConcurrentHashMap (Assignment 2)</title>
+
+<BODY text = "#000000"
+link="#000fff"
+vlink="#ff0f0f"
+bgcolor="#ffffff">
+
+<HR>
+<h3>AsyncTask and ConcurrentHashMap (Assignment 2)</h3>
+
+<HR width=50% align=left><P>
+<H4>Overview of the Assignment</H4>
+
+This assignment will extend the Palantiri app from <A
+HREF="://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment1/">assignment
+1</a> to use AsyncTasks and ConcurrentHashMap to develop an Android
+app containing a resource manager that restricts the number of Beings
+from Middle-Earth who can concurrently gaze into a fixed number of
+Palantiri. As before, this Android program is structured in accordance
+with the <A
+HREf="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter">Model-View-Presenter</A>
+(MVP) pattern to help alleviate various accidental complexities
+associated with developing concurrent Android apps. <P>
+
+The classes in the View layer are provided to you.  The main
+PalantiriActivity first prompts the user to enter various
+configuration parameters, such as the number of Palantiri and Beings.
+It then starts the GazingSimulationActivity, which initializes the
+Presenter layer and then starts the Presenter layer's processing
+logic.  The bulk of the concurrent processing is performed by the
+Presenter and Model layers.  If you correctly complete the
+implementation of the skeletons in these layers the Palantiri app will
+run successfully without throwing any exceptions. <P>
+
+This Android app uses various features of AsyncTask (which is
+described <A
+HREF="https://www.youtube.com/watch?v=tQJnejqcAZw&index=32&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">here</a>
+and <A
+HREF="https://www.youtube.com/watch?v=2-o92SLinqk&index=33&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">here</a>)
+and ThreadPoolExecutor (which is described <A
+HREF="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ThreadPoolExecutor.html">here</a>).
+You'll also need to understand how to use Java ConcurrentHashMap work,
+which is described <A
+HREF="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentHashMap.html">here</A>.
+
+Please watch these videos, read the documentation, and look at the
+skeleton code to ensure you understand how to program Java AsyncTasks
+and ConcurrentHashMaps.  Naturally, we'll also cover these topics in
+the live lectures during weeks 2 and 3 of the MOOC and answer your
+questions during Virtual Office Hours in weeks 2 and 3. <P>
+
+<P><HR width=50% align=left><P>
+<H4>Assignment Structure</H4>
+
+The assignment is split into the following three directories:
+
+<UL> <LI> <A HREF="A2-Android-App">A2-Android-App</A>, which conains
+the skeletons you'll need to fill in, as described <A
+HREF="#description">below</A>.  You'll need to import this project
+into your IDE as an Android app.
+
+<LI> <A HREF="A2-Java-Test">A2-Java-Test</A>, which is a JUnit test
+that exercises all the PalantiriManager features and can be used to
+help test the functionality created in the assignment.  You'll need to
+import this project into Eclipse as a Java app.
+
+<LI> <A HREF="A2-Android-Test">A2-Android-Test</A>, which is a
+Robotium test that runs your app automatically.  You'll need to import
+this project into your IDE as an Android app.
+
+</UL>
+
+To compile the the A2-Android-App and A2-Android-Test apps you need to
+use the provided Eclipse ADT project, which should also work
+"out-of-the-box" with Android Studio.  In Eclipse you can run these
+projects by right-clicking the project's name in the Package Explorer
+and selecting Run As -> Android Application for A2-Android-App and Run
+As -> Android JUnit Test for A2-Android-Test.  Your IDE should
+automatically select an Android Emulator to run, assuming you have one
+created.  <P>
+
+To compile the the A2-Java-Test you need to use the provided Eclipse
+project.  You can run this project by right-clicking the project's
+name in the Package Explorer and selecting Run As -> JUnit Test. <P>
+
+<P><HR width=50% align=left><P>
+<A NAME="description">
+<H4>Program Description</H4>
+
+In the src directory you'll find a number of files, all of which you
+should read.  You'll need to modify several files containing the
+skeleton Java code that you'll implement by completing the "TODO - You
+fill in here" comments to provide a working solution.  DO NOT CHANGE
+THE OVERALL STRUCTURE OF THE SKELETON - just fill in the "TODO -- You
+fill in here" portions!!! <P>
+
+In particular, you'll need to do the following: <P>
+
+<UL>
+
+<LI> Finish the implementation of certain methods in the
+<CODE>PalantiriPresenter.java</CODE> and
+<CODE>BeingAsyncTask.java</CODE> defined by the Presenter layer
+residing in <CODE>src/edu/vandy/presenter/</CODE>.  You'll need to (1)
+complete the <CODE>createAndExecuteBeingTasks()</CODE> and
+<CODE>newThread()</CODE> methods in
+<CODE>PalantiriPresenter.java</CODE> to create/start a BeingAsyncTask
+and BeingThread for each Being, which uses a thread from a fixed-sized
+ThreadPoolExecutor to concurrently acquires a Palantir from the Model
+layer and gaze into it for a certain amount of time and (2) complete
+the <CODE>doInBackground()</CODE> and <CODE>onProgressUpdate()</CODE>
+methods in <CODE>BeingAsyncTask.java</CODE> to handle cancellations
+and updates to the GUI. <P>
+
+<LI> Finish the implementation of the Model layer in
+<CODE>src/edu/vandy/model/PalantiriManager.java</CODE>.  In
+particular, you'll use a Java Semaphore and ConcurrentHashMap to
+mediate concurrent access to the Palantiri resources and keep track of
+which Palantiri are currently free and which are in use. <P>
+
+</UL>
+
+The program will be considered "correct" if it successfully completes
+a simulation of N Palantiri and M Beings without crashing or throwing
+any exceptions. The Palantir and Beings are color coded to represent
+their state: <P>
+
+<UL>
+
+<LI> <B>Beings</B> - Yellow means the Being is idle, Red means it's
+waiting to acquire a Palantir, and Green means it's gazing into a
+Palantir.<P> 
+
+<LI> <B>Palantiri</B> - Gray means the Palantir is inactive, Green
+means it is available for use, and Red means it is in use (i.e., a
+Being is currently gazing into it).<P>
+
+</UL>
+
+A "correct" simulation should restrict the number of gazing Beings to
+the number of Palantiri.  In other words, if there are four Palantiri
+in the simulation, then only four Being dots should ever be Green on
+the screen at a time. <P>
+
+<P><HR width=50% align=left><P>
+<H4>Skeleton Code</H4>
+
+Skeleton code for this assignment is available from my <A
+HREF="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment2/">GitHub</a>
+account.  Pull the appropriate skeleton code in your repository, read
+it carefully, and complete the "TODO" markers.  <P>
+
+<HR width=50% align=left><P>
+<H4>Concluding Remarks</H4>
+
+This assignment is designed to help you get familiar with writing
+multi-threaded programs using an Android IDE and Android AsyncTask, as
+well as applying core Java synchronizers (such as Semaphore) and
+concurrent collections (such as ConcurrentHashMap). <P>
+
+</body>
+</html>
