@@ -39,7 +39,8 @@ public class DownloadImageAsync extends AsyncTask<Uri,Void,Uri> {
     @Override
     protected void onPostExecute(Uri imagePath) {
         Utils.showToast(mImagePresenter.getApplicationContext(),"Donwloaded image");
-          mImagePresenter.onProcessingComplete(mDirectoryPath,imagePath);
+        new ApplyGrayScaleFilterAsync(mImagePresenter,mDirectoryPath).execute(imagePath);
+//          mImagePresenter.onProcessingComplete(mDirectoryPath,imagePath);
 //        mImagePresenter.onProcessingComplete();
     }
 }

@@ -104,24 +104,31 @@ public class ImageDownloadsModel
         if(dirPath.exists()){
             Log.i(TAG,"path created");
         }else{
-            Log.i(TAG,"No Go");
+            Log.i(TAG,"Path does not exist");
         }
         String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-        String imageName = url.getLastPathSegment();
-        Log.i(TAG,"image Name"+ imageName);
+        String imageName = "IMG_"+timeStamp+".jpg";
         File imageFile = new File(directoryPathname+File.separator+imageName);
-        Log.i(TAG,"image path"+imageFile.getAbsolutePath());
-        OutputStream outputStream = null;
-        try{
-            outputStream =new BufferedOutputStream(new FileOutputStream(imageFile));
-
-            downloadedImage.compress(Bitmap.CompressFormat.PNG,90,outputStream);
-        } catch (FileNotFoundException e) {
-            Log.i(TAG,"file not found"+imageFile);
-            e.printStackTrace();
+        if(saveImageToDir(imageFile,downloadedImage)){
+            return Uri.fromFile(imageFile);
+        }else{
+            Log.e(TAG,"Error occured in saving downloaded image to dir");
             return null;
         }
 
-        return Uri.fromFile(imageFile);
+    }
+
+    public static boolean saveImageToDir(File destFileName,Bitmap image){
+        OutputStream outputStream = null;
+        try{
+            outputStream =new BufferedOutputStream(new FileOutputStream(destFileName));
+
+            image.compress(Bitmap.CompressFormat.JPEG,90,outputStream);
+            return true;
+        } catch (FileNotFoundException e) {
+            Log.i(TAG, "file not found" + destFileName);
+            e.printStackTrace();
+            return false;
+        }
     }
 }

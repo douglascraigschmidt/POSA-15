@@ -79,7 +79,7 @@ public class DisplayImagesActivity
         configureGridView(imageGrid);
         
         // Initialize the image loader
-//        mLoader = new ImageLoader(ResourcesCompat.getDrawable(getResources(),R.drawable.loading, null));
+        mLoader = new ImageLoader(ResourcesCompat.getDrawable(getResources(),R.drawable.loading, null));
 
         // Retrieve the file path to the directory containing the
         // images to display from the intent.
@@ -215,7 +215,7 @@ public class DisplayImagesActivity
                 imageView = (ImageView) convertView;
 
             // Load the image in the background
-            mLoader.loadAndDisplayImage(imageView, 
+            mLoader.loadAndDisplayImage(imageView,
                                         mBitmapFiles[position]
                                             .getAbsolutePath(), 
                                         mColWidth);
