@@ -1,10 +1,5 @@
 package vandy.mooc.view;
 
-import java.io.File;
-
-import vandy.mooc.R;
-import vandy.mooc.common.LifecycleLoggingActivity;
-import vandy.mooc.utils.loader.ImageLoader;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -12,11 +7,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import java.io.File;
+
+import vandy.mooc.R;
+import vandy.mooc.common.LifecycleLoggingActivity;
+import vandy.mooc.utils.loader.ImageLoader;
 
 /**
  * An Activity that displays all the images that have been downloaded
@@ -89,6 +90,18 @@ public class DisplayImagesActivity
         // Find the directory and load the directory as the source of
         // the imageAdapter.
         imageAdapter.setBitmaps(mFilePath);
+
+        // Implement onItemClick to start a SwipeListDisplay at
+        // the current image.
+        imageGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                startActivity(ViewPagerActivity.makeIntent
+                        (mFilePath,
+                                position));
+            }
+        });
     }
 
     /**
@@ -201,18 +214,7 @@ public class DisplayImagesActivity
                                      mPadding,
                                      mPadding,
                                      mPadding);
-
-                // Implement onClick to start an a SwipeListDisplay at
-                // the current image.
-                imageView.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(ViewPagerActivity.makeIntent
-                                          (mFilePath,
-                                           position));
-                        }
-                    });
-            } else 
+            } else
                 imageView = (ImageView) convertView;
 
             // Load the image in the background
