@@ -21,27 +21,25 @@ public class DownloadImageAsync extends AsyncTask<Uri,Void,Uri> {
 
     private Uri mDirectoryPath;
 
-    private ImagePresenter mImagePresenter;
+    private WeakReference<ImagePresenter> mImagePresenter;
 
     public DownloadImageAsync(Uri dirPath, ImagePresenter imagePresenter) {
         this.mDirectoryPath = dirPath;
-        this.mImagePresenter = imagePresenter;
+        this.mImagePresenter = new WeakReference<>(imagePresenter);
     }
 
     @Override
     protected Uri doInBackground(Uri... uris) {
         Log.i(TAG, "Image being downloaded " + uris[0]);
-        ImageDownloadsModel im = new ImageDownloadsModel();
-        Uri imagePath = im.downloadImage(mImagePresenter.getApplicationContext(), uris[0], mDirectoryPath);
-        return imagePath;
+        return mImagePresenter.get().getModel().downloadImage(mImagePresenter.get().mView.get().getApplicationContext()
+                ,uris[0]
+                ,mImagePresenter.get().mDirectoryPathname);
     }
 
     @Override
     protected void onPostExecute(Uri imagePath) {
-        Utils.showToast(mImagePresenter.getApplicationContext(),"Donwloaded image");
-        new ApplyGrayScaleFilterAsync(mImagePresenter,mDirectoryPath).execute(imagePath);
-//          mImagePresenter.onProcessingComplete(mDirectoryPath,imagePath);
-//        mImagePresenter.onProcessingComplete();
+        new ApplyGrayScaleFilterAsync(mImagePresenter.get(),mDirectoryPath)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,imagePath);
     }
 }
 

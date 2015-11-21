@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 import vandy.mooc.MVP;
 import vandy.mooc.common.Utils;
@@ -37,6 +38,8 @@ public class ImageDownloadsModel
      */
     protected final static String TAG = 
         ImageDownloadsModel.class.getSimpleName();
+
+    private static AtomicLong imgId = new AtomicLong(0);
 
     /**
      * A WeakReference used to access methods in the Presenter layer.
@@ -107,7 +110,7 @@ public class ImageDownloadsModel
             Log.i(TAG,"Path does not exist");
         }
         String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-        String imageName = "IMG_"+timeStamp+".jpg";
+        String imageName = "IMG_"+imgId.incrementAndGet()+url.getLastPathSegment();
         File imageFile = new File(directoryPathname+File.separator+imageName);
         if(saveImageToDir(imageFile,downloadedImage)){
             return Uri.fromFile(imageFile);

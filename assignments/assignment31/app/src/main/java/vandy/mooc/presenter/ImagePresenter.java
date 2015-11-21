@@ -14,6 +14,7 @@ import vandy.mooc.utils.loader.ImageLoaderThreadPool;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
@@ -33,7 +34,7 @@ public class ImagePresenter
     /**
      * Used to enable garbage collection.
      */
-    private WeakReference<MVP.RequiredViewOps> mView;
+    public WeakReference<MVP.RequiredViewOps> mView;
     	
     /**
      * Stores the running total number of images downloaded that must
@@ -50,7 +51,7 @@ public class ImagePresenter
     /**
      * Stores the directory to be used for all downloaded images.
      */
-    private Uri mDirectoryPathname = null;
+    public Uri mDirectoryPathname = null;
     
     /**
      * Array of Strings that represent the valid URLs that have
@@ -200,7 +201,7 @@ public class ImagePresenter
 
             // TODO -- you fill in here.
             for(Uri eachImage : mUrlList){
-                new DownloadImageAsync(mDirectoryPathname,this).executeOnExecutor(ImageLoaderThreadPool.MY_THREAD_POOL_EXECUTOR,eachImage);
+                new DownloadImageAsync(mDirectoryPathname,this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,eachImage);
             }
 
         }

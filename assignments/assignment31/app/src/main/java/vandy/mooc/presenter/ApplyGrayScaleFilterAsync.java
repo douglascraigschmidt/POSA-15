@@ -25,12 +25,12 @@ public class ApplyGrayScaleFilterAsync extends AsyncTask<Uri,Void,Uri>{
 
     private static final String TAG = ApplyGrayScaleFilterAsync.class.getName();
 
-    private ImagePresenter mImagePresenter;
+    private WeakReference<ImagePresenter> mImagePresenter;
 
     private Uri mDirectoryPath ;
 
     public ApplyGrayScaleFilterAsync(ImagePresenter mImagePresenter, Uri dirPath) {
-        this.mImagePresenter = mImagePresenter;
+        this.mImagePresenter = new WeakReference<ImagePresenter>(mImagePresenter);
         this.mDirectoryPath = dirPath;
     }
 
@@ -39,7 +39,7 @@ public class ApplyGrayScaleFilterAsync extends AsyncTask<Uri,Void,Uri>{
         Log.i(TAG,"Came in gray scale");
         Bitmap origImage = null;
         try {
-            origImage = MediaStore.Images.Media.getBitmap(mImagePresenter.getActivityContext().getContentResolver(),uris[0]);
+            origImage = MediaStore.Images.Media.getBitmap(mImagePresenter.get().mView.get().getActivityContext().getContentResolver(),uris[0]);
         } catch (IOException e) {
             Log.e(TAG,"Issue creating bitamp from uri");
             e.printStackTrace();
@@ -49,7 +49,6 @@ public class ApplyGrayScaleFilterAsync extends AsyncTask<Uri,Void,Uri>{
 
         if(grayScaleImage != null){
             Log.i(TAG, "greyscale image created sucessfully");
-//            mImagePresenter.getApplicationContext().getContentResolver().delete(uris[0], null, null);
             File destDir = new File(mDirectoryPath.toString());
             if(destDir.exists()){
                 Log.i(TAG,"path exists");
@@ -57,10 +56,14 @@ public class ApplyGrayScaleFilterAsync extends AsyncTask<Uri,Void,Uri>{
                 Log.i(TAG,"Path does not exist");
             }
             String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-            String imageName = "IMG_"+timeStamp+".jpg";
+            String imageName = "GRY_"+uris[0].getLastPathSegment();
             File greyFilterImageFile = new File(destDir+File.separator+imageName);
             ;
             if(ImageDownloadsModel.saveImageToDir(greyFilterImageFile, grayScaleImage)){
+                File origFile = new File(uris[0].getPath().toString());
+                if(!origFile.exists())
+                    Log.e(TAG,"Original image not found to delete");
+                origFile.delete();
                 return Uri.fromFile(greyFilterImageFile);
             }else{
                 Log.e(TAG,"Error occured in saving filtered image to dir");
@@ -74,8 +77,7 @@ public class ApplyGrayScaleFilterAsync extends AsyncTask<Uri,Void,Uri>{
 
     @Override
     protected void onPostExecute(Uri greyScaleImage) {
-//        super.onPostExecute(uri);
-        mImagePresenter.onProcessingComplete(mDirectoryPath,greyScaleImage);
+        mImagePresenter.get().onProcessingComplete(mDirectoryPath,greyScaleImage);
     }
 
     public Bitmap createGreyScaleImage(Bitmap origImage){
