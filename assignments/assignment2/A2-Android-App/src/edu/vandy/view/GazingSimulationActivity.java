@@ -328,16 +328,8 @@ public class GazingSimulationActivity
      */ 
     @Override
     public Runnable markGazing(final int index) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                // Set the appropriate value.
-                getPresenter().getBeingsColors().set(index, 
-                                                     DotColor.GREEN);
-			
-                // Update the list view.
-                mBeingAdapter.notifyDataSetChanged();
-            }};	
+        return markBeing(index,
+                         DotColor.GREEN);
     }
 
     /**
@@ -346,16 +338,8 @@ public class GazingSimulationActivity
      */ 
     @Override
     public Runnable markWaiting(final int index) {
-        return new Runnable() {
-            @Override
-            public void run() {
-                // Set the appropriate value
-                getPresenter().getBeingsColors().set(index,
-                                                     DotColor.RED);
-			
-                // Update the list view.
-                mBeingAdapter.notifyDataSetChanged();
-            }};
+        return markBeing(index,
+                         DotColor.GREEN);
     }
 	
     /**
