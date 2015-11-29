@@ -1,0 +1,174 @@
+<html>
+
+<title>Download Image Viewer (P2 - Assignment 1)</title>
+
+<body text = "#000000"
+  link="#000fff"
+  vlink="#ff0f0f"
+  bgcolor="#ffffff">
+
+<hr>
+<h3>Download Image Viewer (P2 - Assignment 1)</h3>
+
+<hr width=50% align=left>
+<h4>Overview of the Download Image Viewer Assignment</h4>
+
+<p>
+
+The purpose of this assignment is to give you experience using Android
+Services by developing an app containing a main Activity that prompts
+the user for URLs of images to download concurrently via a
+DownloadImagesStartedService and then view via a
+DisplayImagesActivity.  The DownloadImagesStartedService should use
+the Android <A
+HREF="http://developer.android.com/reference/android/app/IntentService.html">IntentService</a>
+framework, which is a type of Started Service covered in <A
+HREF="https://www.youtube.com/watch?v=N9tx9sRmn48&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK&index=39">this
+video</a> and the Android <A
+HREF="http://developer.android.com/reference/android/os/Messenger.html">Messenger</a>
+class, which is covered in this <A
+HREF="https://www.youtube.com/watch?v=Bfu14K74DxQ&index=41&list=PLZ9NgFYEMxp4tbiFYip6tDNIEBRUDyPQK">video</a>.
+
+This Android program is structured in accordance with the <A
+HREf="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter">Model-View-Presenter</A>
+(MVP) pattern to help alleviate various accidental complexities
+associated with developing concurrent Android apps.  The classes in
+the View layer are provided to you.  The main DownloadImagesActivity
+first prompts the user to enter the URLs for various images to
+download.  After these URLs are entered the user can click the
+download button, which will download the images and launch the
+DisplayImagesActivity to display them to the user. <P>
+
+The bulk of the concurrent processing is performed by the Model layer.
+This layer is implemented using the <A
+HREF="https://en.wikipedia.org/wiki/Bridge_pattern">Bridge pattern</A>
+to decouple the interface of the the Model layer from the particular
+type of Service used to implement this layer.  The app will run
+successfully without throwing any exceptions if you correctly complete
+the implementation of the skeletons in this layer, as described <A
+HREF="#description">below</A>.  <P>
+
+  <P> The motivations for the pattern-oriented design of this
+  assignment include making it easy to do the following:
+
+  <UL>
+
+  <LI> <P> Handle runtime configuration changes by placing the bulk of
+  the state in the Presenter and Model layers so this state can be
+  stored/retrieved during runtime configuration changes that cause the
+  DownloadImagesActivity to be destroyed and recreated. </P>
+
+  <LI> <P> Support both Started and Bound Service implementations
+  seamlessly within a common framework. The Bound Services
+  implementation will be the focus of assignment 2. </P>
+
+  <LI> <P> Plug in different concurrency models for the Bound and/or
+  Started Services without affecting other parts of the app
+  design/implementation. </P>
+
+  <LI> <P> Change the request and reply message formats without
+  affecting other parts of the app design/implementation. </P>
+
+  <LI> <P> Change the way in which the downloaded images are displayed
+  without affecting other parts of the app design/implementation. </P>
+
+  <LI> <P> Support totally different application requirements (e.g.,
+  retrieving/displaying weather data from a web service
+  vs. downloading/displaying images) with minimal impact on other
+  parts of the app design/implementation. </P>
+
+  </UL> 
+
+<P> These are all useful capabilities, irrespective of the details of
+an Android application.  The key point of the POSA MOOCs is to teach
+<EM>by example</EM> how to solve complex, real-world problems with
+concurrency and communication by applying patterns and frameworks.
+The best way to do this is by getting experience reading and writing
+these sorts of pattern-oriented applications and frameworks.
+Therefore, please watch these videos, read the documentation, and look
+at the skeleton code to ensure you understand how to program Android
+Started Services.  Naturally, we'll also cover these topics in the
+live lectures during weeks 1 and 2 of the MOOC and answer your
+questions during Virtual Office Hours in weeks 1 and 2. <P>
+
+</p>
+
+<P><HR width=50% align=left><P>
+<H4>Assignment Structure</H4>
+
+The assignment is split into the following directories:
+
+<UL> <LI> <A HREF="A1-Android-App">A1-Android-App</A>, which conains
+the skeletons you'll need to fill in, as described <A
+HREF="#description">below</A>.  You'll need to import this project
+into your IDE as an Android app.<P>
+
+<LI> <A HREF="A1-Android-Test">A1-Android-Test</A>, which is a
+Robotium test that runs your app automatically.  You'll need to import
+this project into your IDE as an Android app and configure it to use
+the Robotium test automation framework, which is available <A
+HREF="https://github.com/robotiumtech/robotium">here</A>. <P>
+
+</UL>
+
+To compile the the A1-Android-App and A1-Android-Test apps you need to
+use the provided Eclipse ADT project, which should also work
+"out-of-the-box" with Android Studio.  In Eclipse you can run these
+projects by right-clicking the project's name in the Package Explorer
+and selecting Run As -> Android Application for A1-Android-App and Run
+As -> Android JUnit Test for A1-Android-Test.  Your IDE should
+automatically select an Android Emulator to run, assuming you have one
+created.  <P>
+
+<P><HR width=50% align=left><P>
+<A NAME="description">
+<H4>Program Description</H4>
+
+In the src directory you'll find a number of files, all of which you
+should read.  You'll need to modify several files containing the
+skeleton Java code that you'll implement by completing the "TODO - You
+fill in here" comments to provide a working solution.  DO NOT CHANGE
+THE OVERALL STRUCTURE OF THE SKELETON - just fill in the "TODO -- You
+fill in here" portions!!! <P>
+
+In particular, you'll need to do the following: <P>
+
+<UL>
+
+<LI> Finish the implementation of certain methods in the
+<CODE>DownloadImagesStartedService.java</CODE> file defined by the
+Model layer residing in <CODE>src/edu/vandy/model/services/</CODE>.
+These methods use the IntentService to download an an image requested
+via data in an intent, store the image in a local file on the local
+device, and return the image file's URI back to the MainActivity via
+the Messenger passed with the intent. <P>
+
+<LI> Finish the implementation of certain methods in the
+<CODE>ReplyMessage.java</CODE> and <CODE>RequestMessage.java</CODE>
+files defined by the Model layer residing in
+<CODE>src/edu/vandy/model/datamodel/</CODE>.  These classes provide a
+thin facade around the Android Message class that define the schema of
+requests and replies from the DownloadImagesStartedService back to the
+DownloadImagesActivity. <P>
+
+</UL>
+
+<hr width=50% align=left>
+<h4>Skeleton Code</h4>
+
+<p> Skeleton code for this assignment is available <a
+href="https://github.com/douglascraigschmidt/POSA-15/tree/master/assignments/assignment1">here</a>.
+Pull the appropriate skeleton code in your repository, read it
+carefully, and complete the "TODO" markers.  </p>
+
+<hr width=50% align=left>
+<h4>Concluding Remarks</h4>
+<p>
+
+This assignment is designed to further your understanding with
+programming Android Started Services and the IntentService framework
+in Java. Start early and come to Virtual Office Hours if you have
+questions or run into problems.  </p>
+
+</body>
+</html>
