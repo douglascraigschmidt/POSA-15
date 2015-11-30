@@ -157,7 +157,8 @@ public class RequestReplyMessageBase {
     }
 
     /**
-     * Helper method that sets the path to the image file
+     * Helper method that sets the path to the image file.
+     *
      * @param imagePathname - the path to the image file
      */
     public void setImagePathname(Uri imagePathname) {

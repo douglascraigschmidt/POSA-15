@@ -130,8 +130,7 @@ public interface MVP {
          * implementation.
          *
          * @param serviceType 
-         *            Type of Service, i.e., BOUND_SERVICE or
-
+         *            Type of Service, i.e., STARTED_SERVICE
          */
         void setServiceType(ImageModel.ServiceType serviceType);
     }

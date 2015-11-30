@@ -26,7 +26,9 @@ import android.util.Log;
  * Model-View-Presenter pattern.
  */
 public class ImagePresenter 
-       extends GenericPresenter<MVP.RequiredPresenterOps, MVP.ProvidedModelOps, ImageModel>
+       extends GenericPresenter<MVP.RequiredPresenterOps,
+                                MVP.ProvidedModelOps,
+                                ImageModel>
        implements MVP.ProvidedPresenterOps,
                   MVP.RequiredPresenterOps {
     /**

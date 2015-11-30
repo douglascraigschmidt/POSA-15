@@ -181,7 +181,7 @@ public class ImageLoader
         ImageView view = imgView.getWrappedImageView();
         checkViewCollected(imgView);
         checkViewReused(imgView,
-                filepath);
+                        filepath);
     }
 
     /**
