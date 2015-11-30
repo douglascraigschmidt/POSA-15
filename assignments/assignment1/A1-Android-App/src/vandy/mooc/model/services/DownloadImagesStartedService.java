@@ -16,8 +16,8 @@ import android.util.Log;
 /**
  * An IntentService that downloads an image requested via data in an
  * intent, stores the image in a local file on the local device, and
- * returns the image file's URI back to the MainActivity via the
- * Messenger passed with the intent.
+ * returns the image file's URI back to the ImageModelImpl's Handler
+ * via the Messenger passed with the intent.
  */
 public class DownloadImagesStartedService 
        extends IntentService {
@@ -61,8 +61,8 @@ public class DownloadImagesStartedService
      * Hook method dispatched by the IntentService framework to
      * download the image requested via data in an intent, store the
      * image in a local file on the local device, and return the image
-     * file's URI back to the MainActivity via the Messenger passed
-     * with the intent.
+     * file's URI back to the ImageModelImpl's Handler via the
+     * Messenger passed with the intent.
      */
     @Override
     public void onHandleIntent(Intent intent) {
@@ -90,8 +90,8 @@ public class DownloadImagesStartedService
     }
 
     /**
-     * Send the pathname back to the MainActivity via the
-     * messenger.
+     * Send the @a pathToImageFile back to the ImageModelImp's Handler
+     * via the @a Messenger.
      */
     private void sendPath(Messenger messenger, 
                           Uri pathToImageFile,
@@ -103,7 +103,7 @@ public class DownloadImagesStartedService
         
         try {
             // Send the path to the image file back to the
-            // MainActivity.
+            // ImageModelImpl's Handler via the Messenger.
             // TODO -- you fill in here.
         } catch (RemoteException e) {
             Log.e(getClass().getName(),
