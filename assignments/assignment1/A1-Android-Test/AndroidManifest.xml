@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="vandy.mooc.tests"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+	<uses-sdk android:minSdkVersion="19"
+		android:targetSdkVersion="22" />
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:targetPackage="vandy.mooc" />
+
+    <application android:label="vandy.mooc.tests" >
+        <uses-library android:name="android.test.runner" />
+    </application>
+ 
+</manifest>
