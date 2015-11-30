@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.vandy"
+    package="vandy.mooc"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -8,26 +8,50 @@
         android:minSdkVersion="19"
         android:targetSdkVersion="22" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/palantir">
+        android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+    android:label="@strings/app_name">
         <activity
-            android:name=".view.PalantiriActivity"
-            android:label="@string/palantiri_configuration">
+            android:name=".view.DownloadImagesActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".view.GazingSimulationActivity"
-            android:label="@string/palantiri_simulation">
+            android:name=".view.ViewPagerActivity"
+            android:label="@string/swipe_activity" >
             <intent-filter>
-                <action android:name="android.intent.action.GAZING_SIMULATION" />
+                <action android:name="android.intent.action.DISPLAY_IMAGES_SWIPE" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="" />
+                <data android:scheme="file" />
+                <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".view.DisplayImagesActivity"
+            android:label="@string/download_images_activity"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.DISPLAY_IMAGES" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="" />
+                <data android:scheme="file" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".model.services.DownloadImagesStartedService"
+            android:process=":remote2" >
+        </service>
     </application>
 
 </manifest>

@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:id="@+id/services">
+    <item android:id="@+id/bound"
+          android:title="@string/bound"
+          android:onClick="chooseService"/>
+    <item android:id="@+id/started"
+          android:title="@string/started"
+           android:onClick="chooseService" />
+  </group>
+</menu>
