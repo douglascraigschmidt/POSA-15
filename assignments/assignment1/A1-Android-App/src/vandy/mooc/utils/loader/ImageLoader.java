@@ -168,15 +168,20 @@ public class ImageLoader
 
     /**
      * Checks if the ImageView wrapped by the ImageViewHolder has
-     * been garbaged collected or reused to display a different 
-     * image
+     * been garbage collected or reused to display a different
+     * image. To ensure that the wrapped view is not GC'd while
+     * this check is being performed, we first need to grab a
+     * reference to that view.
      */
     private void checkImageView(ImageViewHolder imgView,
                                 String filepath)
-        throws ViewChangedException {
-            checkViewCollected(imgView);
-            checkViewReused(imgView,
-                            filepath);
+            throws ViewChangedException {
+        // Grab a reference to the wrapped view so that
+        // it won't be GC'd between the two checks below.
+        ImageView view = imgView.getWrappedImageView();
+        checkViewCollected(imgView);
+        checkViewReused(imgView,
+                filepath);
     }
 
     /**
@@ -202,14 +207,22 @@ public class ImageLoader
 
     /**
      * Checks if the view has been reused without
-     * throwing an exception.
+     * throwing an exception. If the wrapped image
+     * view has been garbage collected, this method
+     * will return true.
      */
     private boolean isViewReused(ImageViewHolder imgView,
                                  String filepath) {
+        // Get a reference to the wrapped view to prevent
+        // garbage collection.
+        ImageView view = imgView.getWrappedImageView();
+        if (view == null) {
+            // Must have been collected.
+            return true;
+        }
+
         final String currCachedKey =
-            mCacheKeysForImageView.get
-                (imgView.getWrappedImageView()
-                                 .hashCode());
+                mCacheKeysForImageView.get(view.hashCode());
 
         return currCachedKey != filepath;
     }
@@ -282,20 +295,21 @@ public class ImageLoader
      */
     @Override
     public void onPostExecute(ImageLoaderWorkResult result) {
-        
-        ImageViewHolder holder = result.getmImageViewHolder();
-        String filepath = result.getmFilePath();
-        
-        // Check that the ImageView is still valid
-        if (result != null 
-                    && !holder.isCollected()
+
+        if (result != null) {
+            ImageViewHolder holder = result.getmImageViewHolder();
+            String filepath = result.getmFilePath();
+
+            // Check that the ImageView is still valid
+            if (!holder.isCollected()
                     && !isViewReused(holder, filepath)) {
-                    addBitmapToCache(filepath, 
-                                     result.getmBitmap());
-                    
-                    // Display the loaded bitmap
-                    holder.getWrappedImageView()
-                              .setImageBitmap(result.getmBitmap());
-                }
+                addBitmapToCache(filepath,
+                        result.getmBitmap());
+
+                // Display the loaded bitmap
+                holder.getWrappedImageView()
+                        .setImageBitmap(result.getmBitmap());
+            }
+        }
     }
 }
