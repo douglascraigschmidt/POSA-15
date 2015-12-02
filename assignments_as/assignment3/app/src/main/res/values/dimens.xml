@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+  
+    <dimen name="button_padding">5dp</dimen>
+    <dimen name="tablerow_padding">30dp</dimen>
+
+</resources>

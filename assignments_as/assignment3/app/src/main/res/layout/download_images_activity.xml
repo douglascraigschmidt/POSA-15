@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res/vandy.mooc"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" > 
+
+    <EditText
+        android:id="@+id/url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/enter_url"
+        android:inputType="text|textMultiLine|textUri" >
+    </EditText>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="addUrl"
+        android:text="@string/add_url" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.84"
+        android:orientation="vertical">
+    </LinearLayout>
+
+    <ProgressBar
+      android:id="@+id/progressBar_loading"
+      style="@android:style/Widget.ProgressBar.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="invisible"
+      android:layout_gravity="bottom|start"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.15" >
+
+        <vandy.mooc.view.ui.FloatingActionButton
+            android:id="@+id/downloadFabButton"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="start|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" 
+            android:onClick="downloadImages"
+            fab:fabDrawable="@drawable/ic_download"
+           fab:fabColor="@color/theme_primary"/>
+
+        <vandy.mooc.view.ui.FloatingActionButton
+            android:id="@+id/clearFabButton"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" 
+            android:onClick="deleteDownloadedImages"
+            fab:fabDrawable="@drawable/ic_delete_white"
+           fab:fabColor="@color/theme_primary"/>
+    </FrameLayout>
+    
+<!--     <Button -->
+<!--         android:id="@+id/button1" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignLeft="@+id/url" -->
+<!--         android:layout_below="@+id/url" -->
+<!--         android:layout_marginTop="18dp" -->
+<!--         android:onClick="downloadImages" -->
+<!--         android:text="@string/download_and_display_images" /> -->
+
+<!--     <Button -->
+<!--         android:id="@+id/button3" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:onClick="deleteDownloadedImages" -->
+<!--         android:text="@string/clear_directory" /> -->
+
+</LinearLayout>
