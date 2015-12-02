@@ -3,7 +3,6 @@
 	<name>A1-Android-Test</name>
 	<comment></comment>
 	<projects>
-		<project>A1-Android-App</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
