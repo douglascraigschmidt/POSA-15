@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/A2-Android-App/A2-Android-App.iml" filepath="$PROJECT_DIR$/A2-Android-App/A2-Android-App.iml" />
+      <module fileurl="file://$PROJECT_DIR$/A2-Android-Test/A2-Android-Test.iml" filepath="$PROJECT_DIR$/A2-Android-Test/A2-Android-Test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/A2-Java-Test/A2-Java-Test.iml" filepath="$PROJECT_DIR$/A2-Java-Test/A2-Java-Test.iml" />
+    </modules>
+  </component>
+</project>
