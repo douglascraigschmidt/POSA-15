@@ -4,16 +4,16 @@ package vandy.mooc.common;
  * The base interface that an operations ("Ops") class in the
  * Model layer must implement.
  */
-public interface ModelOps<RequiredModelOps> {
+public interface ModelOps<RequiredPresenterOps> {
     /**
      * Hook method dispatched by the GenericModel framework to
      * initialize an operations ("Ops") object after it's been
      * instantiated.
      *
-     * @param view
-     *        The currently active RequiredModelOps.
+     * @param presenter
+     *        The currently active RequiredPresenterOps.
      */
-    void onCreate(RequiredModelOps view);
+    void onCreate(RequiredPresenterOps presenter);
 
     /**
      * Hook method called when an Ops object in the Presenter layer is
