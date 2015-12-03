@@ -93,7 +93,7 @@ public class DownloadImagesStartedService
      * Send the @a pathToImageFile back to the ImageModelImp's Handler
      * via the @a Messenger.
      */
-    private void sendPath(Messenger messenger, 
+    private void sendPath(Messenger messenger,
                           Uri pathToImageFile,
                           Uri url,
                           int requestCode) {

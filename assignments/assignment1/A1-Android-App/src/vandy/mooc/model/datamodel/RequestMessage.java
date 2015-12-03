@@ -30,7 +30,7 @@ public class RequestMessage extends RequestReplyMessageBase {
      * Factory method creates a RequestMessage to return to the
      * Activity with information necessary to download an image.
      */
-    public static RequestMessage makeRequestMessage(int requestCode, 
+    public static RequestMessage makeRequestMessage(int requestCode,
                                                     Uri url,
                                                     Uri directoryPathname,
                                                     Messenger replyMessenger) {
