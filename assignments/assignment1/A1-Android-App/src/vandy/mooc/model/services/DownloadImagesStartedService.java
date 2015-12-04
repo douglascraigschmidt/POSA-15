@@ -80,8 +80,7 @@ public class DownloadImagesStartedService
         // Extract the request code.
         // TODO -- you fill in here.
 
-        // Extract the Messenger stored as an extra in the
-        // intent under the key MESSENGER.
+        // Extract the Messenger stored in the RequestMessage.
         // TODO -- you fill in here.
 
         // Send the path to the image file back to the
