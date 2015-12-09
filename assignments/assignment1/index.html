@@ -137,16 +137,16 @@ In particular, you'll need to do the following: <P>
 
 <LI> Finish the implementation of certain methods in the
 <CODE>DownloadImagesStartedService.java</CODE> file defined by the
-Model layer residing in <CODE>src/edu/vandy/model/services/</CODE>.
+Model layer residing in <CODE>src/edu/vandy/model/services</CODE>.
 These methods use the IntentService to download an an image requested
 via data in an intent, store the image in a local file on the local
-device, and return the image file's URI back to the MainActivity via
-the Messenger passed with the intent. <P>
+device, and return the image file's URI back to the client in the
+Model layer via the Messenger passed with the intent. <P>
 
 <LI> Finish the implementation of certain methods in the
 <CODE>ReplyMessage.java</CODE> and <CODE>RequestMessage.java</CODE>
 files defined by the Model layer residing in
-<CODE>src/edu/vandy/model/datamodel/</CODE>.  These classes provide a
+<CODE>src/edu/vandy/model/datamodel</CODE>.  These classes provide a
 thin facade around the Android Message class that define the schema of
 requests and replies from the DownloadImagesStartedService back to the
 DownloadImagesActivity. <P>
