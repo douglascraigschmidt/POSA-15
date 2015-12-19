@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+  <LinearLayout
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal">
+
+    <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+       android:text="@string/prompt" />
+
+    <EditText
+       android:id="@+id/url"
+       android:layout_height="wrap_content"
+       android:layout_width="fill_parent"
+       android:layout_weight="1"
+       android:inputType="text|textMultiLine"
+       android:hint="@string/default_url" />
+  </LinearLayout>
+
+  <LinearLayout
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal"
+     android:gravity="center_horizontal">
+
+    <Button
+       android:id="@+id/bound_sync_button"
+       android:layout_width="0dip"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+       android:textSize="14dp"
+       android:onClick="downloadImage"
+       android:text="@string/bound_sync_string" />
+
+    <Button
+       android:id="@+id/bound_async_button"
+       android:layout_width="0dip"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+       android:textSize="14dp"
+       android:onClick="downloadImage"
+       android:text="@string/bound_async_string" />
+
+    <Button
+       android:id="@+id/reset_image_button"
+       android:layout_width="0dip"
+       android:layout_height="wrap_content"
+       android:layout_weight="1"
+       android:textSize="14dp"
+       android:onClick="resetImage"
+       android:text="@string/reset_image_string" />
+
+  </LinearLayout>
+
+  <ImageView
+     android:id="@+id/imageView1"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"  
+     android:src="@drawable/default_image" >
+  </ImageView>
+</LinearLayout>

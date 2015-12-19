@@ -1,0 +1,9 @@
+<resources>
+
+    <string name="app_name">BoundDownloadApplication</string>
+    <string name="prompt">URL:</string>
+    <string name="default_url">http://www.dre.vanderbilt.edu/~schmidt/ka.png</string>
+    <string name="bound_sync_string">Run Sync </string>
+    <string name="bound_async_string">Run Async </string>
+    <string name="reset_image_string">Reset Image</string>
+</resources>
