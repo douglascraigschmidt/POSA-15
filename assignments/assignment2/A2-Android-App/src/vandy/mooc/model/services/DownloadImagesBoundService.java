@@ -23,7 +23,8 @@ import android.util.Log;
  * file back to the Activity via the Reply Messenger passed with the
  * original Message.
  */
-public class DownloadImagesBoundService extends LifecycleLoggingService {
+public class DownloadImagesBoundService 
+       extends LifecycleLoggingService {
     /**
      * A RequestHandler that handles request Messages send from the
      * Activity.
@@ -105,7 +106,7 @@ public class DownloadImagesBoundService extends LifecycleLoggingService {
 		     * This method runs in a background Thread.
 		     */
 		    @Override
-			public void run() {
+                    public void run() {
 	
 			// Download and store the requested image.
 			// TODO -- you fill in here.
@@ -172,7 +173,7 @@ public class DownloadImagesBoundService extends LifecycleLoggingService {
      * Hook method called when the Service is created.
      */
     @Override
-	public void onCreate() {
+    public void onCreate() {
         // Create a RequestHandler used to handle request Messages
         // sent from an Activity.
     	// TODO -- you fill in here.
@@ -186,8 +187,9 @@ public class DownloadImagesBoundService extends LifecycleLoggingService {
      * with the Request Messenger.
      */
     @Override
-	public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent) {
         super.onBind(intent);
+    
         // Return the iBinder associated with the Request Messenger.
         return mRequestMessenger.getBinder();
     }
@@ -197,7 +199,7 @@ public class DownloadImagesBoundService extends LifecycleLoggingService {
      * Service.
      */
     @Override
-	public void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         // Shutdown the RequestHandler.

@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res/vandy.mooc"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/locationQuery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/query"
+        android:inputType="text|textMultiLine|textUri" >
+
+        <requestFocus />
+    </EditText>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="115dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" >
+
+        <TextView
+            android:id="@+id/syncText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:paddingBottom="10dp"
+            android:paddingStart="10dp"
+            android:text="@string/sync"
+            android:textSize="16sp" />
+
+        <vandy.mooc.common.FloatingActionButton
+            android:id="@+id/buttonSync"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:onClick="getWeatherSync"
+            fab:fabColor="@color/theme_primary"
+            fab:fabDrawable="@drawable/ic_download" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="115dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" >
+
+        <TextView
+            android:id="@+id/asyncText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_gravity="top|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/async"
+            android:textSize="16sp" />
+
+        <vandy.mooc.common.FloatingActionButton
+            android:id="@+id/buttonAsync"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:onClick="getWeatherAsync"
+            fab:fabColor="@color/theme_primary"
+            fab:fabDrawable="@drawable/ic_download" />
+    </FrameLayout>
+
+</RelativeLayout>
