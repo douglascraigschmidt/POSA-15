@@ -159,7 +159,7 @@ public class WeatherData implements Parcelable {
      * 
      * @param date
      */
-    public void getDate(long date) {
+    public void setDate(long date) {
 	mDate = date;
     }
 
