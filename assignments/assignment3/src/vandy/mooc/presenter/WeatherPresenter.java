@@ -95,7 +95,7 @@ public class WeatherPresenter
      */
     @Override
     public void onConfigurationChange(MVP.RequiredViewOps view) {
-        // Reset the mImageView WeakReference.
+        // Reset the mView WeakReference.
         mView = new WeakReference<>(view);
     }
 
