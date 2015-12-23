@@ -28,15 +28,22 @@ public class DownloadImagesActivityBaseTest extends ActivityInstrumentationTestC
      * A list of valid URLs to test the download of a valid images.
      * This array is used to test the download of a single valid image
      * as well as again to test the download of multiple valid images.
+     * These images are ordered from largest to smallest in size.
      */
-    protected static final String mValidUrlList[] =
-        {"http://www.hireworks.tv/wp-content/gallery/bout_us/gameofthrones.jpg",
-         "http://colleges.usnews.rankingsandreviews.com/img/college-photo_313._445x280-zmm.jpg",
-         "http://www.dre.vanderbilt.edu/~schmidt/gifs/dougs-xsmall.jpg",
-         "http://funny-pics-fun.com/wp-content/uploads/Very-Funny-Baby-Faces-13.jpg",
-         "http://2.bp.blogspot.com/-c2U3HUQZVy8/UV7KI2bodLI/AAAAAAAAA4g/DJEEmv-FmNY/s1600/galaxy_universe-normal.jpg",
-         "http://acidcow.com/pics/20110920/famous_actors_who_got_hit_with_the_ugly_stick_19.jpg",
-        };
+    protected static final String mValidUrlList[] = {
+            // 163 KB
+            "http://s1.ibtimes.com/sites/www.ibtimes.com/files/2015/06/11/game-thrones-coloring-book.jpg",
+            // 151 KB
+            "http://colleges.usnews.rankingsandreviews.com/img/college-photo_313._445x280-zmm.jpg",
+            // 144 KB
+            "http://static.tumblr.com/a5fa27964cfba9a928dd51f93d648375/24rnppg/LeFndriav/tumblr_static_876b2abic1kwkcw884s40cgw0.jpg",
+            // 84 KB
+            "http://www.dre.vanderbilt.edu/~schmidt/gifs/dougs-xsmall.jpg",
+            // 48 KB
+            "http://acidcow.com/pics/20110920/famous_actors_who_got_hit_with_the_ugly_stick_19.jpg",
+            // 28 KB
+            "http://funny-pics-fun.com/wp-content/uploads/Very-Funny-Baby-Faces-13.jpg"};
+
 
     /**
      * A list of invalid URLs to test the handling of invalid images.
