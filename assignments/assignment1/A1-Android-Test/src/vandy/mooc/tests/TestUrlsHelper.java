@@ -110,7 +110,9 @@ public class TestUrlsHelper {
             // Check for invalid URL toasts.
             Assert.assertTrue("Test failed: No Toast shown for "
                             + invalidCount + " invalid URL(s)",
-                    solo.waitForText("failed to download!"));
+                    solo.waitForText("failed to download!", 1,
+                            TestTimeTuningManager.getDownloadWaitTime(
+                                    solo.getCurrentActivity(), 1)));
         }
 
         if (validCount == 0) {
@@ -120,9 +122,34 @@ public class TestUrlsHelper {
                     solo.waitForActivity(
                             DisplayImagesActivity.class, shortDelay));
         } else {
+
+            // Special case for downloading a single valid image is used
+            // to calculate the download wait time to set for later multiple
+            // image download tests.
+            if (validCount == 1) {
+                TestTimeTuningManager.startTimer();
+
+                // Wait for the DisplayImagesActivity with a really long
+                // timeout to ensure that it can complete. Once completed
+                // the call t ostopTimerAndSaveResults() will store the
+                // time it took to download this (the largest image) and
+                // use it to later estimate how long to wait for tests
+                // which attempt to download multiple images.
+                Assert.assertTrue("Test failed: DownloadImageActivity failed to start",
+                        solo.waitForActivity(
+                                DisplayImagesActivity.class,
+                                TestTimeTuningManager.getMaxDownloadWaitTime()));
+
+                TestTimeTuningManager.stopTimerAndSaveResults(
+                        solo.getCurrentActivity());
+            } else {
             // Ensure that the display images activity was started.
             Assert.assertTrue("Test failed: DownloadImageActivity failed to start",
-                    solo.waitForActivity(DisplayImagesActivity.class));
+                        solo.waitForActivity(
+                                DisplayImagesActivity.class,
+                                TestTimeTuningManager.getDownloadWaitTime(
+                                        solo.getCurrentActivity(), validCount)));
+            }
 
             // Now check if the proper number of images were
             // successfully downloaded.
