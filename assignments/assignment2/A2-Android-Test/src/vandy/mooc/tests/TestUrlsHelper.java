@@ -27,7 +27,7 @@ public class TestUrlsHelper {
     public static int shortDelay = 2 * SECOND;
     public static int mediumDelay = 5 * SECOND;
     public static int longDelay = 10 * SECOND;
-    public static int veryLongDelay = 30 * SECOND;
+    public static int veryLongDelay = 60 * SECOND;
 
     /**
      * Downloads and deletes the specified number of images from the
@@ -121,8 +121,8 @@ public class TestUrlsHelper {
                             DisplayImagesActivity.class, shortDelay));
         } else {
             // Ensure that the display images activity was started.
-            Assert.assertTrue("Test failed: DownloadImageActivity failed to start",
-                    solo.waitForActivity(DisplayImagesActivity.class));
+            Assert.assertTrue("Test failed: DisplayImagesActivity failed to start",
+                    solo.waitForActivity(DisplayImagesActivity.class, veryLongDelay));
 
             // Now check if the proper number of images were
             // successfully downloaded.
