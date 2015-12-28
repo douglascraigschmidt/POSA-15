@@ -190,7 +190,7 @@ public class DownloadImagesBoundService
     public IBinder onBind(Intent intent) {
         super.onBind(intent);
     
-        // Return the iBinder associated with the Request Messenger.
+        // Return the IBinder associated with the Request Messenger.
         return mRequestMessenger.getBinder();
     }
 
