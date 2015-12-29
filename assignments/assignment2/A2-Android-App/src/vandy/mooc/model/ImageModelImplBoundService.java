@@ -63,7 +63,9 @@ public class ImageModelImplBoundService
              */
             public void onServiceDisconnected(ComponentName className) {
                 Log.d(TAG,
-                      "onServiceDisconnected ");
+                      "onServiceDisconnected() "
+                      + className);
+
                 // Reset the reference to the RequestMessenger to
                 // null, thereby preventing send() calls until it's
                 // reconnected.
@@ -86,7 +88,7 @@ public class ImageModelImplBoundService
     @Override
     protected void bindService() {
         Log.d(TAG,
-              "calling bindService()");
+              "calling ImageModelImplBoundService.bindService()");
 
         if (mRequestMessengerRef == null) {
             // Create a new intent to the DownloadImagesBoundService
@@ -95,7 +97,7 @@ public class ImageModelImplBoundService
             // TODO - you fill in here.
 
             Log.d(TAG,
-                  "calling bindService()");
+                  "calling Context.bindService()");
 
             // Bind to the Service associated with the Intent.
             // TODO -- you fill in here.
@@ -108,12 +110,14 @@ public class ImageModelImplBoundService
     @Override
     protected void unbindService() {
         Log.d(TAG,
-              "calling unbindService()");
+              "calling ImageModelImplBoundService.unbindService()");
+
         if (mRequestMessengerRef != null) {
-            Log.d(TAG,
-                  "calling unbindService()");
             // Unbind from the Service.
             // TODO -- you fill in here.
+
+            Log.d(TAG,
+                  "calling Context.unbindService()");
 
             // Set this field to null to trigger a call to
             // bindService() next time bindService() is called.
@@ -139,7 +143,7 @@ public class ImageModelImplBoundService
                               Uri directoryPathname) {
         if (mRequestMessengerRef == null) 
             Utils.showToast(mImagePresenter.get().getActivityContext(),
-                            "not bound to the service");
+                            "Not bound to the service");
         else {
             try {
                 // Create a RequestMessage that indicates the
