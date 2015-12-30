@@ -46,17 +46,16 @@ public class AcronymDataJsonParser {
         throws IOException {
 
         reader.beginArray();
-        try {
-            // If the acronym wasn't expanded return null;
-            if (reader.peek() == JsonToken.END_ARRAY)
-                return null;
+        // If the acronym wasn't expanded return null;
+        if (reader.peek() == JsonToken.END_ARRAY)
+            return null;
 
-            // Create a AcronymData object for each element in the
-            // Json array.
-            return parseAcronymData(reader);
-        } finally {
-            reader.endArray();
-        }
+        // Create a AcronymData object for each element in the
+        // Json array.
+        final List<AcronymExpansion> acronymExpansion =
+            parseAcronymData(reader);
+        reader.endArray();
+        return acronymExpansion;
     }
 
     public List<AcronymExpansion> parseAcronymData(JsonReader reader)
@@ -65,29 +64,27 @@ public class AcronymDataJsonParser {
         List<AcronymExpansion> acronymExpansion = null;
         reader.beginObject();
 
-        try {
-            outerloop:
-            while (reader.hasNext()) {
-                String name = reader.nextName();
-                switch (name) {
-                case AcronymData.sf_JSON:
-                    // Log.d(TAG, "reading sf field");
-                    reader.nextString();
-                    break;
-                case AcronymData.lfs_JSON:
-                    // Log.d(TAG, "reading lfs field");
-                    if (reader.peek() == JsonToken.BEGIN_ARRAY)
-                        acronymExpansion = parseAcronymLongFormArray(reader);
-                    break outerloop;
-                default:
-		    reader.skipValue();
-                    // Log.d(TAG, "weird problem with " + name + " field");
-                    break;
-                }
+        outerloop:
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+            case AcronymData.sf_JSON:
+                // Log.d(TAG, "reading sf field");
+                reader.nextString();
+                break;
+            case AcronymData.lfs_JSON:
+                // Log.d(TAG, "reading lfs field");
+                if (reader.peek() == JsonToken.BEGIN_ARRAY)
+                    acronymExpansion = parseAcronymLongFormArray(reader);
+                break outerloop;
+            default:
+                reader.skipValue();
+                // Log.d(TAG, "weird problem with " + name + " field");
+                break;
             }
-        } finally {
-                reader.endObject();
         }
+
+        reader.endObject();
         return acronymExpansion;
     }
 
@@ -102,16 +99,14 @@ public class AcronymDataJsonParser {
 
         reader.beginArray();
 
-        try {
-            List<AcronymExpansion> acronyms = new ArrayList<AcronymExpansion>();
+        final List<AcronymExpansion> acronyms =
+            new ArrayList<AcronymExpansion>();
 
-            while (reader.hasNext()) 
-                acronyms.add(parseAcronymExpansion(reader));
+        while (reader.hasNext()) 
+            acronyms.add(parseAcronymExpansion(reader));
             
-            return acronyms;
-        } finally {
-            reader.endArray();
-        }
+        reader.endArray();
+        return acronyms;
     }
 
     /**
@@ -122,32 +117,32 @@ public class AcronymDataJsonParser {
 
         reader.beginObject();
 
-        AcronymExpansion acronymExpansion = new AcronymExpansion();
-        try {
-            while (reader.hasNext()) {
-                String name = reader.nextName();
-                switch (name) {
-                case AcronymExpansion.lf_JSON:
-                    acronymExpansion.setLf(reader.nextString());
-                    // Log.d(TAG, "reading lf " + acronym.getLongForm());
-                    break;
-                case AcronymExpansion.freq_JSON:
-                    acronymExpansion.setFreq(reader.nextInt());
-                    // Log.d(TAG, "reading freq " + acronym.getFreq());
-                    break;
-                case AcronymExpansion.since_JSON:
-                    acronymExpansion.setSince(reader.nextInt());
-                    // Log.d(TAG, "reading since " + acronym.getSince());
-                    break;
-                default:
-                    reader.skipValue();
-                    // Log.d(TAG, "ignoring " + name);
-                    break;
-                }
-            } 
-        } finally {
-                reader.endObject();
-        }
+        final AcronymExpansion acronymExpansion =
+            new AcronymExpansion();
+
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+            case AcronymExpansion.lf_JSON:
+                acronymExpansion.setLf(reader.nextString());
+                // Log.d(TAG, "reading lf " + acronym.getLongForm());
+                break;
+            case AcronymExpansion.freq_JSON:
+                acronymExpansion.setFreq(reader.nextInt());
+                // Log.d(TAG, "reading freq " + acronym.getFreq());
+                break;
+            case AcronymExpansion.since_JSON:
+                acronymExpansion.setSince(reader.nextInt());
+                // Log.d(TAG, "reading since " + acronym.getSince());
+                break;
+            default:
+                reader.skipValue();
+                // Log.d(TAG, "ignoring " + name);
+                break;
+            }
+        } 
+        
+        reader.endObject();
         return acronymExpansion;
     }
 }
