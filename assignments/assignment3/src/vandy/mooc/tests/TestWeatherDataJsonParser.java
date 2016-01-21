@@ -93,6 +93,14 @@ public class TestWeatherDataJsonParser extends AndroidTestCase {
             + "\"cod\": 200" /* parcelized but not used */
             + "}";
 
+    /*
+     * Weather Data error response.
+     */
+    public static final String mErrorData = "{"
+            + "\"cod\": 404," /* required */
+            + "\"message\": \"Error: Not found city\"" /* required */
+            + "}";
+
     /**
      * Test case runner for testing the
      * WeatherDataJsonParser class methods.
@@ -121,6 +129,28 @@ public class TestWeatherDataJsonParser extends AndroidTestCase {
         }
     }
 
+    public void testParseJsonErrorStream() throws Throwable {
+        // Build the input string to mock the Json output
+        // from openweathermap.org.
+        String data = buildJsonErrorData();
+
+        // Convert Json string to an InputStream.
+        InputStream inputStream = new ByteArrayInputStream(data.getBytes());
+
+        // Test the WeatherDataJsonParser main entry point.
+        WeatherDataJsonParser parser = new WeatherDataJsonParser();
+
+        try {
+            // Test the parser.
+            List<WeatherData> weatherDataList = parser.parseJsonStream(inputStream);
+
+            // Now verify the results from the parser.
+            validateErrorData(weatherDataList);
+        } catch (Exception e) {
+            fail("Unable to parse weather data: " + e);
+        }
+    }
+
     public void validateWeatherDataList(List<WeatherData> weatherDataList) throws Throwable {
         Assert.assertNotNull(weatherDataList != null);
         Assert.assertNotNull(weatherDataList.size() == 1);
@@ -142,6 +172,19 @@ public class TestWeatherDataJsonParser extends AndroidTestCase {
 
         // Validate wind data values.
         validateWind(weatherData);
+    }
+
+    public void validateErrorData(List<WeatherData> weatherDataList) {
+        Assert.assertNotNull(weatherDataList != null);
+        Assert.assertNotNull(weatherDataList.size() == 1);
+
+        WeatherData weatherData = weatherDataList.get(0);
+        Assert.assertNotNull(weatherData);
+
+        Assert.assertEquals("getCod() is invalid",
+                weatherData.getCod(), 404);
+        Assert.assertEquals("getMessage() is invalid",
+                weatherData.getMessage(), "Error: Not found city");
     }
 
     public void validateData(WeatherData weatherData) {
@@ -198,5 +241,9 @@ public class TestWeatherDataJsonParser extends AndroidTestCase {
         data = data.replace("_WIND_DATA", mWindData);
 
         return data;
+    }
+
+    private String buildJsonErrorData() {
+        return mErrorData;
     }
 }
