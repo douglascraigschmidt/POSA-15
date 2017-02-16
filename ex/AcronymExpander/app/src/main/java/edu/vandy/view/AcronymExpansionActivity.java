@@ -26,7 +26,9 @@ import android.widget.EditText;
  * dependencies between the View and Presenter layers.
  */
 public class AcronymExpansionActivity
-       extends GenericActivity<MVP.RequiredViewOps, MVP.ProvidedPresenterOps, AcronymPresenter>
+       extends GenericActivity<MVP.RequiredViewOps,
+                               MVP.ProvidedPresenterOps,
+                               AcronymPresenter>
        implements MVP.RequiredViewOps {
     /**
      * Acronym entered by the user.
@@ -151,9 +153,11 @@ public class AcronymExpansionActivity
     @Override
     public void displayResults(List<AcronymExpansion> results,
                                String errorMessage) {
-        if (results == null)
-            Utils.showToast(this,
-                            errorMessage);
+        if (results == null
+            || results.size() == 0)
+            // Make sure the toast is displayed in the UI thread.
+            runOnUiThread(() -> Utils.showToast(this,
+                                                errorMessage));
         else {
             Log.d(TAG,
                   "displayResults() with number of acronyms = "

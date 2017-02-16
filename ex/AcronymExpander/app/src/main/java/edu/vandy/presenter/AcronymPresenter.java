@@ -221,7 +221,7 @@ public class AcronymPresenter
      */
     @Override
     public void displayResults(List<AcronymExpansion> results,
-                                   String failureReason) {
+                               String failureReason) {
         // Display the results.
         mAcronymView.get().displayResults(results,
                                           failureReason);
