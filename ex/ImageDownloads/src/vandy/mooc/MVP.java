@@ -77,21 +77,6 @@ public interface MVP {
          * Reset bitmap display on the user's screen to the default image.
          */
         void resetBitmap();
-
-        /**
-         * Display a downloaded bitmap image if it's non-null;
-         * otherwise, it reports an error via a Toast that's displayed
-         * on the UI Thread.  This method can be called from either
-         * the UI Thread or a background Thread.
-         * 
-         * @param image
-         *            The bitmap image
-         * @param completionCommand
-         *            Command whose run() hook method is called after the
-         *            image is displayed.
-         */
-        void displayBitmap(final Bitmap image,
-                           Runnable completionCommand);
     }
 
     /**
